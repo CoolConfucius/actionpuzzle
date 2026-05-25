@@ -1,0 +1,421 @@
+{
+  "id": "11",
+  "world": 2,
+  "dims": {
+    "cols": 19,
+    "rows": 15
+  },
+  "timeLimitMs": 180000,
+  "music": "canon-in-d",
+  "background": "world-2",
+  "playerSpawns": [
+    {
+      "playerSlot": 1,
+      "col": 3,
+      "row": 7,
+      "dir": "right"
+    },
+    {
+      "playerSlot": 2,
+      "col": 15,
+      "row": 7,
+      "dir": "left"
+    }
+  ],
+  "objects": [
+    {
+      "col": 1,
+      "row": 10,
+      "type": "rock"
+    },
+    {
+      "col": 2,
+      "row": 4,
+      "type": "rock"
+    },
+    {
+      "col": 2,
+      "row": 10,
+      "type": "rock"
+    },
+    {
+      "col": 3,
+      "row": 4,
+      "type": "rock"
+    },
+    {
+      "col": 3,
+      "row": 10,
+      "type": "rock"
+    },
+    {
+      "col": 4,
+      "row": 4,
+      "type": "rock"
+    },
+    {
+      "col": 4,
+      "row": 10,
+      "type": "rock"
+    },
+    {
+      "col": 5,
+      "row": 4,
+      "type": "rock"
+    },
+    {
+      "col": 5,
+      "row": 10,
+      "type": "rock"
+    },
+    {
+      "col": 1,
+      "row": 5,
+      "type": "rock"
+    },
+    {
+      "col": 5,
+      "row": 5,
+      "type": "rock"
+    },
+    {
+      "col": 1,
+      "row": 6,
+      "type": "rock"
+    },
+    {
+      "col": 5,
+      "row": 6,
+      "type": "rock"
+    },
+    {
+      "col": 1,
+      "row": 7,
+      "type": "rock"
+    },
+    {
+      "col": 5,
+      "row": 7,
+      "type": "rock"
+    },
+    {
+      "col": 1,
+      "row": 8,
+      "type": "rock"
+    },
+    {
+      "col": 5,
+      "row": 8,
+      "type": "rock"
+    },
+    {
+      "col": 1,
+      "row": 9,
+      "type": "rock"
+    },
+    {
+      "col": 5,
+      "row": 9,
+      "type": "rock"
+    },
+    {
+      "col": 7,
+      "row": 4,
+      "type": "rock"
+    },
+    {
+      "col": 7,
+      "row": 10,
+      "type": "rock"
+    },
+    {
+      "col": 8,
+      "row": 4,
+      "type": "rock"
+    },
+    {
+      "col": 8,
+      "row": 10,
+      "type": "rock"
+    },
+    {
+      "col": 9,
+      "row": 4,
+      "type": "rock"
+    },
+    {
+      "col": 9,
+      "row": 10,
+      "type": "rock"
+    },
+    {
+      "col": 10,
+      "row": 4,
+      "type": "rock"
+    },
+    {
+      "col": 10,
+      "row": 10,
+      "type": "rock"
+    },
+    {
+      "col": 11,
+      "row": 10,
+      "type": "rock"
+    },
+    {
+      "col": 7,
+      "row": 5,
+      "type": "rock"
+    },
+    {
+      "col": 11,
+      "row": 5,
+      "type": "rock"
+    },
+    {
+      "col": 7,
+      "row": 6,
+      "type": "rock"
+    },
+    {
+      "col": 11,
+      "row": 6,
+      "type": "rock"
+    },
+    {
+      "col": 7,
+      "row": 7,
+      "type": "rock"
+    },
+    {
+      "col": 11,
+      "row": 7,
+      "type": "rock"
+    },
+    {
+      "col": 7,
+      "row": 8,
+      "type": "rock"
+    },
+    {
+      "col": 11,
+      "row": 8,
+      "type": "rock"
+    },
+    {
+      "col": 7,
+      "row": 9,
+      "type": "rock"
+    },
+    {
+      "col": 11,
+      "row": 9,
+      "type": "rock"
+    },
+    {
+      "col": 13,
+      "row": 4,
+      "type": "rock"
+    },
+    {
+      "col": 13,
+      "row": 10,
+      "type": "rock"
+    },
+    {
+      "col": 14,
+      "row": 4,
+      "type": "rock"
+    },
+    {
+      "col": 14,
+      "row": 10,
+      "type": "rock"
+    },
+    {
+      "col": 15,
+      "row": 4,
+      "type": "rock"
+    },
+    {
+      "col": 15,
+      "row": 10,
+      "type": "rock"
+    },
+    {
+      "col": 16,
+      "row": 4,
+      "type": "rock"
+    },
+    {
+      "col": 16,
+      "row": 10,
+      "type": "rock"
+    },
+    {
+      "col": 17,
+      "row": 4,
+      "type": "rock"
+    },
+    {
+      "col": 13,
+      "row": 5,
+      "type": "rock"
+    },
+    {
+      "col": 17,
+      "row": 5,
+      "type": "rock"
+    },
+    {
+      "col": 13,
+      "row": 6,
+      "type": "rock"
+    },
+    {
+      "col": 17,
+      "row": 6,
+      "type": "rock"
+    },
+    {
+      "col": 13,
+      "row": 7,
+      "type": "rock"
+    },
+    {
+      "col": 17,
+      "row": 7,
+      "type": "rock"
+    },
+    {
+      "col": 13,
+      "row": 8,
+      "type": "rock"
+    },
+    {
+      "col": 17,
+      "row": 8,
+      "type": "rock"
+    },
+    {
+      "col": 13,
+      "row": 9,
+      "type": "rock"
+    },
+    {
+      "col": 17,
+      "row": 9,
+      "type": "rock"
+    },
+    {
+      "col": 6,
+      "row": 5,
+      "type": "rock"
+    },
+    {
+      "col": 6,
+      "row": 9,
+      "type": "rock"
+    },
+    {
+      "col": 12,
+      "row": 5,
+      "type": "rock"
+    },
+    {
+      "col": 12,
+      "row": 9,
+      "type": "rock"
+    },
+    {
+      "col": 9,
+      "row": 3,
+      "type": "egg"
+    },
+    {
+      "col": 9,
+      "row": 11,
+      "type": "egg"
+    },
+    {
+      "col": 4,
+      "row": 3,
+      "type": "fireball"
+    },
+    {
+      "col": 14,
+      "row": 11,
+      "type": "fireball"
+    },
+    {
+      "col": 8,
+      "row": 7,
+      "type": "donut"
+    },
+    {
+      "col": 10,
+      "row": 7,
+      "type": "donut"
+    },
+    {
+      "col": 2,
+      "row": 12,
+      "type": "egg"
+    },
+    {
+      "col": 16,
+      "row": 12,
+      "type": "egg"
+    }
+  ],
+  "eggCount": 4,
+  "enemySpawns": [
+    {
+      "type": "enemy2",
+      "atTimeMs": 0
+    },
+    {
+      "type": "enemy3",
+      "atTimeMs": 12000
+    },
+    {
+      "type": "enemy2",
+      "atTimeMs": 22000
+    },
+    {
+      "type": "enemy3",
+      "atTimeMs": 35000
+    },
+    {
+      "type": "enemy2",
+      "atTimeMs": 50000
+    },
+    {
+      "type": "enemy3",
+      "atTimeMs": 70000
+    }
+  ],
+  "enemyCap": 4,
+  "balloonSchedule": [
+    {
+      "type": "timeFreeze",
+      "atTimeMs": 45000,
+      "col": 8
+    },
+    {
+      "type": "scorePlus500",
+      "atTimeMs": 60000,
+      "col": 5
+    },
+    {
+      "type": "scorePlus1000",
+      "atTimeMs": 90000,
+      "col": 12
+    }
+  ],
+  "winConditions": [
+    "allEnemiesDefeated",
+    "allObjectsDestroyed"
+  ]
+}

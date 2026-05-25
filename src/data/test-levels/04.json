@@ -1,0 +1,149 @@
+{
+  "id": "04",
+  "world": 0,
+  "dims": {
+    "cols": 19,
+    "rows": 15
+  },
+  "timeLimitMs": 600000,
+  "music": "mountain-king",
+  "background": "world-5",
+  "tutorialHint": "Every upgrade is granted. Press 1 (P1) or 6 (P2) to fire your character's ability. Cycle skins on the title screen to test each.",
+  "tutorialSubhint": "Wolf: berserk. Owl: time freeze. Fox: invisibility. Lion: fireball charge. Monkey: clone. Rabbit: bomb. Mole: trap/burrow.",
+  "playerSpawns": [
+    {
+      "playerSlot": 1,
+      "col": 8,
+      "row": 6,
+      "dir": "down"
+    },
+    {
+      "playerSlot": 2,
+      "col": 0,
+      "row": 12,
+      "dir": "right"
+    }
+  ],
+  "objects": [
+    {
+      "type": "rock",
+      "col": 2,
+      "row": 3
+    },
+    {
+      "type": "rock",
+      "col": 3,
+      "row": 3
+    },
+    {
+      "type": "rock",
+      "col": 4,
+      "row": 3
+    },
+    {
+      "type": "rock",
+      "col": 12,
+      "row": 3
+    },
+    {
+      "type": "rock",
+      "col": 13,
+      "row": 3
+    },
+    {
+      "type": "rock",
+      "col": 14,
+      "row": 3
+    },
+    {
+      "type": "rock",
+      "col": 2,
+      "row": 9
+    },
+    {
+      "type": "rock",
+      "col": 3,
+      "row": 9
+    },
+    {
+      "type": "rock",
+      "col": 4,
+      "row": 9
+    },
+    {
+      "type": "rock",
+      "col": 12,
+      "row": 9
+    },
+    {
+      "type": "rock",
+      "col": 13,
+      "row": 9
+    },
+    {
+      "type": "rock",
+      "col": 14,
+      "row": 9
+    },
+    {
+      "type": "egg",
+      "col": 8,
+      "row": 2
+    },
+    {
+      "type": "egg",
+      "col": 8,
+      "row": 10
+    },
+    {
+      "type": "donut",
+      "col": 1,
+      "row": 6
+    },
+    {
+      "type": "donut",
+      "col": 15,
+      "row": 6
+    }
+  ],
+  "eggCount": 0,
+  "enemySpawns": [
+    {
+      "type": "enemy1",
+      "atTimeMs": 3000
+    },
+    {
+      "type": "enemy3",
+      "atTimeMs": 8000
+    },
+    {
+      "type": "enemy2",
+      "atTimeMs": 12000
+    },
+    {
+      "type": "enemy4",
+      "atTimeMs": 18000
+    }
+  ],
+  "enemyCap": 6,
+  "balloonSchedule": [
+    {
+      "type": "berserk",
+      "atTimeMs": 5000,
+      "col": 4
+    },
+    {
+      "type": "timeFreeze",
+      "atTimeMs": 9000,
+      "col": 12
+    },
+    {
+      "type": "invisibility",
+      "atTimeMs": 13000,
+      "col": 8
+    }
+  ],
+  "winConditions": [
+    "allEnemiesDefeated"
+  ]
+}

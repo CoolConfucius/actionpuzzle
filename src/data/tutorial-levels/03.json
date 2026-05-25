@@ -1,0 +1,135 @@
+{
+  "id": "03",
+  "world": 0,
+  "dims": {
+    "cols": 19,
+    "rows": 15
+  },
+  "timeLimitMs": 300000,
+  "music": "entertainer",
+  "background": "world-3",
+  "tutorialHint": "Balloons rise from the bottom — walk into them for power-ups.",
+  "tutorialSubhint": "Press P to pause, Esc for menu, M to mute music. Backtick (`) opens admin mode.",
+  "playerSpawns": [
+    {
+      "playerSlot": 1,
+      "col": 9,
+      "row": 6,
+      "dir": "down"
+    },
+    {
+      "playerSlot": 2,
+      "col": 16,
+      "row": 12,
+      "dir": "up"
+    }
+  ],
+  "objects": [
+    {
+      "type": "egg",
+      "col": 4,
+      "row": 2
+    },
+    {
+      "type": "egg",
+      "col": 12,
+      "row": 2
+    },
+    {
+      "type": "rock",
+      "col": 2,
+      "row": 3
+    },
+    {
+      "type": "rock",
+      "col": 14,
+      "row": 3
+    },
+    {
+      "type": "rock",
+      "col": 6,
+      "row": 5
+    },
+    {
+      "type": "rock",
+      "col": 10,
+      "row": 5
+    },
+    {
+      "type": "egg",
+      "col": 4,
+      "row": 6
+    },
+    {
+      "type": "egg",
+      "col": 14,
+      "row": 6
+    },
+    {
+      "type": "rock",
+      "col": 6,
+      "row": 7
+    },
+    {
+      "type": "rock",
+      "col": 10,
+      "row": 7
+    },
+    {
+      "type": "rock",
+      "col": 2,
+      "row": 9
+    },
+    {
+      "type": "rock",
+      "col": 14,
+      "row": 9
+    },
+    {
+      "type": "egg",
+      "col": 4,
+      "row": 10
+    },
+    {
+      "type": "egg",
+      "col": 12,
+      "row": 10
+    }
+  ],
+  "eggCount": 0,
+  "enemySpawns": [
+    {
+      "type": "enemy1",
+      "atTimeMs": 4000
+    },
+    {
+      "type": "enemy2",
+      "atTimeMs": 18000
+    },
+    {
+      "type": "enemy3",
+      "atTimeMs": 35000
+    }
+  ],
+  "enemyCap": 3,
+  "balloonSchedule": [
+    {
+      "type": "berserk",
+      "atTimeMs": 4000,
+      "col": 4
+    },
+    {
+      "type": "lifePlus",
+      "atTimeMs": 14000,
+      "col": 12
+    },
+    {
+      "type": "scorePlus1000",
+      "atTimeMs": 24000,
+      "col": 8
+    }
+  ],
+  "winConditions": [
+    "allEnemiesDefeated"
+  ]
+}

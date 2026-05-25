@@ -1,0 +1,158 @@
+{
+  "id": "02",
+  "world": 0,
+  "dims": {
+    "cols": 19,
+    "rows": 15
+  },
+  "timeLimitMs": 600000,
+  "music": "entertainer",
+  "background": "world-3",
+  "tutorialHint": "Every powerup type rises in turn. Touch them OR hurl a rock at them mid-air.",
+  "tutorialSubhint": "Listen for each unique SFX and watch the pop animation tint.",
+  "playerSpawns": [
+    {
+      "playerSlot": 1,
+      "col": 8,
+      "row": 11,
+      "dir": "up"
+    },
+    {
+      "playerSlot": 2,
+      "col": 16,
+      "row": 12,
+      "dir": "left"
+    }
+  ],
+  "objects": [
+    {
+      "type": "rock",
+      "col": 0,
+      "row": 12
+    },
+    {
+      "type": "rock",
+      "col": 1,
+      "row": 12
+    },
+    {
+      "type": "rock",
+      "col": 2,
+      "row": 12
+    },
+    {
+      "type": "rock",
+      "col": 14,
+      "row": 12
+    },
+    {
+      "type": "rock",
+      "col": 15,
+      "row": 12
+    },
+    {
+      "type": "donut",
+      "col": 4,
+      "row": 12
+    },
+    {
+      "type": "donut",
+      "col": 12,
+      "row": 12
+    },
+    {
+      "type": "fireball",
+      "col": 6,
+      "row": 12
+    },
+    {
+      "type": "fireball",
+      "col": 10,
+      "row": 12
+    }
+  ],
+  "eggCount": 0,
+  "enemySpawns": [
+    {
+      "type": "enemy1",
+      "atTimeMs": 30000
+    }
+  ],
+  "enemyCap": 1,
+  "balloonSchedule": [
+    {
+      "type": "berserk",
+      "atTimeMs": 1500,
+      "col": 2
+    },
+    {
+      "type": "invisibility",
+      "atTimeMs": 3000,
+      "col": 4
+    },
+    {
+      "type": "timeFreeze",
+      "atTimeMs": 4500,
+      "col": 6
+    },
+    {
+      "type": "lifePlus",
+      "atTimeMs": 6000,
+      "col": 8
+    },
+    {
+      "type": "scorePlus500",
+      "atTimeMs": 7500,
+      "col": 10
+    },
+    {
+      "type": "scorePlus1000",
+      "atTimeMs": 9000,
+      "col": 12
+    },
+    {
+      "type": "scorePlus2500",
+      "atTimeMs": 10500,
+      "col": 14
+    },
+    {
+      "type": "multiplier2",
+      "atTimeMs": 12000,
+      "col": 5
+    },
+    {
+      "type": "multiplier3",
+      "atTimeMs": 13500,
+      "col": 11
+    },
+    {
+      "type": "berserk",
+      "atTimeMs": 17000,
+      "col": 3
+    },
+    {
+      "type": "invisibility",
+      "atTimeMs": 19000,
+      "col": 8
+    },
+    {
+      "type": "timeFreeze",
+      "atTimeMs": 21000,
+      "col": 13
+    },
+    {
+      "type": "lifePlus",
+      "atTimeMs": 23000,
+      "col": 6
+    },
+    {
+      "type": "scorePlus2500",
+      "atTimeMs": 25000,
+      "col": 9
+    }
+  ],
+  "winConditions": [
+    "allEnemiesDefeated",
+    "allObjectsDestroyed"
+  ]
+}

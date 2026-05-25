@@ -1,0 +1,151 @@
+{
+  "id": "03",
+  "world": 0,
+  "dims": {
+    "cols": 19,
+    "rows": 15
+  },
+  "timeLimitMs": 600000,
+  "music": "turkish-march",
+  "background": "world-4",
+  "tutorialHint": "One of each enemy type spawns over time. Plenty of rocks to hurl. Test frozen overlay, hit feedback, death poof.",
+  "tutorialSubhint": "Clear all 7 to advance, or just observe.",
+  "playerSpawns": [
+    {
+      "playerSlot": 1,
+      "col": 8,
+      "row": 6,
+      "dir": "down"
+    },
+    {
+      "playerSlot": 2,
+      "col": 16,
+      "row": 12,
+      "dir": "left"
+    }
+  ],
+  "objects": [
+    {
+      "type": "rock",
+      "col": 1,
+      "row": 1
+    },
+    {
+      "type": "rock",
+      "col": 3,
+      "row": 1
+    },
+    {
+      "type": "rock",
+      "col": 5,
+      "row": 1
+    },
+    {
+      "type": "rock",
+      "col": 11,
+      "row": 1
+    },
+    {
+      "type": "rock",
+      "col": 13,
+      "row": 1
+    },
+    {
+      "type": "rock",
+      "col": 15,
+      "row": 1
+    },
+    {
+      "type": "rock",
+      "col": 1,
+      "row": 11
+    },
+    {
+      "type": "rock",
+      "col": 3,
+      "row": 11
+    },
+    {
+      "type": "rock",
+      "col": 5,
+      "row": 11
+    },
+    {
+      "type": "rock",
+      "col": 11,
+      "row": 11
+    },
+    {
+      "type": "rock",
+      "col": 13,
+      "row": 11
+    },
+    {
+      "type": "rock",
+      "col": 15,
+      "row": 11
+    },
+    {
+      "type": "rock",
+      "col": 1,
+      "row": 6
+    },
+    {
+      "type": "rock",
+      "col": 2,
+      "row": 6
+    },
+    {
+      "type": "rock",
+      "col": 14,
+      "row": 6
+    },
+    {
+      "type": "rock",
+      "col": 15,
+      "row": 6
+    }
+  ],
+  "eggCount": 0,
+  "enemySpawns": [
+    {
+      "type": "enemy1",
+      "atTimeMs": 1000
+    },
+    {
+      "type": "enemy2",
+      "atTimeMs": 8000
+    },
+    {
+      "type": "enemy3",
+      "atTimeMs": 16000
+    },
+    {
+      "type": "enemy4",
+      "atTimeMs": 24000
+    },
+    {
+      "type": "enemy5",
+      "atTimeMs": 32000
+    },
+    {
+      "type": "enemy6",
+      "atTimeMs": 40000
+    },
+    {
+      "type": "enemy7",
+      "atTimeMs": 48000
+    }
+  ],
+  "enemyCap": 4,
+  "balloonSchedule": [
+    {
+      "type": "timeFreeze",
+      "atTimeMs": 20000,
+      "col": 8
+    }
+  ],
+  "winConditions": [
+    "allEnemiesDefeated"
+  ]
+}

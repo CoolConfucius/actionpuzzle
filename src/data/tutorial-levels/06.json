@@ -1,0 +1,154 @@
+{
+  "id": "06",
+  "world": 0,
+  "dims": {
+    "cols": 19,
+    "rows": 15
+  },
+  "timeLimitMs": 300000,
+  "music": "beethovens-fifth",
+  "background": "world-6",
+  "tutorialHint": "Titan ⬢ takes 3 hits. Phantom ☠ teleports every 5s.",
+  "tutorialSubhint": "Hurl fireballs (the F shapes) into them — explosions bypass Titan HP.",
+  "playerSpawns": [
+    {
+      "playerSlot": 1,
+      "col": 8,
+      "row": 6,
+      "dir": "down"
+    },
+    {
+      "playerSlot": 2,
+      "col": 16,
+      "row": 12,
+      "dir": "up"
+    }
+  ],
+  "objects": [
+    {
+      "type": "rock",
+      "col": 2,
+      "row": 1
+    },
+    {
+      "type": "rock",
+      "col": 14,
+      "row": 1
+    },
+    {
+      "type": "fireball",
+      "col": 5,
+      "row": 2
+    },
+    {
+      "type": "fireball",
+      "col": 11,
+      "row": 2
+    },
+    {
+      "type": "rock",
+      "col": 4,
+      "row": 4
+    },
+    {
+      "type": "rock",
+      "col": 12,
+      "row": 4
+    },
+    {
+      "type": "egg",
+      "col": 5,
+      "row": 5
+    },
+    {
+      "type": "egg",
+      "col": 11,
+      "row": 5
+    },
+    {
+      "type": "rock",
+      "col": 7,
+      "row": 6
+    },
+    {
+      "type": "rock",
+      "col": 9,
+      "row": 6
+    },
+    {
+      "type": "egg",
+      "col": 5,
+      "row": 7
+    },
+    {
+      "type": "egg",
+      "col": 11,
+      "row": 7
+    },
+    {
+      "type": "rock",
+      "col": 4,
+      "row": 8
+    },
+    {
+      "type": "rock",
+      "col": 12,
+      "row": 8
+    },
+    {
+      "type": "fireball",
+      "col": 5,
+      "row": 10
+    },
+    {
+      "type": "fireball",
+      "col": 11,
+      "row": 10
+    },
+    {
+      "type": "rock",
+      "col": 2,
+      "row": 11
+    },
+    {
+      "type": "rock",
+      "col": 14,
+      "row": 11
+    }
+  ],
+  "eggCount": 0,
+  "enemySpawns": [
+    {
+      "type": "enemy3",
+      "atTimeMs": 3000
+    },
+    {
+      "type": "enemy6",
+      "atTimeMs": 8000
+    },
+    {
+      "type": "enemy7",
+      "atTimeMs": 25000
+    },
+    {
+      "type": "enemy6",
+      "atTimeMs": 50000
+    }
+  ],
+  "enemyCap": 3,
+  "balloonSchedule": [
+    {
+      "type": "berserk",
+      "atTimeMs": 5000,
+      "col": 4
+    },
+    {
+      "type": "lifePlus",
+      "atTimeMs": 30000,
+      "col": 12
+    }
+  ],
+  "winConditions": [
+    "allEnemiesDefeated"
+  ]
+}

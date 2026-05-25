@@ -1,0 +1,252 @@
+{
+  "id": "36",
+  "world": 6,
+  "dims": {
+    "cols": 19,
+    "rows": 15
+  },
+  "timeLimitMs": 180000,
+  "music": "beethovens-fifth",
+  "background": "world-6",
+  "playerSpawns": [
+    {
+      "playerSlot": 1,
+      "col": 3,
+      "row": 7,
+      "dir": "right"
+    },
+    {
+      "playerSlot": 2,
+      "col": 15,
+      "row": 7,
+      "dir": "left"
+    }
+  ],
+  "objects": [
+    {
+      "col": 7,
+      "row": 5,
+      "type": "rock"
+    },
+    {
+      "col": 8,
+      "row": 5,
+      "type": "rock"
+    },
+    {
+      "col": 10,
+      "row": 5,
+      "type": "rock"
+    },
+    {
+      "col": 11,
+      "row": 5,
+      "type": "rock"
+    },
+    {
+      "col": 7,
+      "row": 6,
+      "type": "rock"
+    },
+    {
+      "col": 11,
+      "row": 6,
+      "type": "rock"
+    },
+    {
+      "col": 7,
+      "row": 8,
+      "type": "rock"
+    },
+    {
+      "col": 11,
+      "row": 8,
+      "type": "rock"
+    },
+    {
+      "col": 7,
+      "row": 9,
+      "type": "rock"
+    },
+    {
+      "col": 8,
+      "row": 9,
+      "type": "rock"
+    },
+    {
+      "col": 10,
+      "row": 9,
+      "type": "rock"
+    },
+    {
+      "col": 11,
+      "row": 9,
+      "type": "rock"
+    },
+    {
+      "col": 3,
+      "row": 2,
+      "type": "rock"
+    },
+    {
+      "col": 15,
+      "row": 2,
+      "type": "rock"
+    },
+    {
+      "col": 3,
+      "row": 12,
+      "type": "rock"
+    },
+    {
+      "col": 15,
+      "row": 12,
+      "type": "rock"
+    },
+    {
+      "col": 9,
+      "row": 2,
+      "type": "rock"
+    },
+    {
+      "col": 9,
+      "row": 12,
+      "type": "rock"
+    },
+    {
+      "col": 8,
+      "row": 6,
+      "type": "egg"
+    },
+    {
+      "col": 10,
+      "row": 6,
+      "type": "egg"
+    },
+    {
+      "col": 8,
+      "row": 8,
+      "type": "egg"
+    },
+    {
+      "col": 10,
+      "row": 8,
+      "type": "egg"
+    },
+    {
+      "col": 6,
+      "row": 4,
+      "type": "fireball"
+    },
+    {
+      "col": 12,
+      "row": 10,
+      "type": "fireball"
+    },
+    {
+      "col": 12,
+      "row": 4,
+      "type": "fireball"
+    },
+    {
+      "col": 6,
+      "row": 10,
+      "type": "fireball"
+    },
+    {
+      "col": 9,
+      "row": 6,
+      "type": "egg"
+    },
+    {
+      "col": 9,
+      "row": 8,
+      "type": "egg"
+    }
+  ],
+  "eggCount": 8,
+  "enemySpawns": [
+    {
+      "type": "enemy5",
+      "atTimeMs": 3000
+    },
+    {
+      "type": "enemy1",
+      "atTimeMs": 8000
+    },
+    {
+      "type": "enemy2",
+      "atTimeMs": 16000
+    },
+    {
+      "type": "enemy4",
+      "atTimeMs": 26000
+    },
+    {
+      "type": "enemy3",
+      "atTimeMs": 36000
+    },
+    {
+      "type": "enemy5",
+      "atTimeMs": 48000
+    },
+    {
+      "type": "enemy2",
+      "atTimeMs": 60000
+    },
+    {
+      "type": "enemy4",
+      "atTimeMs": 72000
+    },
+    {
+      "type": "enemy5",
+      "atTimeMs": 85000
+    },
+    {
+      "type": "enemy3",
+      "atTimeMs": 95000
+    },
+    {
+      "type": "enemy2",
+      "atTimeMs": 105000
+    },
+    {
+      "type": "enemy1",
+      "atTimeMs": 115000
+    },
+    {
+      "type": "enemy5",
+      "atTimeMs": 125000
+    },
+    {
+      "type": "enemy4",
+      "atTimeMs": 135000
+    },
+    {
+      "type": "enemy3",
+      "atTimeMs": 145000
+    }
+  ],
+  "enemyCap": 7,
+  "balloonSchedule": [
+    {
+      "type": "scoreMultiplier3",
+      "atTimeMs": 30000,
+      "col": 8
+    },
+    {
+      "type": "timeFreeze",
+      "atTimeMs": 60000,
+      "col": 8
+    },
+    {
+      "type": "lifePlus",
+      "atTimeMs": 90000,
+      "col": 8
+    }
+  ],
+  "winConditions": [
+    "allEnemiesDefeated",
+    "allObjectsDestroyed"
+  ]
+}

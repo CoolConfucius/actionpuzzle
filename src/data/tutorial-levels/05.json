@@ -1,0 +1,107 @@
+{
+  "id": "05",
+  "world": 0,
+  "dims": {
+    "cols": 19,
+    "rows": 15
+  },
+  "timeLimitMs": 300000,
+  "music": "mountain-king",
+  "background": "world-5",
+  "tutorialHint": "Hurl a donut: it bounces back when it hits a wall.",
+  "tutorialSubhint": "Line up multiple enemies — each kill in one slide is 2x, 4x, 8x score!",
+  "playerSpawns": [
+    {
+      "playerSlot": 1,
+      "col": 8,
+      "row": 6,
+      "dir": "down"
+    },
+    {
+      "playerSlot": 2,
+      "col": 16,
+      "row": 12,
+      "dir": "up"
+    }
+  ],
+  "objects": [
+    {
+      "type": "donut",
+      "col": 2,
+      "row": 2
+    },
+    {
+      "type": "donut",
+      "col": 14,
+      "row": 2
+    },
+    {
+      "type": "rock",
+      "col": 4,
+      "row": 4
+    },
+    {
+      "type": "rock",
+      "col": 12,
+      "row": 4
+    },
+    {
+      "type": "donut",
+      "col": 3,
+      "row": 6
+    },
+    {
+      "type": "donut",
+      "col": 13,
+      "row": 6
+    },
+    {
+      "type": "rock",
+      "col": 4,
+      "row": 8
+    },
+    {
+      "type": "rock",
+      "col": 12,
+      "row": 8
+    },
+    {
+      "type": "donut",
+      "col": 2,
+      "row": 10
+    },
+    {
+      "type": "donut",
+      "col": 14,
+      "row": 10
+    }
+  ],
+  "eggCount": 0,
+  "enemySpawns": [
+    {
+      "type": "enemy1",
+      "atTimeMs": 3000
+    },
+    {
+      "type": "enemy1",
+      "atTimeMs": 6000
+    },
+    {
+      "type": "enemy2",
+      "atTimeMs": 14000
+    },
+    {
+      "type": "enemy2",
+      "atTimeMs": 22000
+    },
+    {
+      "type": "enemy5",
+      "atTimeMs": 40000
+    }
+  ],
+  "enemyCap": 3,
+  "balloonSchedule": [],
+  "winConditions": [
+    "allEnemiesDefeated"
+  ]
+}

@@ -1,0 +1,44 @@
+{
+  "id": "07",
+  "world": 0,
+  "dims": { "cols": 19, "rows": 15 },
+  "timeLimitMs": 600000,
+  "music": "morning-mood",
+  "background": "world-1",
+  "tutorialHint": "Hurl a fireball at distant eggs. The fireball slides until it hits the back wall, then explodes. You stay safe at center.",
+  "tutorialSubhint": "Up=1 egg (+1000), Down=2 eggs (+3000), Left=3 eggs (+7000), Right=4 eggs (+15000). Walk over fried eggs to collect them.",
+  "playerSpawns": [
+    { "playerSlot": 1, "col": 9, "row": 7, "dir": "up" },
+    { "playerSlot": 2, "col": 4, "row": 7, "dir": "right" }
+  ],
+  "objects": [
+    { "type": "fireball", "col": 9,  "row": 6 },
+    { "type": "rock",     "col": 9,  "row": 1 },
+    { "type": "egg",      "col": 8,  "row": 2 },
+
+    { "type": "fireball", "col": 9,  "row": 8 },
+    { "type": "rock",     "col": 9,  "row": 13 },
+    { "type": "egg",      "col": 8,  "row": 12 },
+    { "type": "egg",      "col": 10, "row": 12 },
+
+    { "type": "fireball", "col": 8,  "row": 7 },
+    { "type": "rock",     "col": 0,  "row": 7 },
+    { "type": "egg",      "col": 1,  "row": 6 },
+    { "type": "egg",      "col": 2,  "row": 6 },
+    { "type": "egg",      "col": 2,  "row": 8 },
+
+    { "type": "fireball", "col": 10, "row": 7 },
+    { "type": "rock",     "col": 18, "row": 7 },
+    { "type": "egg",      "col": 16, "row": 6 },
+    { "type": "egg",      "col": 17, "row": 6 },
+    { "type": "egg",      "col": 16, "row": 8 },
+    { "type": "egg",      "col": 17, "row": 8 }
+  ],
+  "eggCount": 0,
+  "enemySpawns": [
+    { "type": "enemy1", "atTimeMs": 600000 }
+  ],
+  "enemyCap": 1,
+  "balloonSchedule": [],
+  "winConditions": ["allObjectsDestroyed"]
+}

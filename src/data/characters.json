@@ -1,0 +1,12 @@
+{
+  "bear":     { "displayName": "Bear",     "color": "#7B4F2A", "glyph": "🐻" },
+  "wolf":     { "displayName": "Wolf",     "color": "#6B6B7A", "glyph": "🐺" },
+  "lion":     { "displayName": "Lion",     "color": "#D4A24C", "glyph": "🦁" },
+  "rabbit":   { "displayName": "Rabbit",   "color": "#E8D8D0", "glyph": "🐰" },
+  "pig":      { "displayName": "Pig",      "color": "#F0A8B8", "glyph": "🐷" },
+  "mole":     { "displayName": "Mole",     "color": "#4A3A2E", "glyph": "🐹" },
+  "monkey":   { "displayName": "Monkey",   "color": "#8B5A3C", "glyph": "🐵" },
+  "elephant": { "displayName": "Elephant", "color": "#A8A8C8", "glyph": "🐘" },
+  "owl":      { "displayName": "Owl",      "color": "#6B4F8A", "glyph": "🦉" },
+  "fox":      { "displayName": "Fox",      "color": "#D97742", "glyph": "🦊" }
+}

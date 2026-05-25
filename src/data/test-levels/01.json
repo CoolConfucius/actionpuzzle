@@ -1,0 +1,180 @@
+{
+  "id": "01",
+  "world": 0,
+  "dims": {
+    "cols": 19,
+    "rows": 15
+  },
+  "timeLimitMs": 600000,
+  "music": "morning-mood",
+  "background": "world-1",
+  "tutorialHint": "Shatter test: hurl or break each row. Row 2 = rocks, Row 5 = eggs, Row 8 = donuts, Row 11 = fireballs. Walk over Row 6 fried-eggs.",
+  "tutorialSubhint": "Press 1 to fire your character's ability. Clear all enemies to advance.",
+  "playerSpawns": [
+    {
+      "playerSlot": 1,
+      "col": 0,
+      "row": 12,
+      "dir": "right"
+    },
+    {
+      "playerSlot": 2,
+      "col": 16,
+      "row": 12,
+      "dir": "left"
+    }
+  ],
+  "objects": [
+    {
+      "type": "rock",
+      "col": 2,
+      "row": 2
+    },
+    {
+      "type": "rock",
+      "col": 4,
+      "row": 2
+    },
+    {
+      "type": "rock",
+      "col": 6,
+      "row": 2
+    },
+    {
+      "type": "rock",
+      "col": 8,
+      "row": 2
+    },
+    {
+      "type": "rock",
+      "col": 10,
+      "row": 2
+    },
+    {
+      "type": "rock",
+      "col": 12,
+      "row": 2
+    },
+    {
+      "type": "rock",
+      "col": 14,
+      "row": 2
+    },
+    {
+      "type": "egg",
+      "col": 2,
+      "row": 5
+    },
+    {
+      "type": "egg",
+      "col": 4,
+      "row": 5
+    },
+    {
+      "type": "egg",
+      "col": 6,
+      "row": 5
+    },
+    {
+      "type": "egg",
+      "col": 8,
+      "row": 5
+    },
+    {
+      "type": "egg",
+      "col": 10,
+      "row": 5
+    },
+    {
+      "type": "egg",
+      "col": 12,
+      "row": 5
+    },
+    {
+      "type": "egg",
+      "col": 14,
+      "row": 5
+    },
+    {
+      "type": "fried-egg",
+      "col": 3,
+      "row": 6
+    },
+    {
+      "type": "fried-egg",
+      "col": 7,
+      "row": 6
+    },
+    {
+      "type": "fried-egg",
+      "col": 11,
+      "row": 6
+    },
+    {
+      "type": "donut",
+      "col": 2,
+      "row": 8
+    },
+    {
+      "type": "donut",
+      "col": 4,
+      "row": 8
+    },
+    {
+      "type": "donut",
+      "col": 6,
+      "row": 8
+    },
+    {
+      "type": "donut",
+      "col": 8,
+      "row": 8
+    },
+    {
+      "type": "donut",
+      "col": 10,
+      "row": 8
+    },
+    {
+      "type": "donut",
+      "col": 12,
+      "row": 8
+    },
+    {
+      "type": "donut",
+      "col": 14,
+      "row": 8
+    },
+    {
+      "type": "fireball",
+      "col": 3,
+      "row": 11
+    },
+    {
+      "type": "fireball",
+      "col": 8,
+      "row": 11
+    },
+    {
+      "type": "fireball",
+      "col": 13,
+      "row": 11
+    }
+  ],
+  "eggCount": 0,
+  "enemySpawns": [
+    {
+      "type": "enemy1",
+      "atTimeMs": 8000
+    },
+    {
+      "type": "enemy1",
+      "atTimeMs": 16000
+    }
+  ],
+  "enemyCap": 2,
+  "balloonSchedule": [],
+  "winConditions": [
+    "allEnemiesDefeated"
+  ]
+}

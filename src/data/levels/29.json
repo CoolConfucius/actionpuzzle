@@ -1,0 +1,213 @@
+{
+  "id": "29",
+  "world": 5,
+  "dims": {
+    "cols": 19,
+    "rows": 15
+  },
+  "timeLimitMs": 180000,
+  "music": "mountain-king",
+  "background": "world-5",
+  "playerSpawns": [
+    {
+      "playerSlot": 1,
+      "col": 3,
+      "row": 7,
+      "dir": "right"
+    },
+    {
+      "playerSlot": 2,
+      "col": 15,
+      "row": 7,
+      "dir": "left"
+    }
+  ],
+  "objects": [
+    {
+      "col": 7,
+      "row": 5,
+      "type": "rock"
+    },
+    {
+      "col": 8,
+      "row": 5,
+      "type": "rock"
+    },
+    {
+      "col": 10,
+      "row": 5,
+      "type": "rock"
+    },
+    {
+      "col": 11,
+      "row": 5,
+      "type": "rock"
+    },
+    {
+      "col": 7,
+      "row": 6,
+      "type": "rock"
+    },
+    {
+      "col": 11,
+      "row": 6,
+      "type": "rock"
+    },
+    {
+      "col": 7,
+      "row": 8,
+      "type": "rock"
+    },
+    {
+      "col": 11,
+      "row": 8,
+      "type": "rock"
+    },
+    {
+      "col": 7,
+      "row": 9,
+      "type": "rock"
+    },
+    {
+      "col": 8,
+      "row": 9,
+      "type": "rock"
+    },
+    {
+      "col": 10,
+      "row": 9,
+      "type": "rock"
+    },
+    {
+      "col": 11,
+      "row": 9,
+      "type": "rock"
+    },
+    {
+      "col": 3,
+      "row": 2,
+      "type": "rock"
+    },
+    {
+      "col": 15,
+      "row": 2,
+      "type": "rock"
+    },
+    {
+      "col": 3,
+      "row": 12,
+      "type": "rock"
+    },
+    {
+      "col": 15,
+      "row": 12,
+      "type": "rock"
+    },
+    {
+      "col": 9,
+      "row": 2,
+      "type": "rock"
+    },
+    {
+      "col": 9,
+      "row": 12,
+      "type": "rock"
+    },
+    {
+      "col": 8,
+      "row": 6,
+      "type": "egg"
+    },
+    {
+      "col": 10,
+      "row": 6,
+      "type": "egg"
+    },
+    {
+      "col": 8,
+      "row": 8,
+      "type": "egg"
+    },
+    {
+      "col": 10,
+      "row": 8,
+      "type": "egg"
+    },
+    {
+      "col": 6,
+      "row": 4,
+      "type": "fireball"
+    },
+    {
+      "col": 12,
+      "row": 10,
+      "type": "fireball"
+    },
+    {
+      "col": 12,
+      "row": 4,
+      "type": "fireball"
+    },
+    {
+      "col": 6,
+      "row": 10,
+      "type": "fireball"
+    }
+  ],
+  "eggCount": 5,
+  "enemySpawns": [
+    {
+      "type": "enemy3",
+      "atTimeMs": 0
+    },
+    {
+      "type": "enemy5",
+      "atTimeMs": 10000
+    },
+    {
+      "type": "enemy4",
+      "atTimeMs": 22000
+    },
+    {
+      "type": "enemy3",
+      "atTimeMs": 38000
+    },
+    {
+      "type": "enemy5",
+      "atTimeMs": 55000
+    },
+    {
+      "type": "enemy4",
+      "atTimeMs": 70000
+    },
+    {
+      "type": "enemy3",
+      "atTimeMs": 90000
+    },
+    {
+      "type": "enemy5",
+      "atTimeMs": 105000
+    },
+    {
+      "type": "enemy4",
+      "atTimeMs": 115000
+    }
+  ],
+  "enemyCap": 5,
+  "balloonSchedule": [
+    {
+      "type": "berserk",
+      "atTimeMs": 22000,
+      "col": 8
+    },
+    {
+      "type": "lifePlus",
+      "atTimeMs": 90000,
+      "col": 8
+    }
+  ],
+  "winConditions": [
+    "allEnemiesDefeated",
+    "allObjectsDestroyed"
+  ]
+}
