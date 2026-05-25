@@ -7,10 +7,12 @@ import {
   getBinding,
 } from '../engine/run-state.js';
 
-const PANEL_W = 380;
-const PANEL_H = 340;
-const ROW_H = 22;
-const SLIDER_W = 140;
+const PANEL_W = 440;
+const PANEL_H = 380;
+const ROW_H = 32;
+const SLIDER_W = 220;
+const SLIDER_H = 18;
+const SLIDER_THUMB_W = 14;
 
 // Escape is intentionally NOT in this set; it is handled above as cancel/close.
 const RESERVED_KEYS = new Set([
@@ -49,12 +51,12 @@ function panelOrigin(ctx) {
 
 function layoutRows(overlay, panelX, panelY) {
   overlay.rows = [];
-  let y = panelY + 36;
+  let y = panelY + 44;
   for (const ch of VOLUME_CHANNELS) {
     overlay.rows.push({
       kind: 'slider',
       label: `${ch} volume`,
-      rect: { x: panelX + 140, y: y + 4, w: SLIDER_W, h: 12 },
+      rect: { x: panelX + 150, y: y + 2, w: SLIDER_W, h: SLIDER_H },
       ref: ch,
     });
     y += ROW_H;
@@ -62,15 +64,15 @@ function layoutRows(overlay, panelX, panelY) {
   overlay.rows.push({
     kind: 'toggle',
     label: 'mute',
-    rect: { x: panelX + 140, y: y + 2, w: 60, h: 16 },
+    rect: { x: panelX + 150, y: y + 2, w: 80, h: 20 },
     ref: 'mute',
   });
-  y += ROW_H + 4;
+  y += ROW_H + 6;
   for (const br of BINDING_ROWS) {
     overlay.rows.push({
       kind: 'binding',
       label: br.label,
-      rect: { x: panelX + 140, y: y + 2, w: 90, h: 16 },
+      rect: { x: panelX + 150, y: y + 2, w: 110, h: 16 },
       ref: { slot: br.slot, action: br.action },
     });
     y += 16;
@@ -78,7 +80,7 @@ function layoutRows(overlay, panelX, panelY) {
   overlay.rows.push({
     kind: 'button',
     label: 'close',
-    rect: { x: panelX + PANEL_W - 80, y: panelY + PANEL_H - 30, w: 60, h: 22 },
+    rect: { x: panelX + PANEL_W - 90, y: panelY + PANEL_H - 32, w: 70, h: 24 },
     ref: 'close',
   });
 }
@@ -173,13 +175,17 @@ export function handleSettingsClick(overlay, x, y) {
   if (!overlay.open) return;
   for (const row of overlay.rows) {
     const r = row.rect;
-    if (x < r.x || x > r.x + r.w || y < r.y || y > r.y + r.h) continue;
+    // Sliders use a slightly enlarged hit box so the thumb is easy to grab.
     if (row.kind === 'slider') {
+      const padY = 6;
+      if (x < r.x - 6 || x > r.x + r.w + 6 || y < r.y - padY || y > r.y + r.h + padY) continue;
       const t = Math.max(0, Math.min(1, (x - r.x) / r.w));
       setVolume(overlay.runState, row.ref, t);
       applyVolumeToAudio(overlay);
+      overlay._dragging = { kind: 'slider', ref: row.ref, rect: r };
       return;
     }
+    if (x < r.x || x > r.x + r.w || y < r.y || y > r.y + r.h) continue;
     if (row.kind === 'toggle') {
       setMuted(overlay.runState, !isMuted(overlay.runState));
       applyVolumeToAudio(overlay);
@@ -194,6 +200,51 @@ export function handleSettingsClick(overlay, x, y) {
       return;
     }
   }
+}
+
+// Called on mousemove while the mouse button is held down. Lets the player
+// drag the slider thumb instead of clicking a single position.
+export function handleSettingsDrag(overlay, x, y) {
+  if (!overlay || !overlay._dragging) return;
+  const d = overlay._dragging;
+  if (d.kind !== 'slider' || !d.rect) return;
+  const t = Math.max(0, Math.min(1, (x - d.rect.x) / d.rect.w));
+  setVolume(overlay.runState, d.ref, t);
+  applyVolumeToAudio(overlay);
+}
+
+export function endSettingsDrag(overlay) {
+  if (overlay) overlay._dragging = null;
+}
+
+export function settingsHover(overlay, x, y) {
+  if (!overlay || !overlay.open) return false;
+  for (const row of overlay.rows) {
+    const r = row.rect;
+    if (row.kind === 'slider') {
+      const padY = 6;
+      if (x >= r.x - 6 && x <= r.x + r.w + 6 && y >= r.y - padY && y <= r.y + r.h + padY) return true;
+    } else {
+      if (x >= r.x && x <= r.x + r.w && y >= r.y && y <= r.y + r.h) return true;
+    }
+  }
+  return false;
+}
+
+function drawRoundRect(ctx, x, y, w, h, r) {
+  ctx.beginPath();
+  if (typeof ctx.roundRect === 'function') { ctx.roundRect(x, y, w, h, r); return; }
+  const rr = Math.min(r, w / 2, h / 2);
+  ctx.moveTo(x + rr, y);
+  ctx.lineTo(x + w - rr, y);
+  ctx.arcTo(x + w, y, x + w, y + rr, rr);
+  ctx.lineTo(x + w, y + h - rr);
+  ctx.arcTo(x + w, y + h, x + w - rr, y + h, rr);
+  ctx.lineTo(x + rr, y + h);
+  ctx.arcTo(x, y + h, x, y + h - rr, rr);
+  ctx.lineTo(x, y + rr);
+  ctx.arcTo(x, y, x + rr, y, rr);
+  ctx.closePath();
 }
 
 export function tickSettings(overlay, dtMs) {
@@ -229,12 +280,29 @@ export function drawSettings(ctx, overlay) {
     const r = row.rect;
     if (row.kind === 'slider') {
       const v = getVolume(overlay.runState, row.ref);
-      ctx.fillStyle = '#333';
-      ctx.fillRect(r.x, r.y, r.w, r.h);
-      ctx.fillStyle = '#5a9';
-      ctx.fillRect(r.x, r.y, r.w * v, r.h);
-      ctx.fillStyle = '#fff';
-      ctx.fillText(`${Math.round(v * 100)}%`, r.x + r.w + 6, r.y);
+      // Track (rounded)
+      ctx.fillStyle = '#2A2A38';
+      drawRoundRect(ctx, r.x, r.y + r.h/2 - 3, r.w, 6, 3);
+      ctx.fill();
+      // Filled portion
+      ctx.fillStyle = '#66FFAA';
+      drawRoundRect(ctx, r.x, r.y + r.h/2 - 3, r.w * v, 6, 3);
+      ctx.fill();
+      // Thumb (round)
+      const thumbX = r.x + r.w * v;
+      const thumbY = r.y + r.h / 2;
+      ctx.fillStyle = '#FFFFFF';
+      ctx.beginPath();
+      ctx.arc(thumbX, thumbY, SLIDER_THUMB_W / 2, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.strokeStyle = '#66FFAA';
+      ctx.lineWidth = 2;
+      ctx.stroke();
+      // Percent label
+      ctx.fillStyle = '#FFFFFF';
+      ctx.font = 'bold 11px monospace';
+      ctx.fillText(`${Math.round(v * 100)}%`, r.x + r.w + 12, r.y + 4);
+      ctx.font = '10px monospace';
     } else if (row.kind === 'toggle') {
       const muted = isMuted(overlay.runState);
       ctx.fillStyle = muted ? '#a33' : '#3a3';

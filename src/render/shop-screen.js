@@ -101,11 +101,34 @@ export function drawShopScreen(ctx, shop, campaign, widthPx, heightPx) {
   const rowH = 32;
   ctx.textAlign = 'left';
 
+  shop._rowBounds = [];
+  const ROW_X = px + 12;
+  const ROW_W = PW - 24;
+
   for (let i = 0; i < upgrades.length; i++) {
     const u = upgrades[i];
     const status = purchaseStatus(u, campaign);
     const selected = i === shop.cursor;
+    const hovered = shop._hoverRow === i;
     const y = baseY + i * rowH;
+    const rowY = y - 14;
+    const rowH0 = 28;
+
+    ctx.save();
+    if (selected) {
+      ctx.fillStyle = 'rgba(102,255,170,0.16)';
+      roundRect(ctx, ROW_X, rowY, ROW_W, rowH0, 6);
+      ctx.fill();
+      ctx.strokeStyle = HIGHLIGHT_COLOR;
+      ctx.lineWidth = 1.5;
+      roundRect(ctx, ROW_X, rowY, ROW_W, rowH0, 6);
+      ctx.stroke();
+    } else if (hovered) {
+      ctx.fillStyle = 'rgba(255,255,255,0.06)';
+      roundRect(ctx, ROW_X, rowY, ROW_W, rowH0, 6);
+      ctx.fill();
+    }
+    ctx.restore();
 
     let labelColor = TEXT_COLOR;
     let tagText = '';
@@ -121,10 +144,9 @@ export function drawShopScreen(ctx, shop, campaign, widthPx, heightPx) {
     }
     if (selected) labelColor = HIGHLIGHT_COLOR;
 
-    const prefix = selected ? '> ' : '  ';
     ctx.fillStyle = labelColor;
     ctx.font = selected ? 'bold 13px monospace' : '13px monospace';
-    ctx.fillText(`${prefix}${u.label}`, px + 24, y);
+    ctx.fillText(u.label, px + 24, y);
 
     ctx.textAlign = 'right';
     ctx.font = '12px monospace';
@@ -143,7 +165,21 @@ export function drawShopScreen(ctx, shop, campaign, widthPx, heightPx) {
       ctx.fillText(tagText, px + PW - 24, y + 14);
       ctx.textAlign = 'left';
     }
+
+    shop._rowBounds.push({ i, bounds: { x: ROW_X, y: rowY, w: ROW_W, h: rowH0 } });
   }
+
+  // Left/right character cycle buttons next to the character title.
+  const arrowY = py + 38;
+  const arrowSize = 22;
+  const leftArrowX = px + 24;
+  const rightArrowX = px + PW - 24 - arrowSize;
+  drawArrowButton(ctx, leftArrowX, arrowY, arrowSize, arrowSize, '<', shop._hoverChar === -1);
+  drawArrowButton(ctx, rightArrowX, arrowY, arrowSize, arrowSize, '>', shop._hoverChar === 1);
+  shop._charBounds = {
+    left: { x: leftArrowX, y: arrowY, w: arrowSize, h: arrowSize },
+    right: { x: rightArrowX, y: arrowY, w: arrowSize, h: arrowSize },
+  };
 
   // Ability detail panel — the "store-as-tutorial" view of the highlighted upgrade.
   const selected = upgrades[shop.cursor];
@@ -230,6 +266,77 @@ export function cycleShopCharacter(shop, delta) {
   const base = idx === -1 ? 0 : idx;
   shop.character = order[(base + delta + order.length) % order.length];
   shop.cursor = 0;
+}
+
+function roundRect(ctx, x, y, w, h, r) {
+  ctx.beginPath();
+  if (typeof ctx.roundRect === 'function') { ctx.roundRect(x, y, w, h, r); return; }
+  const rr = Math.min(r, w / 2, h / 2);
+  ctx.moveTo(x + rr, y);
+  ctx.lineTo(x + w - rr, y);
+  ctx.arcTo(x + w, y, x + w, y + rr, rr);
+  ctx.lineTo(x + w, y + h - rr);
+  ctx.arcTo(x + w, y + h, x + w - rr, y + h, rr);
+  ctx.lineTo(x + rr, y + h);
+  ctx.arcTo(x, y + h, x, y + h - rr, rr);
+  ctx.lineTo(x, y + rr);
+  ctx.arcTo(x, y, x + rr, y, rr);
+  ctx.closePath();
+}
+
+function drawArrowButton(ctx, x, y, w, h, glyph, emphasized) {
+  ctx.save();
+  ctx.fillStyle = emphasized ? 'rgba(102,255,170,0.22)' : 'rgba(255,255,255,0.10)';
+  roundRect(ctx, x, y, w, h, 5);
+  ctx.fill();
+  ctx.strokeStyle = emphasized ? '#66FFAA' : '#666677';
+  ctx.lineWidth = 1;
+  roundRect(ctx, x, y, w, h, 5);
+  ctx.stroke();
+  ctx.fillStyle = emphasized ? '#66FFAA' : '#CCCCCC';
+  ctx.font = 'bold 13px monospace';
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+  ctx.fillText(glyph, x + w / 2, y + h / 2);
+  ctx.restore();
+}
+
+function hits(b, x, y) {
+  return b && x >= b.x && x < b.x + b.w && y >= b.y && y < b.y + b.h;
+}
+
+export function shopHover(shop, x, y) {
+  if (!shop || !shop.open) return;
+  shop._hoverRow = -1;
+  shop._hoverChar = 0;
+  if (shop._charBounds) {
+    if (hits(shop._charBounds.left, x, y)) shop._hoverChar = -1;
+    else if (hits(shop._charBounds.right, x, y)) shop._hoverChar = 1;
+  }
+  if (Array.isArray(shop._rowBounds)) {
+    for (const rb of shop._rowBounds) {
+      if (hits(rb.bounds, x, y)) { shop._hoverRow = rb.i; break; }
+    }
+  }
+}
+
+// Returns 'buy' if a row was clicked (sets cursor first), 'cycleChar:-1' / '+1'
+// for character arrows, or null otherwise.
+export function shopClick(shop, x, y) {
+  if (!shop || !shop.open) return null;
+  if (shop._charBounds) {
+    if (hits(shop._charBounds.left, x, y)) return { type: 'cycleChar', delta: -1 };
+    if (hits(shop._charBounds.right, x, y)) return { type: 'cycleChar', delta: 1 };
+  }
+  if (Array.isArray(shop._rowBounds)) {
+    for (const rb of shop._rowBounds) {
+      if (hits(rb.bounds, x, y)) {
+        shop.cursor = rb.i;
+        return { type: 'buy' };
+      }
+    }
+  }
+  return null;
 }
 
 function countCharacterOwned(charId, campaign) {

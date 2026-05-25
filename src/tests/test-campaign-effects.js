@@ -8,7 +8,7 @@ const STUB_LEVEL = {
   id: '01',
   world: 1,
   title: 'Test',
-  dims: { cols: 19, rows: 13 },
+  dims: { cols: 25, rows: 13 },
   timeLimitMs: 180000,
   playerSpawns: [{ playerSlot: 1, col: 1, row: 1, dir: 'down' }],
   objects: [],
@@ -259,26 +259,26 @@ test('campaign C3: easterEgg makes hurled egg destroy-in-place explode', () => {
   });
   const p = state.players[0];
   // Place egg directly in front of player; wall behind it (off-grid).
-  p.pos = { col: 17, row: 1 };
+  p.pos = { col: 23, row: 1 };
   p.dir = 'right';
-  state.grid[1][18].object = { type: 'egg', id: 999 };
+  state.grid[1][24].object = { type: 'egg', id: 999 };
   state.timeMs = 100;
   applyHurlCommand(state, p.id);
   // destroyInPlace fired with objType='fireball' → applyExplosion was queued.
-  assert.equal(state.grid[1][18].object, null, 'egg cell cleared');
+  assert.equal(state.grid[1][24].object, null, 'egg cell cleared');
   assert.ok(state.explosions && state.explosions.length > 0, 'explosion enqueued');
 });
 
 test('campaign C3: easterEgg absent → hurled egg just cracks', () => {
   const state = loadLevel(STUB_LEVEL, 1, { mode: 'arcade' });
   const p = state.players[0];
-  p.pos = { col: 17, row: 1 };
+  p.pos = { col: 23, row: 1 };
   p.dir = 'right';
-  state.grid[1][18].object = { type: 'egg', id: 999 };
+  state.grid[1][24].object = { type: 'egg', id: 999 };
   state.timeMs = 100;
   const beforeScore = p.score;
   applyHurlCommand(state, p.id);
-  assert.equal(state.grid[1][18].object, null);
+  assert.equal(state.grid[1][24].object, null);
   assert.equal((state.explosions || []).length, 0, 'no explosion without upgrade');
   assert.ok(p.score > beforeScore, 'egg crack score awarded');
 });
@@ -290,14 +290,14 @@ test('campaign C3: rockToExplosive turns hurled rock into fireball when queued',
     campaignUpgrades: { lion: { rockToExplosive: true } },
   });
   const p = state.players[0];
-  p.pos = { col: 17, row: 1 };
+  p.pos = { col: 23, row: 1 };
   p.dir = 'right';
-  state.grid[1][18].object = { type: 'rock', id: 999 };
+  state.grid[1][24].object = { type: 'rock', id: 999 };
   state.timeMs = 1000;
   // Queue charge as if F was pressed
   p.explosiveQueuedUntilMs = state.timeMs + 5000;
   applyHurlCommand(state, p.id);
-  assert.equal(state.grid[1][18].object, null);
+  assert.equal(state.grid[1][24].object, null);
   assert.ok(state.explosions && state.explosions.length > 0, 'explosion fired');
   assert.equal(p.explosiveQueuedUntilMs, 0, 'charge consumed');
   assert.ok(p.explosiveCooldownUntilMs > state.timeMs, 'cooldown started');
@@ -691,9 +691,9 @@ test('campaign C3: rockToExplosive without queued charge → plain rock destroy'
     campaignUpgrades: { lion: { rockToExplosive: true } },
   });
   const p = state.players[0];
-  p.pos = { col: 17, row: 1 };
+  p.pos = { col: 23, row: 1 };
   p.dir = 'right';
-  state.grid[1][18].object = { type: 'rock', id: 999 };
+  state.grid[1][24].object = { type: 'rock', id: 999 };
   state.timeMs = 1000;
   // No charge queued
   applyHurlCommand(state, p.id);

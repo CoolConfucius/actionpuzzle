@@ -36,6 +36,8 @@ import {
   selectedShopUpgrade,
   drawShopScreen,
   cycleShopCharacter,
+  shopClick,
+  shopHover,
 } from './render/shop-screen.js';
 import {
   createLevelSelectState,
@@ -99,6 +101,8 @@ import {
   createTitleScreenState,
   drawTitleScreen,
   titleScreenKey,
+  titleScreenClick,
+  titleScreenHover,
   consumeStartRequest,
   consumeHelpRequest,
   consumeAchievementsRequest,
@@ -124,6 +128,8 @@ import {
   navigatePauseMenu,
   selectedPauseMenuAction,
   drawPauseMenu,
+  pauseMenuClick,
+  pauseMenuHover,
 } from './render/pause-menu.js';
 import {
   createSettingsOverlay,
@@ -132,6 +138,9 @@ import {
   isSettingsOpen,
   handleSettingsKey,
   handleSettingsClick,
+  handleSettingsDrag,
+  endSettingsDrag,
+  settingsHover,
   tickSettings,
   drawSettings,
 } from './render/settings-overlay.js';
@@ -912,16 +921,75 @@ async function boot() {
   window.addEventListener('pointerdown', unlockAudio);
   window.addEventListener('keydown', unlockAudio);
 
-  // Settings overlay is mouse-driven — wire click-on-canvas to its handler.
+  // Canvas mouse routing. The CSS scales the canvas to fit the viewport;
+  // events use clientX/Y, so we convert to internal canvas coordinates by
+  // multiplying by the ratio of internal-to-displayed width.
   const canvasEl = document.getElementById('game');
   if (canvasEl) {
-    canvasEl.addEventListener('click', (ev) => {
-      if (!isSettingsOpen(settingsOverlay)) return;
+    const toCanvasXY = (ev) => {
       const rect = canvasEl.getBoundingClientRect();
-      const x = ev.clientX - rect.left;
-      const y = ev.clientY - rect.top;
-      handleSettingsClick(settingsOverlay, x, y);
+      const xCss = ev.clientX - rect.left;
+      const yCss = ev.clientY - rect.top;
+      const sx = LOGICAL_WIDTH_PX / Math.max(1, rect.width);
+      const sy = LOGICAL_HEIGHT_PX / Math.max(1, rect.height);
+      return { x: xCss * sx, y: yCss * sy };
+    };
+
+    // Settings sliders need drag support, not just click. mousedown starts a
+    // drag; mousemove updates the value while the button is held; mouseup
+    // ends the drag.
+    canvasEl.addEventListener('mousedown', (ev) => {
+      if (!isSettingsOpen(settingsOverlay)) return;
+      // click handler already updates the value; this just primes the drag.
     });
+    window.addEventListener('mouseup', () => {
+      endSettingsDrag(settingsOverlay);
+    });
+
+    canvasEl.addEventListener('mousemove', (ev) => {
+      const { x, y } = toCanvasXY(ev);
+      let cursorPointer = false;
+      if (isSettingsOpen(settingsOverlay)) {
+        if (settingsOverlay._dragging) handleSettingsDrag(settingsOverlay, x, y);
+        cursorPointer = settingsHover(settingsOverlay, x, y);
+      } else if (isPauseMenuOpen(pauseMenu)) {
+        pauseMenuHover(pauseMenu, x, y);
+        cursorPointer = pauseMenu._hoverRow >= 0;
+      } else if (isShopOpen(shopState)) {
+        shopHover(shopState, x, y);
+        cursorPointer = (shopState._hoverRow >= 0 || shopState._hoverChar !== 0);
+      } else if (phase === 'title') {
+        titleScreenHover(titleState, x, y);
+        cursorPointer = (titleState._hoverRow != null && titleState._hoverRow >= 0);
+      }
+      canvasEl.style.cursor = cursorPointer ? 'pointer' : 'default';
+    });
+
+    canvasEl.addEventListener('click', (ev) => {
+      const { x, y } = toCanvasXY(ev);
+      if (isSettingsOpen(settingsOverlay)) {
+        handleSettingsClick(settingsOverlay, x, y);
+        return;
+      }
+      if (isPauseMenuOpen(pauseMenu)) {
+        const action = pauseMenuClick(pauseMenu, x, y);
+        if (action) handlePauseAction(action);
+        return;
+      }
+      if (isShopOpen(shopState)) {
+        const click = shopClick(shopState, x, y);
+        if (click) {
+          if (click.type === 'cycleChar') cycleShopCharacter(shopState, click.delta);
+          else if (click.type === 'buy') attemptShopPurchase();
+        }
+        return;
+      }
+      if (phase === 'title') {
+        titleScreenClick(titleState, x, y);
+        return;
+      }
+    });
+
     canvasEl.addEventListener('wheel', (ev) => {
       if (phase !== 'help') return;
       scrollHelpScreen(ev.deltaY);

@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32">
+<defs>
+<linearGradient id="dragGrad" x1="0" y1="0" x2="0" y2="1">
+<stop offset="0" stop-color="#FF6633"/>
+<stop offset="0.55" stop-color="#FF3300"/>
+<stop offset="1" stop-color="#8B1100"/>
+</linearGradient>
+</defs>
+<polygon points="16,3 22,8 28,12 24,18 28,24 18,22 16,28 14,22 4,24 8,18 4,12 10,8" fill="url(#dragGrad)" stroke="#3A0500" stroke-width="1.5" stroke-linejoin="round"/>
+<polygon points="16,8 20,12 16,15 12,12" fill="#FFD27A"/>
+<circle cx="14" cy="11" r="1.4" fill="#1A0000"/>
+<circle cx="18" cy="11" r="1.4" fill="#1A0000"/>
+<path d="M13 18 Q16 21 19 18" stroke="#FFCC44" stroke-width="1.5" fill="none"/>
+</svg>

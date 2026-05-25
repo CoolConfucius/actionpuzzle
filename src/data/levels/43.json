@@ -2,7 +2,7 @@
   "id": "43",
   "world": 8,
   "dims": {
-    "cols": 19,
+    "cols": 25,
     "rows": 13
   },
   "timeLimitMs": 200000,
@@ -11,35 +11,35 @@
   "playerSpawns": [
     {
       "playerSlot": 1,
-      "col": 3,
+      "col": 4,
       "row": 6,
       "dir": "right"
     },
     {
       "playerSlot": 2,
-      "col": 15,
+      "col": 20,
       "row": 6,
       "dir": "left"
     }
   ],
   "objects": [
     {
-      "col": 4,
+      "col": 6,
       "row": 2,
       "type": "rock"
     },
     {
-      "col": 14,
+      "col": 18,
       "row": 2,
       "type": "rock"
     },
     {
-      "col": 7,
+      "col": 9,
       "row": 2,
       "type": "rock"
     },
     {
-      "col": 11,
+      "col": 15,
       "row": 2,
       "type": "rock"
     },
@@ -49,17 +49,17 @@
       "type": "rock"
     },
     {
-      "col": 17,
-      "row": 4,
-      "type": "rock"
-    },
-    {
-      "col": 8,
+      "col": 23,
       "row": 4,
       "type": "rock"
     },
     {
       "col": 10,
+      "row": 4,
+      "type": "rock"
+    },
+    {
+      "col": 14,
       "row": 4,
       "type": "rock"
     },
@@ -69,17 +69,17 @@
       "type": "rock"
     },
     {
-      "col": 16,
-      "row": 6,
-      "type": "rock"
-    },
-    {
-      "col": 8,
+      "col": 22,
       "row": 6,
       "type": "rock"
     },
     {
       "col": 10,
+      "row": 6,
+      "type": "rock"
+    },
+    {
+      "col": 14,
       "row": 6,
       "type": "rock"
     },
@@ -89,12 +89,7 @@
       "type": "rock"
     },
     {
-      "col": 17,
-      "row": 8,
-      "type": "rock"
-    },
-    {
-      "col": 8,
+      "col": 23,
       "row": 8,
       "type": "rock"
     },
@@ -104,34 +99,29 @@
       "type": "rock"
     },
     {
-      "col": 4,
-      "row": 10,
-      "type": "rock"
-    },
-    {
       "col": 14,
-      "row": 10,
-      "type": "rock"
-    },
-    {
-      "col": 7,
-      "row": 10,
-      "type": "rock"
-    },
-    {
-      "col": 11,
-      "row": 10,
+      "row": 8,
       "type": "rock"
     },
     {
       "col": 6,
-      "row": 3,
-      "type": "egg"
+      "row": 10,
+      "type": "rock"
     },
     {
-      "col": 12,
-      "row": 3,
-      "type": "egg"
+      "col": 18,
+      "row": 10,
+      "type": "rock"
+    },
+    {
+      "col": 9,
+      "row": 10,
+      "type": "rock"
+    },
+    {
+      "col": 15,
+      "row": 10,
+      "type": "rock"
     },
     {
       "col": 5,
@@ -139,7 +129,17 @@
       "type": "egg"
     },
     {
-      "col": 13,
+      "col": 19,
+      "row": 3,
+      "type": "egg"
+    },
+    {
+      "col": 4,
+      "row": 3,
+      "type": "egg"
+    },
+    {
+      "col": 20,
       "row": 3,
       "type": "egg"
     }
@@ -155,19 +155,31 @@
       "atTimeMs": 10000
     },
     {
+      "type": "enemy6",
+      "atTimeMs": 10000
+    },
+    {
       "type": "enemy4",
       "atTimeMs": 22000
+    },
+    {
+      "type": "enemy8",
+      "atTimeMs": 25000
     },
     {
       "type": "enemy4",
       "atTimeMs": 45000
     },
     {
+      "type": "enemy8",
+      "atTimeMs": 55000
+    },
+    {
       "type": "enemy5",
       "atTimeMs": 75000
     }
   ],
-  "enemyCap": 4,
+  "enemyCap": 6,
   "balloonSchedule": [
     {
       "type": "invisibility",

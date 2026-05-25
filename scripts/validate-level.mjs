@@ -8,7 +8,7 @@ const REQUIRED_FIELDS = [
 ];
 
 const OBJECT_TYPES = new Set(['rock', 'fireball', 'donut', 'egg', 'fried-egg']);
-const ENEMY_TYPES = new Set(['enemy1', 'enemy2', 'enemy3', 'enemy4', 'enemy5', 'enemy6', 'enemy7']);
+const ENEMY_TYPES = new Set(['enemy1', 'enemy2', 'enemy3', 'enemy4', 'enemy5', 'enemy6', 'enemy7', 'enemy8']);
 const WIN_CONDITIONS = new Set(['allEnemiesDefeated', 'allObjectsDestroyed']);
 const DIRS = new Set(['up', 'down', 'left', 'right']);
 const BACKGROUNDS = new Set([

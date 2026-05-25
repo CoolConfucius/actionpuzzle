@@ -2,7 +2,7 @@
   "id": "01",
   "world": 0,
   "dims": {
-    "cols": 19,
+    "cols": 25,
     "rows": 13
   },
   "timeLimitMs": 600000,

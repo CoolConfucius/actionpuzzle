@@ -132,7 +132,7 @@ test('mute command drains without throwing and leaves state coherent', () => {
 
 test('player respawns after DEATH_ANIM_MS when lives remain', () => {
   const level = {
-    id: '01', world: 1, dims: { cols: 19, rows: 13 },
+    id: '01', world: 1, dims: { cols: 25, rows: 13 },
     playerSpawns: [{ playerSlot: 1, col: 5, row: 5, dir: 'down' }],
     objects: [], eggCount: 0,
     enemySpawns: [{ type: 'enemy1', atTimeMs: 99999 }],
@@ -158,7 +158,7 @@ test('player respawns after DEATH_ANIM_MS when lives remain', () => {
 
 test('player does not respawn when out of lives', () => {
   const level = {
-    id: '01', world: 1, dims: { cols: 19, rows: 13 },
+    id: '01', world: 1, dims: { cols: 25, rows: 13 },
     playerSpawns: [{ playerSlot: 1, col: 5, row: 5, dir: 'down' }],
     objects: [], eggCount: 0,
     enemySpawns: [{ type: 'enemy1', atTimeMs: 99999 }],

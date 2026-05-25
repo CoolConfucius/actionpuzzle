@@ -2,7 +2,7 @@
   "id": "17",
   "world": 3,
   "dims": {
-    "cols": 19,
+    "cols": 25,
     "rows": 13
   },
   "timeLimitMs": 180000,
@@ -11,35 +11,25 @@
   "playerSpawns": [
     {
       "playerSlot": 1,
-      "col": 3,
+      "col": 4,
       "row": 6,
       "dir": "right"
     },
     {
       "playerSlot": 2,
-      "col": 15,
+      "col": 20,
       "row": 6,
       "dir": "left"
     }
   ],
   "objects": [
     {
-      "col": 1,
-      "row": 1,
-      "type": "rock"
-    },
-    {
-      "col": 17,
-      "row": 1,
-      "type": "rock"
-    },
-    {
       "col": 2,
       "row": 1,
       "type": "rock"
     },
     {
-      "col": 16,
+      "col": 22,
       "row": 1,
       "type": "rock"
     },
@@ -49,7 +39,7 @@
       "type": "rock"
     },
     {
-      "col": 15,
+      "col": 21,
       "row": 1,
       "type": "rock"
     },
@@ -59,7 +49,7 @@
       "type": "rock"
     },
     {
-      "col": 14,
+      "col": 20,
       "row": 1,
       "type": "rock"
     },
@@ -69,17 +59,17 @@
       "type": "rock"
     },
     {
-      "col": 13,
+      "col": 19,
       "row": 1,
       "type": "rock"
     },
     {
-      "col": 7,
+      "col": 6,
       "row": 1,
       "type": "rock"
     },
     {
-      "col": 11,
+      "col": 18,
       "row": 1,
       "type": "rock"
     },
@@ -89,47 +79,107 @@
       "type": "rock"
     },
     {
+      "col": 16,
+      "row": 1,
+      "type": "rock"
+    },
+    {
+      "col": 9,
+      "row": 1,
+      "type": "rock"
+    },
+    {
+      "col": 15,
+      "row": 1,
+      "type": "rock"
+    },
+    {
       "col": 10,
       "row": 1,
       "type": "rock"
     },
     {
-      "col": 9,
+      "col": 14,
       "row": 1,
       "type": "rock"
     },
     {
-      "col": 5,
-      "row": 2,
+      "col": 11,
+      "row": 1,
       "type": "rock"
     },
     {
       "col": 13,
+      "row": 1,
+      "type": "rock"
+    },
+    {
+      "col": 12,
+      "row": 1,
+      "type": "rock"
+    },
+    {
+      "col": 6,
       "row": 2,
       "type": "rock"
     },
     {
-      "col": 7,
+      "col": 18,
       "row": 2,
       "type": "rock"
     },
     {
-      "col": 11,
+      "col": 8,
       "row": 2,
       "type": "rock"
     },
     {
-      "col": 1,
-      "row": 3,
-      "type": "rock"
-    },
-    {
-      "col": 17,
-      "row": 3,
+      "col": 16,
+      "row": 2,
       "type": "rock"
     },
     {
       "col": 2,
+      "row": 3,
+      "type": "rock"
+    },
+    {
+      "col": 22,
+      "row": 3,
+      "type": "rock"
+    },
+    {
+      "col": 3,
+      "row": 3,
+      "type": "rock"
+    },
+    {
+      "col": 21,
+      "row": 3,
+      "type": "rock"
+    },
+    {
+      "col": 4,
+      "row": 3,
+      "type": "rock"
+    },
+    {
+      "col": 20,
+      "row": 3,
+      "type": "rock"
+    },
+    {
+      "col": 6,
+      "row": 3,
+      "type": "rock"
+    },
+    {
+      "col": 18,
+      "row": 3,
+      "type": "rock"
+    },
+    {
+      "col": 8,
       "row": 3,
       "type": "rock"
     },
@@ -139,27 +189,12 @@
       "type": "rock"
     },
     {
-      "col": 3,
+      "col": 10,
       "row": 3,
       "type": "rock"
     },
     {
-      "col": 15,
-      "row": 3,
-      "type": "rock"
-    },
-    {
-      "col": 5,
-      "row": 3,
-      "type": "rock"
-    },
-    {
-      "col": 13,
-      "row": 3,
-      "type": "rock"
-    },
-    {
-      "col": 7,
+      "col": 14,
       "row": 3,
       "type": "rock"
     },
@@ -169,52 +204,52 @@
       "type": "rock"
     },
     {
-      "col": 9,
+      "col": 13,
       "row": 3,
       "type": "rock"
     },
     {
-      "col": 1,
+      "col": 12,
+      "row": 3,
+      "type": "rock"
+    },
+    {
+      "col": 2,
       "row": 4,
       "type": "rock"
     },
     {
-      "col": 17,
+      "col": 22,
       "row": 4,
       "type": "rock"
     },
     {
-      "col": 5,
+      "col": 6,
       "row": 4,
       "type": "rock"
     },
     {
-      "col": 13,
+      "col": 18,
       "row": 4,
       "type": "rock"
     },
     {
-      "col": 9,
+      "col": 10,
       "row": 4,
       "type": "rock"
     },
     {
-      "col": 1,
+      "col": 14,
+      "row": 4,
+      "type": "rock"
+    },
+    {
+      "col": 2,
       "row": 5,
       "type": "rock"
     },
     {
-      "col": 17,
-      "row": 5,
-      "type": "rock"
-    },
-    {
-      "col": 3,
-      "row": 5,
-      "type": "rock"
-    },
-    {
-      "col": 15,
+      "col": 22,
       "row": 5,
       "type": "rock"
     },
@@ -224,7 +259,7 @@
       "type": "rock"
     },
     {
-      "col": 14,
+      "col": 20,
       "row": 5,
       "type": "rock"
     },
@@ -234,7 +269,7 @@
       "type": "rock"
     },
     {
-      "col": 13,
+      "col": 19,
       "row": 5,
       "type": "rock"
     },
@@ -244,62 +279,117 @@
       "type": "rock"
     },
     {
-      "col": 12,
+      "col": 18,
       "row": 5,
       "type": "rock"
     },
     {
       "col": 7,
       "row": 5,
-      "type": "rock"
-    },
-    {
-      "col": 11,
-      "row": 5,
-      "type": "rock"
-    },
-    {
-      "col": 9,
-      "row": 5,
-      "type": "rock"
-    },
-    {
-      "col": 5,
-      "row": 6,
-      "type": "rock"
-    },
-    {
-      "col": 13,
-      "row": 6,
-      "type": "rock"
-    },
-    {
-      "col": 7,
-      "row": 6,
-      "type": "rock"
-    },
-    {
-      "col": 11,
-      "row": 6,
-      "type": "rock"
-    },
-    {
-      "col": 9,
-      "row": 6,
-      "type": "rock"
-    },
-    {
-      "col": 1,
-      "row": 7,
       "type": "rock"
     },
     {
       "col": 17,
-      "row": 7,
+      "row": 5,
+      "type": "rock"
+    },
+    {
+      "col": 8,
+      "row": 5,
+      "type": "rock"
+    },
+    {
+      "col": 16,
+      "row": 5,
+      "type": "rock"
+    },
+    {
+      "col": 10,
+      "row": 5,
+      "type": "rock"
+    },
+    {
+      "col": 14,
+      "row": 5,
+      "type": "rock"
+    },
+    {
+      "col": 6,
+      "row": 6,
+      "type": "rock"
+    },
+    {
+      "col": 18,
+      "row": 6,
+      "type": "rock"
+    },
+    {
+      "col": 8,
+      "row": 6,
+      "type": "rock"
+    },
+    {
+      "col": 16,
+      "row": 6,
+      "type": "rock"
+    },
+    {
+      "col": 10,
+      "row": 6,
+      "type": "rock"
+    },
+    {
+      "col": 14,
+      "row": 6,
+      "type": "rock"
+    },
+    {
+      "col": 12,
+      "row": 6,
       "type": "rock"
     },
     {
       "col": 2,
+      "row": 7,
+      "type": "rock"
+    },
+    {
+      "col": 22,
+      "row": 7,
+      "type": "rock"
+    },
+    {
+      "col": 3,
+      "row": 7,
+      "type": "rock"
+    },
+    {
+      "col": 21,
+      "row": 7,
+      "type": "rock"
+    },
+    {
+      "col": 4,
+      "row": 7,
+      "type": "rock"
+    },
+    {
+      "col": 20,
+      "row": 7,
+      "type": "rock"
+    },
+    {
+      "col": 6,
+      "row": 7,
+      "type": "rock"
+    },
+    {
+      "col": 18,
+      "row": 7,
+      "type": "rock"
+    },
+    {
+      "col": 8,
       "row": 7,
       "type": "rock"
     },
@@ -309,82 +399,52 @@
       "type": "rock"
     },
     {
-      "col": 3,
+      "col": 10,
       "row": 7,
       "type": "rock"
     },
     {
-      "col": 15,
+      "col": 14,
       "row": 7,
       "type": "rock"
     },
     {
-      "col": 5,
-      "row": 7,
-      "type": "rock"
-    },
-    {
-      "col": 13,
-      "row": 7,
-      "type": "rock"
-    },
-    {
-      "col": 7,
-      "row": 7,
-      "type": "rock"
-    },
-    {
-      "col": 11,
-      "row": 7,
-      "type": "rock"
-    },
-    {
-      "col": 9,
-      "row": 7,
-      "type": "rock"
-    },
-    {
-      "col": 1,
+      "col": 2,
       "row": 8,
       "type": "rock"
     },
     {
-      "col": 17,
+      "col": 22,
       "row": 8,
       "type": "rock"
     },
     {
-      "col": 5,
+      "col": 6,
       "row": 8,
       "type": "rock"
     },
     {
-      "col": 13,
+      "col": 18,
       "row": 8,
       "type": "rock"
     },
     {
-      "col": 9,
+      "col": 10,
       "row": 8,
       "type": "rock"
     },
     {
-      "col": 1,
+      "col": 14,
+      "row": 8,
+      "type": "rock"
+    },
+    {
+      "col": 2,
       "row": 9,
       "type": "rock"
     },
     {
-      "col": 17,
-      "row": 9,
-      "type": "rock"
-    },
-    {
-      "col": 3,
-      "row": 9,
-      "type": "rock"
-    },
-    {
-      "col": 15,
+      "col": 22,
       "row": 9,
       "type": "rock"
     },
@@ -394,7 +454,7 @@
       "type": "rock"
     },
     {
-      "col": 14,
+      "col": 20,
       "row": 9,
       "type": "rock"
     },
@@ -404,7 +464,7 @@
       "type": "rock"
     },
     {
-      "col": 13,
+      "col": 19,
       "row": 9,
       "type": "rock"
     },
@@ -414,7 +474,7 @@
       "type": "rock"
     },
     {
-      "col": 12,
+      "col": 18,
       "row": 9,
       "type": "rock"
     },
@@ -424,42 +484,107 @@
       "type": "rock"
     },
     {
-      "col": 11,
+      "col": 17,
       "row": 9,
       "type": "rock"
     },
     {
-      "col": 9,
+      "col": 8,
       "row": 9,
       "type": "rock"
     },
     {
-      "col": 1,
-      "row": 10,
+      "col": 16,
+      "row": 9,
       "type": "rock"
     },
     {
-      "col": 17,
-      "row": 10,
+      "col": 10,
+      "row": 9,
       "type": "rock"
     },
     {
-      "col": 9,
-      "row": 10,
-      "type": "rock"
-    },
-    {
-      "col": 1,
-      "row": 11,
-      "type": "rock"
-    },
-    {
-      "col": 17,
-      "row": 11,
+      "col": 14,
+      "row": 9,
       "type": "rock"
     },
     {
       "col": 2,
+      "row": 10,
+      "type": "rock"
+    },
+    {
+      "col": 22,
+      "row": 10,
+      "type": "rock"
+    },
+    {
+      "col": 12,
+      "row": 10,
+      "type": "rock"
+    },
+    {
+      "col": 2,
+      "row": 11,
+      "type": "rock"
+    },
+    {
+      "col": 22,
+      "row": 11,
+      "type": "rock"
+    },
+    {
+      "col": 3,
+      "row": 11,
+      "type": "rock"
+    },
+    {
+      "col": 21,
+      "row": 11,
+      "type": "rock"
+    },
+    {
+      "col": 4,
+      "row": 11,
+      "type": "rock"
+    },
+    {
+      "col": 20,
+      "row": 11,
+      "type": "rock"
+    },
+    {
+      "col": 5,
+      "row": 11,
+      "type": "rock"
+    },
+    {
+      "col": 19,
+      "row": 11,
+      "type": "rock"
+    },
+    {
+      "col": 6,
+      "row": 11,
+      "type": "rock"
+    },
+    {
+      "col": 18,
+      "row": 11,
+      "type": "rock"
+    },
+    {
+      "col": 7,
+      "row": 11,
+      "type": "rock"
+    },
+    {
+      "col": 17,
+      "row": 11,
+      "type": "rock"
+    },
+    {
+      "col": 8,
       "row": 11,
       "type": "rock"
     },
@@ -469,17 +594,7 @@
       "type": "rock"
     },
     {
-      "col": 3,
-      "row": 11,
-      "type": "rock"
-    },
-    {
-      "col": 15,
-      "row": 11,
-      "type": "rock"
-    },
-    {
-      "col": 4,
+      "col": 10,
       "row": 11,
       "type": "rock"
     },
@@ -489,68 +604,38 @@
       "type": "rock"
     },
     {
-      "col": 5,
-      "row": 11,
-      "type": "rock"
-    },
-    {
-      "col": 13,
-      "row": 11,
-      "type": "rock"
-    },
-    {
-      "col": 6,
-      "row": 11,
-      "type": "rock"
-    },
-    {
       "col": 12,
       "row": 11,
       "type": "rock"
     },
     {
-      "col": 7,
-      "row": 11,
-      "type": "rock"
+      "col": 1,
+      "row": 3,
+      "type": "egg"
+    },
+    {
+      "col": 23,
+      "row": 3,
+      "type": "egg"
     },
     {
       "col": 11,
-      "row": 11,
-      "type": "rock"
-    },
-    {
-      "col": 9,
-      "row": 11,
-      "type": "rock"
-    },
-    {
-      "col": 6,
-      "row": 3,
-      "type": "egg"
-    },
-    {
-      "col": 12,
-      "row": 3,
-      "type": "egg"
-    },
-    {
-      "col": 6,
-      "row": 10,
-      "type": "egg"
-    },
-    {
-      "col": 12,
-      "row": 10,
-      "type": "egg"
-    },
-    {
-      "col": 5,
-      "row": 10,
+      "row": 5,
       "type": "egg"
     },
     {
       "col": 13,
-      "row": 10,
+      "row": 5,
+      "type": "egg"
+    },
+    {
+      "col": 9,
+      "row": 5,
+      "type": "egg"
+    },
+    {
+      "col": 15,
+      "row": 5,
       "type": "egg"
     }
   ],

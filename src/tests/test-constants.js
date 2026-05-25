@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import { BALANCE, COLORS, GLYPHS, BINDINGS } from '../engine/constants.js';
 
 test('grid dimensions match mechanics spec', () => {
-  assert.equal(BALANCE.GRID_COLS, 19);
+  assert.equal(BALANCE.GRID_COLS, 25);
   assert.equal(BALANCE.GRID_ROWS, 13);
 });
 

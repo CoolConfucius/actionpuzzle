@@ -31,7 +31,7 @@ const FRIED_EGG_SPARKLE_OFFSET_PX = 8;
 
 const SPRITE_KEYS = [
   'bear',
-  'enemy1', 'enemy2', 'enemy3', 'enemy4', 'enemy5', 'enemy6', 'enemy7',
+  'enemy1', 'enemy2', 'enemy3', 'enemy4', 'enemy5', 'enemy6', 'enemy7', 'enemy8',
   'rock', 'fireball', 'donut', 'egg', 'fried-egg', 'slow-trap',
   'balloon-berserk', 'balloon-invisibility', 'balloon-timeFreeze',
   'balloon-lifePlus', 'balloon-scorePlus500', 'balloon-scorePlus1000',

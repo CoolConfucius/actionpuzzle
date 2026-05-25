@@ -13,6 +13,7 @@ const SPEED_BY_TYPE = {
   enemy5: 'ENEMY_5_SPEED',
   enemy6: 'ENEMY_6_SPEED',
   enemy7: 'ENEMY_7_SPEED',
+  enemy8: 'ENEMY_8_SPEED',
 };
 
 const KILL_SCORE_BY_TYPE = {
@@ -23,6 +24,7 @@ const KILL_SCORE_BY_TYPE = {
   enemy5: 'SCORE_E5_KILL',
   enemy6: 'SCORE_E6_KILL',
   enemy7: 'SCORE_E7_KILL',
+  enemy8: 'SCORE_E8_KILL',
 };
 
 const DIR_DELTAS = {
@@ -92,6 +94,11 @@ export function tickEnemies(state, dtMs) {
       continue;
     }
     if (enemy.type === 'enemy4' && canStartFireballCast(state, enemy)) {
+      startE4Cast(state, enemy);
+      continue;
+    }
+    if (enemy.type === 'enemy8' && canStartFireballCast(state, enemy)) {
+      // Dragon: same fireball mechanic as Enemy 4 but with its own cooldown.
       startE4Cast(state, enemy);
       continue;
     }
@@ -371,7 +378,11 @@ function completeE4Cast(state, enemy) {
     }
   }
   enemy.cast = null;
-  enemy.abilityCooldownUntilMs = state.timeMs + BALANCE.E4_FIREBALL_COOLDOWN_MS;
+  // Dragon has its own cooldown so the encounter pace differs from Enemy 4.
+  const cooldown = enemy.type === 'enemy8'
+    ? BALANCE.E8_FIREBALL_COOLDOWN_MS
+    : BALANCE.E4_FIREBALL_COOLDOWN_MS;
+  enemy.abilityCooldownUntilMs = state.timeMs + cooldown;
   return spawned;
 }
 

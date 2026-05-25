@@ -2,7 +2,7 @@
   "id": "02",
   "world": 1,
   "dims": {
-    "cols": 19,
+    "cols": 25,
     "rows": 13
   },
   "timeLimitMs": 180000,
@@ -11,13 +11,13 @@
   "playerSpawns": [
     {
       "playerSlot": 1,
-      "col": 3,
+      "col": 4,
       "row": 6,
       "dir": "right"
     },
     {
       "playerSlot": 2,
-      "col": 15,
+      "col": 20,
       "row": 6,
       "dir": "left"
     }
@@ -29,7 +29,7 @@
       "type": "rock"
     },
     {
-      "col": 18,
+      "col": 24,
       "row": 1,
       "type": "rock"
     },
@@ -39,7 +39,7 @@
       "type": "rock"
     },
     {
-      "col": 17,
+      "col": 23,
       "row": 1,
       "type": "rock"
     },
@@ -49,7 +49,7 @@
       "type": "rock"
     },
     {
-      "col": 18,
+      "col": 24,
       "row": 2,
       "type": "rock"
     },
@@ -59,7 +59,7 @@
       "type": "rock"
     },
     {
-      "col": 17,
+      "col": 23,
       "row": 2,
       "type": "rock"
     },
@@ -69,7 +69,7 @@
       "type": "rock"
     },
     {
-      "col": 16,
+      "col": 22,
       "row": 2,
       "type": "rock"
     },
@@ -79,7 +79,7 @@
       "type": "rock"
     },
     {
-      "col": 17,
+      "col": 23,
       "row": 3,
       "type": "rock"
     },
@@ -89,28 +89,8 @@
       "type": "rock"
     },
     {
-      "col": 16,
+      "col": 22,
       "row": 3,
-      "type": "rock"
-    },
-    {
-      "col": 4,
-      "row": 4,
-      "type": "rock"
-    },
-    {
-      "col": 14,
-      "row": 4,
-      "type": "rock"
-    },
-    {
-      "col": 5,
-      "row": 4,
-      "type": "rock"
-    },
-    {
-      "col": 13,
-      "row": 4,
       "type": "rock"
     },
     {
@@ -119,7 +99,7 @@
       "type": "rock"
     },
     {
-      "col": 12,
+      "col": 18,
       "row": 4,
       "type": "rock"
     },
@@ -129,7 +109,7 @@
       "type": "rock"
     },
     {
-      "col": 11,
+      "col": 17,
       "row": 4,
       "type": "rock"
     },
@@ -139,48 +119,58 @@
       "type": "rock"
     },
     {
+      "col": 16,
+      "row": 4,
+      "type": "rock"
+    },
+    {
+      "col": 9,
+      "row": 4,
+      "type": "rock"
+    },
+    {
+      "col": 15,
+      "row": 4,
+      "type": "rock"
+    },
+    {
       "col": 10,
       "row": 4,
       "type": "rock"
     },
     {
-      "col": 9,
+      "col": 14,
       "row": 4,
       "type": "rock"
     },
     {
-      "col": 9,
+      "col": 11,
+      "row": 4,
+      "type": "rock"
+    },
+    {
+      "col": 13,
+      "row": 4,
+      "type": "rock"
+    },
+    {
+      "col": 12,
+      "row": 4,
+      "type": "rock"
+    },
+    {
+      "col": 12,
       "row": 5,
       "type": "rock"
     },
     {
-      "col": 9,
+      "col": 12,
       "row": 6,
       "type": "rock"
     },
     {
-      "col": 9,
+      "col": 12,
       "row": 7,
-      "type": "rock"
-    },
-    {
-      "col": 4,
-      "row": 8,
-      "type": "rock"
-    },
-    {
-      "col": 14,
-      "row": 8,
-      "type": "rock"
-    },
-    {
-      "col": 5,
-      "row": 8,
-      "type": "rock"
-    },
-    {
-      "col": 13,
-      "row": 8,
       "type": "rock"
     },
     {
@@ -189,7 +179,7 @@
       "type": "rock"
     },
     {
-      "col": 12,
+      "col": 18,
       "row": 8,
       "type": "rock"
     },
@@ -199,7 +189,7 @@
       "type": "rock"
     },
     {
-      "col": 11,
+      "col": 17,
       "row": 8,
       "type": "rock"
     },
@@ -209,12 +199,42 @@
       "type": "rock"
     },
     {
+      "col": 16,
+      "row": 8,
+      "type": "rock"
+    },
+    {
+      "col": 9,
+      "row": 8,
+      "type": "rock"
+    },
+    {
+      "col": 15,
+      "row": 8,
+      "type": "rock"
+    },
+    {
       "col": 10,
       "row": 8,
       "type": "rock"
     },
     {
-      "col": 9,
+      "col": 14,
+      "row": 8,
+      "type": "rock"
+    },
+    {
+      "col": 11,
+      "row": 8,
+      "type": "rock"
+    },
+    {
+      "col": 13,
+      "row": 8,
+      "type": "rock"
+    },
+    {
+      "col": 12,
       "row": 8,
       "type": "rock"
     },
@@ -224,7 +244,7 @@
       "type": "rock"
     },
     {
-      "col": 17,
+      "col": 23,
       "row": 9,
       "type": "rock"
     },
@@ -234,7 +254,7 @@
       "type": "rock"
     },
     {
-      "col": 16,
+      "col": 22,
       "row": 9,
       "type": "rock"
     },
@@ -244,7 +264,7 @@
       "type": "rock"
     },
     {
-      "col": 18,
+      "col": 24,
       "row": 10,
       "type": "rock"
     },
@@ -254,7 +274,7 @@
       "type": "rock"
     },
     {
-      "col": 17,
+      "col": 23,
       "row": 10,
       "type": "rock"
     },
@@ -264,7 +284,7 @@
       "type": "rock"
     },
     {
-      "col": 16,
+      "col": 22,
       "row": 10,
       "type": "rock"
     },
@@ -274,7 +294,7 @@
       "type": "rock"
     },
     {
-      "col": 18,
+      "col": 24,
       "row": 11,
       "type": "rock"
     },
@@ -284,22 +304,22 @@
       "type": "rock"
     },
     {
-      "col": 17,
+      "col": 23,
       "row": 11,
       "type": "rock"
     },
     {
-      "col": 7,
+      "col": 10,
       "row": 7,
       "type": "egg"
     },
     {
-      "col": 11,
+      "col": 14,
       "row": 7,
       "type": "egg"
     },
     {
-      "col": 9,
+      "col": 12,
       "row": 3,
       "type": "egg"
     }

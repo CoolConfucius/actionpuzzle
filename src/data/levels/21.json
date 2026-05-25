@@ -2,7 +2,7 @@
   "id": "21",
   "world": 4,
   "dims": {
-    "cols": 19,
+    "cols": 25,
     "rows": 13
   },
   "timeLimitMs": 180000,
@@ -11,45 +11,25 @@
   "playerSpawns": [
     {
       "playerSlot": 1,
-      "col": 3,
+      "col": 4,
       "row": 6,
       "dir": "right"
     },
     {
       "playerSlot": 2,
-      "col": 15,
+      "col": 20,
       "row": 6,
       "dir": "left"
     }
   ],
   "objects": [
     {
-      "col": 5,
-      "row": 2,
-      "type": "rock"
-    },
-    {
-      "col": 13,
-      "row": 2,
-      "type": "rock"
-    },
-    {
-      "col": 6,
-      "row": 2,
-      "type": "rock"
-    },
-    {
-      "col": 12,
-      "row": 2,
-      "type": "rock"
-    },
-    {
       "col": 7,
       "row": 2,
       "type": "rock"
     },
     {
-      "col": 11,
+      "col": 17,
       "row": 2,
       "type": "rock"
     },
@@ -59,138 +39,148 @@
       "type": "rock"
     },
     {
+      "col": 16,
+      "row": 2,
+      "type": "rock"
+    },
+    {
+      "col": 9,
+      "row": 2,
+      "type": "rock"
+    },
+    {
+      "col": 15,
+      "row": 2,
+      "type": "rock"
+    },
+    {
       "col": 10,
       "row": 2,
       "type": "rock"
     },
     {
-      "col": 9,
+      "col": 14,
       "row": 2,
       "type": "rock"
     },
     {
-      "col": 4,
-      "row": 3,
-      "type": "rock"
-    },
-    {
-      "col": 14,
-      "row": 3,
-      "type": "rock"
-    },
-    {
-      "col": 9,
-      "row": 3,
-      "type": "rock"
-    },
-    {
-      "col": 3,
-      "row": 4,
-      "type": "rock"
-    },
-    {
-      "col": 15,
-      "row": 4,
-      "type": "rock"
-    },
-    {
-      "col": 9,
-      "row": 4,
-      "type": "rock"
-    },
-    {
-      "col": 2,
-      "row": 5,
-      "type": "rock"
-    },
-    {
-      "col": 16,
-      "row": 5,
-      "type": "rock"
-    },
-    {
-      "col": 9,
-      "row": 5,
-      "type": "rock"
-    },
-    {
-      "col": 2,
-      "row": 6,
-      "type": "rock"
-    },
-    {
-      "col": 16,
-      "row": 6,
-      "type": "rock"
-    },
-    {
-      "col": 9,
-      "row": 6,
-      "type": "rock"
-    },
-    {
-      "col": 2,
-      "row": 7,
-      "type": "rock"
-    },
-    {
-      "col": 16,
-      "row": 7,
-      "type": "rock"
-    },
-    {
-      "col": 9,
-      "row": 7,
-      "type": "rock"
-    },
-    {
-      "col": 3,
-      "row": 8,
-      "type": "rock"
-    },
-    {
-      "col": 15,
-      "row": 8,
-      "type": "rock"
-    },
-    {
-      "col": 9,
-      "row": 8,
-      "type": "rock"
-    },
-    {
-      "col": 4,
-      "row": 9,
-      "type": "rock"
-    },
-    {
-      "col": 14,
-      "row": 9,
-      "type": "rock"
-    },
-    {
-      "col": 9,
-      "row": 9,
-      "type": "rock"
-    },
-    {
-      "col": 5,
-      "row": 10,
+      "col": 11,
+      "row": 2,
       "type": "rock"
     },
     {
       "col": 13,
-      "row": 10,
-      "type": "rock"
-    },
-    {
-      "col": 6,
-      "row": 10,
+      "row": 2,
       "type": "rock"
     },
     {
       "col": 12,
-      "row": 10,
+      "row": 2,
+      "type": "rock"
+    },
+    {
+      "col": 6,
+      "row": 3,
+      "type": "rock"
+    },
+    {
+      "col": 18,
+      "row": 3,
+      "type": "rock"
+    },
+    {
+      "col": 12,
+      "row": 3,
+      "type": "rock"
+    },
+    {
+      "col": 5,
+      "row": 4,
+      "type": "rock"
+    },
+    {
+      "col": 19,
+      "row": 4,
+      "type": "rock"
+    },
+    {
+      "col": 12,
+      "row": 4,
+      "type": "rock"
+    },
+    {
+      "col": 4,
+      "row": 5,
+      "type": "rock"
+    },
+    {
+      "col": 20,
+      "row": 5,
+      "type": "rock"
+    },
+    {
+      "col": 12,
+      "row": 5,
+      "type": "rock"
+    },
+    {
+      "col": 5,
+      "row": 6,
+      "type": "rock"
+    },
+    {
+      "col": 19,
+      "row": 6,
+      "type": "rock"
+    },
+    {
+      "col": 12,
+      "row": 6,
+      "type": "rock"
+    },
+    {
+      "col": 4,
+      "row": 7,
+      "type": "rock"
+    },
+    {
+      "col": 20,
+      "row": 7,
+      "type": "rock"
+    },
+    {
+      "col": 12,
+      "row": 7,
+      "type": "rock"
+    },
+    {
+      "col": 5,
+      "row": 8,
+      "type": "rock"
+    },
+    {
+      "col": 19,
+      "row": 8,
+      "type": "rock"
+    },
+    {
+      "col": 12,
+      "row": 8,
+      "type": "rock"
+    },
+    {
+      "col": 6,
+      "row": 9,
+      "type": "rock"
+    },
+    {
+      "col": 18,
+      "row": 9,
+      "type": "rock"
+    },
+    {
+      "col": 12,
+      "row": 9,
       "type": "rock"
     },
     {
@@ -199,7 +189,7 @@
       "type": "rock"
     },
     {
-      "col": 11,
+      "col": 17,
       "row": 10,
       "type": "rock"
     },
@@ -209,37 +199,67 @@
       "type": "rock"
     },
     {
+      "col": 16,
+      "row": 10,
+      "type": "rock"
+    },
+    {
+      "col": 9,
+      "row": 10,
+      "type": "rock"
+    },
+    {
+      "col": 15,
+      "row": 10,
+      "type": "rock"
+    },
+    {
       "col": 10,
       "row": 10,
       "type": "rock"
     },
     {
-      "col": 9,
+      "col": 14,
       "row": 10,
       "type": "rock"
     },
     {
-      "col": 5,
-      "row": 6,
-      "type": "egg"
+      "col": 11,
+      "row": 10,
+      "type": "rock"
     },
     {
       "col": 13,
-      "row": 6,
+      "row": 10,
+      "type": "rock"
+    },
+    {
+      "col": 12,
+      "row": 10,
+      "type": "rock"
+    },
+    {
+      "col": 4,
+      "row": 10,
       "type": "egg"
     },
     {
-      "col": 6,
-      "row": 4,
+      "col": 20,
+      "row": 10,
+      "type": "egg"
+    },
+    {
+      "col": 2,
+      "row": 9,
+      "type": "egg"
+    },
+    {
+      "col": 22,
+      "row": 9,
       "type": "egg"
     },
     {
       "col": 12,
-      "row": 4,
-      "type": "egg"
-    },
-    {
-      "col": 9,
       "row": 1,
       "type": "egg"
     }

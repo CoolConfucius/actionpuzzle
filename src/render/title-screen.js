@@ -291,56 +291,114 @@ export function drawTitleScreen(ctx, ts, widthPx, heightPx) {
   }
 
   const baseY = 170;
-  const rowGap = 28;
+  const rowGap = 32;
   const selectedSkinP1 = getSelectedSkin();
   const selectedSkinP2 = getSelectedP2Skin();
   const coopCapable = !!COOP_CAPABLE[ts.mode];
   const isCoopMode = coopCapable && ts.players === 'local';
 
+  // Reset hit-region tracking so click() can map x,y → action.
+  ts._rowBounds = [];
+
+  const ROW_W = 360;
+  const ROW_H = 26;
+  const ROW_RADIUS = 8;
+  const ARROW_W = 32;
+
   ROWS.forEach((row, i) => {
     const y = baseY + i * rowGap;
     const selected = ts.cursor === i;
+    const hovered = ts._hoverRow === i;
     const dim = (row === 'skin2' && !isCoopMode) || (row === 'players' && !coopCapable);
     const baseColor = dim ? DIM_COLOR : TEXT_COLOR;
+
+    const rowX = Math.floor(widthPx / 2 - ROW_W / 2);
+    const rowY = Math.floor(y - ROW_H / 2 - 4);
+
+    // Click-friendly background pill — only drawn for non-dimmed rows.
+    if (!dim) {
+      ctx.save();
+      if (selected) {
+        ctx.fillStyle = 'rgba(102,255,170,0.18)';
+        roundRect(ctx, rowX, rowY, ROW_W, ROW_H, ROW_RADIUS);
+        ctx.fill();
+        ctx.strokeStyle = HIGHLIGHT_COLOR;
+        ctx.lineWidth = 1.5;
+        roundRect(ctx, rowX, rowY, ROW_W, ROW_H, ROW_RADIUS);
+        ctx.stroke();
+      } else if (hovered) {
+        ctx.fillStyle = 'rgba(255,255,255,0.06)';
+        roundRect(ctx, rowX, rowY, ROW_W, ROW_H, ROW_RADIUS);
+        ctx.fill();
+      }
+      ctx.restore();
+    }
+
     ctx.fillStyle = selected ? HIGHLIGHT_COLOR : baseColor;
     ctx.font = selected ? 'bold 16px monospace' : '16px monospace';
     ctx.textAlign = 'center';
     ctx.textBaseline = 'alphabetic';
-    let text;
+    const cyclable = (row === 'mode')
+      || (row === 'players' && coopCapable)
+      || row === 'skin'
+      || (row === 'skin2' && isCoopMode);
+
+    let labelText;
     let swatchSkin = null;
-    if (row === 'start') text = (selected ? '> ' : '  ') + 'START';
-    else if (row === 'mode') text = (selected ? '> ' : '  ') + 'MODE: ' + (MODE_LABELS[ts.mode] || ts.mode.toUpperCase());
+    if (row === 'start') labelText = 'START';
+    else if (row === 'mode') labelText = 'MODE: ' + (MODE_LABELS[ts.mode] || ts.mode.toUpperCase());
     else if (row === 'players') {
       const label = coopCapable ? PLAYERS_LABELS[ts.players] : 'SINGLE';
-      text = (selected && coopCapable ? '< ' : '  ') + 'PLAYERS: ' + label + (selected && coopCapable ? ' >' : '  ');
+      labelText = 'PLAYERS: ' + label;
     }
     else if (row === 'skin') {
       const skin = lookupSkin(selectedSkinP1);
-      text = (selected ? '< ' : '  ') + 'P1 SKIN: ' + skin.displayName.toUpperCase() + (selected ? ' >' : '  ');
+      labelText = 'P1 SKIN: ' + skin.displayName.toUpperCase();
       swatchSkin = selectedSkinP1;
     } else if (row === 'skin2') {
       const skin = lookupSkin(selectedSkinP2);
-      text = (selected ? '< ' : '  ') + 'P2 SKIN: ' + skin.displayName.toUpperCase() + (selected ? ' >' : '  ');
+      labelText = 'P2 SKIN: ' + skin.displayName.toUpperCase();
       swatchSkin = selectedSkinP2;
-    } else if (row === 'help') {
-      text = (selected ? '> ' : '  ') + 'HELP';
-    } else if (row === 'achievements') {
-      text = (selected ? '> ' : '  ') + 'ACHIEVEMENTS';
-    } else text = (selected ? '> ' : '  ') + 'BEST: ' + formatBestLevelLabel(ts.bestLevelId);
-    ctx.fillText(text, widthPx / 2, y);
+    } else if (row === 'help') labelText = 'HELP';
+    else if (row === 'achievements') labelText = 'ACHIEVEMENTS';
+    else labelText = 'BEST: ' + formatBestLevelLabel(ts.bestLevelId);
+
+    ctx.fillText(labelText, widthPx / 2, y);
+
+    // Draw < > as actual button glyphs for cyclable rows.
+    let leftBounds = null;
+    let rightBounds = null;
+    if (cyclable) {
+      const lx = rowX + 6;
+      const rx = rowX + ROW_W - ARROW_W - 6;
+      drawArrowButton(ctx, lx, rowY + 2, ARROW_W, ROW_H - 4, '<', selected || hovered);
+      drawArrowButton(ctx, rx, rowY + 2, ARROW_W, ROW_H - 4, '>', selected || hovered);
+      leftBounds = { x: lx, y: rowY + 2, w: ARROW_W, h: ROW_H - 4 };
+      rightBounds = { x: rx, y: rowY + 2, w: ARROW_W, h: ROW_H - 4 };
+    }
+
     if (swatchSkin) {
-      drawSkinSwatch(ctx, widthPx / 2 + 130, y - 4, swatchSkin);
-      // Specialty hint under the skin row (campaign-only relevance).
+      drawSkinSwatch(ctx, widthPx / 2 + 150, y - 4, swatchSkin);
       const spec = specialtyForSkin(swatchSkin);
       if (spec && ts.mode === 'campaign') {
         ctx.save();
         ctx.fillStyle = DIM_COLOR;
         ctx.font = '10px monospace';
         ctx.textAlign = 'center';
-        ctx.fillText(spec, widthPx / 2, y + 10);
+        ctx.fillText(spec, widthPx / 2, y + 12);
         ctx.restore();
       }
     }
+
+    ts._rowBounds.push({
+      row,
+      i,
+      cyclable,
+      dim,
+      bounds: { x: rowX, y: rowY, w: ROW_W, h: ROW_H },
+      leftArrow: leftBounds,
+      rightArrow: rightBounds,
+    });
   });
 
   if (ts.mode === 'campaign') {
@@ -433,6 +491,89 @@ function cyclePlayers(ts, delta) {
   if (!COOP_CAPABLE[ts.mode]) return;
   ts.players = ts.players === 'local' ? 'single' : 'local';
   setMode(effectiveMode(ts.mode, ts.players));
+}
+
+function roundRect(ctx, x, y, w, h, r) {
+  ctx.beginPath();
+  if (typeof ctx.roundRect === 'function') { ctx.roundRect(x, y, w, h, r); return; }
+  const rr = Math.min(r, w / 2, h / 2);
+  ctx.moveTo(x + rr, y);
+  ctx.lineTo(x + w - rr, y);
+  ctx.arcTo(x + w, y, x + w, y + rr, rr);
+  ctx.lineTo(x + w, y + h - rr);
+  ctx.arcTo(x + w, y + h, x + w - rr, y + h, rr);
+  ctx.lineTo(x + rr, y + h);
+  ctx.arcTo(x, y + h, x, y + h - rr, rr);
+  ctx.lineTo(x, y + rr);
+  ctx.arcTo(x, y, x + rr, y, rr);
+  ctx.closePath();
+}
+
+function drawArrowButton(ctx, x, y, w, h, glyph, emphasized) {
+  ctx.save();
+  ctx.fillStyle = emphasized ? 'rgba(102,255,170,0.22)' : 'rgba(255,255,255,0.08)';
+  roundRect(ctx, x, y, w, h, 6);
+  ctx.fill();
+  ctx.strokeStyle = emphasized ? '#66FFAA' : '#445566';
+  ctx.lineWidth = 1;
+  roundRect(ctx, x, y, w, h, 6);
+  ctx.stroke();
+  ctx.fillStyle = emphasized ? '#66FFAA' : '#CCCCCC';
+  ctx.font = 'bold 14px monospace';
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+  ctx.fillText(glyph, x + w / 2, y + h / 2);
+  ctx.restore();
+}
+
+function hits(b, x, y) {
+  return b && x >= b.x && x < b.x + b.w && y >= b.y && y < b.y + b.h;
+}
+
+export function titleScreenHover(ts, x, y) {
+  if (!ts || !Array.isArray(ts._rowBounds)) return;
+  ts._hoverRow = -1;
+  for (const rb of ts._rowBounds) {
+    if (rb.dim) continue;
+    if (hits(rb.bounds, x, y)) { ts._hoverRow = rb.i; break; }
+  }
+}
+
+export function titleScreenClick(ts, x, y) {
+  if (!ts || !Array.isArray(ts._rowBounds)) return false;
+  for (const rb of ts._rowBounds) {
+    if (rb.dim) continue;
+    // Arrow buttons take priority (cycling without changing cursor).
+    if (rb.leftArrow && hits(rb.leftArrow, x, y)) {
+      ts.cursor = rb.i;
+      cycleRow(ts, rb.row, -1);
+      return true;
+    }
+    if (rb.rightArrow && hits(rb.rightArrow, x, y)) {
+      ts.cursor = rb.i;
+      cycleRow(ts, rb.row, +1);
+      return true;
+    }
+    if (hits(rb.bounds, x, y)) {
+      ts.cursor = rb.i;
+      // For non-cyclable rows, also act on click (same as Enter).
+      if (!rb.cyclable) {
+        if (rb.row === 'help') ts.helpRequested = true;
+        else if (rb.row === 'achievements') ts.achievementsRequested = true;
+        else if (rb.row === 'best') ts.leaderboardRequested = true;
+        else if (rb.row === 'start') ts.startRequested = true;
+      }
+      return true;
+    }
+  }
+  return false;
+}
+
+function cycleRow(ts, row, delta) {
+  if (row === 'mode') cycleMode(ts, delta);
+  else if (row === 'players') cyclePlayers(ts, delta);
+  else if (row === 'skin') cycleSkinForPlayer(1, delta);
+  else if (row === 'skin2') cycleSkinForPlayer(2, delta);
 }
 
 export function titleScreenKey(ts, key) {

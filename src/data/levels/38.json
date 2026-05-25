@@ -2,7 +2,7 @@
   "id": "38",
   "world": 7,
   "dims": {
-    "cols": 19,
+    "cols": 25,
     "rows": 13
   },
   "timeLimitMs": 180000,
@@ -11,13 +11,13 @@
   "playerSpawns": [
     {
       "playerSlot": 1,
-      "col": 3,
+      "col": 4,
       "row": 6,
       "dir": "right"
     },
     {
       "playerSlot": 2,
-      "col": 15,
+      "col": 20,
       "row": 6,
       "dir": "left"
     }
@@ -29,12 +29,12 @@
       "type": "rock"
     },
     {
-      "col": 17,
+      "col": 23,
       "row": 1,
       "type": "rock"
     },
     {
-      "col": 9,
+      "col": 12,
       "row": 1,
       "type": "rock"
     },
@@ -44,37 +44,37 @@
       "type": "rock"
     },
     {
-      "col": 16,
+      "col": 22,
       "row": 2,
       "type": "rock"
     },
     {
-      "col": 8,
+      "col": 11,
       "row": 2,
+      "type": "rock"
+    },
+    {
+      "col": 13,
+      "row": 2,
+      "type": "rock"
+    },
+    {
+      "col": 3,
+      "row": 3,
+      "type": "rock"
+    },
+    {
+      "col": 21,
+      "row": 3,
       "type": "rock"
     },
     {
       "col": 10,
-      "row": 2,
-      "type": "rock"
-    },
-    {
-      "col": 3,
       "row": 3,
       "type": "rock"
     },
     {
-      "col": 15,
-      "row": 3,
-      "type": "rock"
-    },
-    {
-      "col": 7,
-      "row": 3,
-      "type": "rock"
-    },
-    {
-      "col": 11,
+      "col": 14,
       "row": 3,
       "type": "rock"
     },
@@ -84,62 +84,72 @@
       "type": "rock"
     },
     {
-      "col": 14,
+      "col": 20,
       "row": 4,
       "type": "rock"
     },
     {
-      "col": 6,
+      "col": 9,
       "row": 4,
+      "type": "rock"
+    },
+    {
+      "col": 15,
+      "row": 4,
+      "type": "rock"
+    },
+    {
+      "col": 0,
+      "row": 5,
+      "type": "rock"
+    },
+    {
+      "col": 24,
+      "row": 5,
+      "type": "rock"
+    },
+    {
+      "col": 1,
+      "row": 5,
+      "type": "rock"
+    },
+    {
+      "col": 23,
+      "row": 5,
+      "type": "rock"
+    },
+    {
+      "col": 5,
+      "row": 5,
+      "type": "rock"
+    },
+    {
+      "col": 19,
+      "row": 5,
+      "type": "rock"
+    },
+    {
+      "col": 8,
+      "row": 5,
+      "type": "rock"
+    },
+    {
+      "col": 16,
+      "row": 5,
+      "type": "rock"
+    },
+    {
+      "col": 11,
+      "row": 5,
+      "type": "rock"
+    },
+    {
+      "col": 13,
+      "row": 5,
       "type": "rock"
     },
     {
       "col": 12,
-      "row": 4,
-      "type": "rock"
-    },
-    {
-      "col": 0,
-      "row": 5,
-      "type": "rock"
-    },
-    {
-      "col": 18,
-      "row": 5,
-      "type": "rock"
-    },
-    {
-      "col": 1,
-      "row": 5,
-      "type": "rock"
-    },
-    {
-      "col": 17,
-      "row": 5,
-      "type": "rock"
-    },
-    {
-      "col": 5,
-      "row": 5,
-      "type": "rock"
-    },
-    {
-      "col": 13,
-      "row": 5,
-      "type": "rock"
-    },
-    {
-      "col": 7,
-      "row": 5,
-      "type": "rock"
-    },
-    {
-      "col": 11,
-      "row": 5,
-      "type": "rock"
-    },
-    {
-      "col": 9,
       "row": 5,
       "type": "rock"
     },
@@ -149,7 +159,7 @@
       "type": "rock"
     },
     {
-      "col": 18,
+      "col": 24,
       "row": 7,
       "type": "rock"
     },
@@ -159,7 +169,7 @@
       "type": "rock"
     },
     {
-      "col": 17,
+      "col": 23,
       "row": 7,
       "type": "rock"
     },
@@ -169,12 +179,17 @@
       "type": "rock"
     },
     {
-      "col": 13,
+      "col": 19,
       "row": 7,
       "type": "rock"
     },
     {
-      "col": 7,
+      "col": 8,
+      "row": 7,
+      "type": "rock"
+    },
+    {
+      "col": 16,
       "row": 7,
       "type": "rock"
     },
@@ -184,7 +199,12 @@
       "type": "rock"
     },
     {
-      "col": 9,
+      "col": 13,
+      "row": 7,
+      "type": "rock"
+    },
+    {
+      "col": 12,
       "row": 7,
       "type": "rock"
     },
@@ -194,17 +214,17 @@
       "type": "rock"
     },
     {
-      "col": 14,
+      "col": 20,
       "row": 8,
       "type": "rock"
     },
     {
-      "col": 6,
+      "col": 9,
       "row": 8,
       "type": "rock"
     },
     {
-      "col": 12,
+      "col": 15,
       "row": 8,
       "type": "rock"
     },
@@ -214,17 +234,17 @@
       "type": "rock"
     },
     {
-      "col": 15,
+      "col": 21,
       "row": 9,
       "type": "rock"
     },
     {
-      "col": 7,
+      "col": 10,
       "row": 9,
       "type": "rock"
     },
     {
-      "col": 11,
+      "col": 14,
       "row": 9,
       "type": "rock"
     },
@@ -234,17 +254,17 @@
       "type": "rock"
     },
     {
-      "col": 16,
+      "col": 22,
       "row": 10,
       "type": "rock"
     },
     {
-      "col": 8,
+      "col": 11,
       "row": 10,
       "type": "rock"
     },
     {
-      "col": 10,
+      "col": 13,
       "row": 10,
       "type": "rock"
     },
@@ -254,47 +274,47 @@
       "type": "rock"
     },
     {
-      "col": 17,
+      "col": 23,
       "row": 11,
       "type": "rock"
     },
     {
-      "col": 9,
+      "col": 12,
       "row": 11,
       "type": "rock"
+    },
+    {
+      "col": 6,
+      "row": 9,
+      "type": "egg"
+    },
+    {
+      "col": 18,
+      "row": 9,
+      "type": "egg"
     },
     {
       "col": 5,
-      "row": 2,
-      "type": "egg"
-    },
-    {
-      "col": 13,
-      "row": 2,
-      "type": "egg"
-    },
-    {
-      "col": 4,
       "row": 9,
       "type": "egg"
     },
     {
-      "col": 14,
+      "col": 19,
       "row": 9,
       "type": "egg"
     },
     {
-      "col": 4,
-      "row": 10,
+      "col": 2,
+      "row": 5,
       "type": "egg"
     },
     {
-      "col": 14,
-      "row": 10,
+      "col": 22,
+      "row": 5,
       "type": "egg"
     },
     {
-      "col": 9,
+      "col": 12,
       "row": 6,
       "type": "egg"
     }
@@ -310,12 +330,20 @@
       "atTimeMs": 10000
     },
     {
+      "type": "enemy6",
+      "atTimeMs": 15000
+    },
+    {
       "type": "enemy3",
       "atTimeMs": 22000
     },
     {
       "type": "enemy4",
       "atTimeMs": 38000
+    },
+    {
+      "type": "enemy6",
+      "atTimeMs": 45000
     },
     {
       "type": "enemy4",

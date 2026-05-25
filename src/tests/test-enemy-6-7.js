@@ -11,7 +11,7 @@ const STUB_LEVEL = {
   id: '01',
   world: 1,
   title: 'Test',
-  dims: { cols: 19, rows: 13 },
+  dims: { cols: 25, rows: 13 },
   timeLimitMs: 180000,
   playerSpawns: [{ playerSlot: 1, col: 1, row: 1, dir: 'down' }],
   objects: [],
