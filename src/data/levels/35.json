@@ -3,7 +3,7 @@
   "world": 6,
   "dims": {
     "cols": 19,
-    "rows": 15
+    "rows": 13
   },
   "timeLimitMs": 180000,
   "music": "beethovens-fifth",
@@ -12,159 +12,424 @@
     {
       "playerSlot": 1,
       "col": 3,
-      "row": 7,
+      "row": 6,
       "dir": "right"
     },
     {
       "playerSlot": 2,
       "col": 15,
-      "row": 7,
+      "row": 6,
       "dir": "left"
     }
   ],
   "objects": [
     {
-      "col": 7,
-      "row": 5,
+      "col": 1,
+      "row": 1,
       "type": "rock"
     },
     {
-      "col": 8,
-      "row": 5,
+      "col": 17,
+      "row": 1,
       "type": "rock"
     },
     {
-      "col": 10,
-      "row": 5,
+      "col": 2,
+      "row": 1,
       "type": "rock"
     },
     {
-      "col": 11,
-      "row": 5,
-      "type": "rock"
-    },
-    {
-      "col": 7,
-      "row": 6,
-      "type": "rock"
-    },
-    {
-      "col": 11,
-      "row": 6,
-      "type": "rock"
-    },
-    {
-      "col": 7,
-      "row": 8,
-      "type": "rock"
-    },
-    {
-      "col": 11,
-      "row": 8,
-      "type": "rock"
-    },
-    {
-      "col": 7,
-      "row": 9,
-      "type": "rock"
-    },
-    {
-      "col": 8,
-      "row": 9,
-      "type": "rock"
-    },
-    {
-      "col": 10,
-      "row": 9,
-      "type": "rock"
-    },
-    {
-      "col": 11,
-      "row": 9,
+      "col": 16,
+      "row": 1,
       "type": "rock"
     },
     {
       "col": 3,
-      "row": 2,
+      "row": 1,
       "type": "rock"
     },
     {
       "col": 15,
+      "row": 1,
+      "type": "rock"
+    },
+    {
+      "col": 4,
+      "row": 1,
+      "type": "rock"
+    },
+    {
+      "col": 14,
+      "row": 1,
+      "type": "rock"
+    },
+    {
+      "col": 7,
+      "row": 1,
+      "type": "rock"
+    },
+    {
+      "col": 11,
+      "row": 1,
+      "type": "rock"
+    },
+    {
+      "col": 8,
+      "row": 1,
+      "type": "rock"
+    },
+    {
+      "col": 10,
+      "row": 1,
+      "type": "rock"
+    },
+    {
+      "col": 9,
+      "row": 1,
+      "type": "rock"
+    },
+    {
+      "col": 5,
       "row": 2,
+      "type": "rock"
+    },
+    {
+      "col": 13,
+      "row": 2,
+      "type": "rock"
+    },
+    {
+      "col": 8,
+      "row": 2,
+      "type": "rock"
+    },
+    {
+      "col": 10,
+      "row": 2,
+      "type": "rock"
+    },
+    {
+      "col": 5,
+      "row": 3,
+      "type": "rock"
+    },
+    {
+      "col": 13,
+      "row": 3,
+      "type": "rock"
+    },
+    {
+      "col": 8,
+      "row": 3,
+      "type": "rock"
+    },
+    {
+      "col": 10,
+      "row": 3,
+      "type": "rock"
+    },
+    {
+      "col": 1,
+      "row": 4,
+      "type": "rock"
+    },
+    {
+      "col": 17,
+      "row": 4,
+      "type": "rock"
+    },
+    {
+      "col": 2,
+      "row": 4,
+      "type": "rock"
+    },
+    {
+      "col": 16,
+      "row": 4,
       "type": "rock"
     },
     {
       "col": 3,
-      "row": 12,
+      "row": 4,
       "type": "rock"
     },
     {
       "col": 15,
-      "row": 12,
+      "row": 4,
+      "type": "rock"
+    },
+    {
+      "col": 4,
+      "row": 4,
+      "type": "rock"
+    },
+    {
+      "col": 14,
+      "row": 4,
+      "type": "rock"
+    },
+    {
+      "col": 7,
+      "row": 4,
+      "type": "rock"
+    },
+    {
+      "col": 11,
+      "row": 4,
+      "type": "rock"
+    },
+    {
+      "col": 8,
+      "row": 4,
+      "type": "rock"
+    },
+    {
+      "col": 10,
+      "row": 4,
       "type": "rock"
     },
     {
       "col": 9,
+      "row": 4,
+      "type": "rock"
+    },
+    {
+      "col": 2,
+      "row": 6,
+      "type": "rock"
+    },
+    {
+      "col": 16,
+      "row": 6,
+      "type": "rock"
+    },
+    {
+      "col": 4,
+      "row": 6,
+      "type": "rock"
+    },
+    {
+      "col": 14,
+      "row": 6,
+      "type": "rock"
+    },
+    {
+      "col": 7,
+      "row": 6,
+      "type": "rock"
+    },
+    {
+      "col": 11,
+      "row": 6,
+      "type": "rock"
+    },
+    {
+      "col": 9,
+      "row": 6,
+      "type": "rock"
+    },
+    {
+      "col": 1,
+      "row": 8,
+      "type": "rock"
+    },
+    {
+      "col": 17,
+      "row": 8,
+      "type": "rock"
+    },
+    {
+      "col": 2,
+      "row": 8,
+      "type": "rock"
+    },
+    {
+      "col": 16,
+      "row": 8,
+      "type": "rock"
+    },
+    {
+      "col": 3,
+      "row": 8,
+      "type": "rock"
+    },
+    {
+      "col": 15,
+      "row": 8,
+      "type": "rock"
+    },
+    {
+      "col": 4,
+      "row": 8,
+      "type": "rock"
+    },
+    {
+      "col": 14,
+      "row": 8,
+      "type": "rock"
+    },
+    {
+      "col": 7,
+      "row": 8,
+      "type": "rock"
+    },
+    {
+      "col": 11,
+      "row": 8,
+      "type": "rock"
+    },
+    {
+      "col": 8,
+      "row": 8,
+      "type": "rock"
+    },
+    {
+      "col": 10,
+      "row": 8,
+      "type": "rock"
+    },
+    {
+      "col": 9,
+      "row": 8,
+      "type": "rock"
+    },
+    {
+      "col": 5,
+      "row": 9,
+      "type": "rock"
+    },
+    {
+      "col": 13,
+      "row": 9,
+      "type": "rock"
+    },
+    {
+      "col": 8,
+      "row": 9,
+      "type": "rock"
+    },
+    {
+      "col": 10,
+      "row": 9,
+      "type": "rock"
+    },
+    {
+      "col": 5,
+      "row": 10,
+      "type": "rock"
+    },
+    {
+      "col": 13,
+      "row": 10,
+      "type": "rock"
+    },
+    {
+      "col": 8,
+      "row": 10,
+      "type": "rock"
+    },
+    {
+      "col": 10,
+      "row": 10,
+      "type": "rock"
+    },
+    {
+      "col": 1,
+      "row": 11,
+      "type": "rock"
+    },
+    {
+      "col": 17,
+      "row": 11,
+      "type": "rock"
+    },
+    {
+      "col": 2,
+      "row": 11,
+      "type": "rock"
+    },
+    {
+      "col": 16,
+      "row": 11,
+      "type": "rock"
+    },
+    {
+      "col": 3,
+      "row": 11,
+      "type": "rock"
+    },
+    {
+      "col": 15,
+      "row": 11,
+      "type": "rock"
+    },
+    {
+      "col": 4,
+      "row": 11,
+      "type": "rock"
+    },
+    {
+      "col": 14,
+      "row": 11,
+      "type": "rock"
+    },
+    {
+      "col": 7,
+      "row": 11,
+      "type": "rock"
+    },
+    {
+      "col": 11,
+      "row": 11,
+      "type": "rock"
+    },
+    {
+      "col": 8,
+      "row": 11,
+      "type": "rock"
+    },
+    {
+      "col": 10,
+      "row": 11,
+      "type": "rock"
+    },
+    {
+      "col": 9,
+      "row": 11,
+      "type": "rock"
+    },
+    {
+      "col": 6,
       "row": 2,
-      "type": "rock"
-    },
-    {
-      "col": 9,
-      "row": 12,
-      "type": "rock"
-    },
-    {
-      "col": 8,
-      "row": 6,
       "type": "egg"
-    },
-    {
-      "col": 10,
-      "row": 6,
-      "type": "egg"
-    },
-    {
-      "col": 8,
-      "row": 8,
-      "type": "egg"
-    },
-    {
-      "col": 10,
-      "row": 8,
-      "type": "egg"
-    },
-    {
-      "col": 6,
-      "row": 4,
-      "type": "fireball"
     },
     {
       "col": 12,
-      "row": 10,
-      "type": "fireball"
-    },
-    {
-      "col": 12,
-      "row": 4,
-      "type": "fireball"
-    },
-    {
-      "col": 6,
-      "row": 10,
-      "type": "fireball"
-    },
-    {
-      "col": 9,
-      "row": 6,
+      "row": 2,
       "type": "egg"
     },
     {
-      "col": 9,
-      "row": 8,
+      "col": 4,
+      "row": 2,
+      "type": "egg"
+    },
+    {
+      "col": 14,
+      "row": 2,
+      "type": "egg"
+    },
+    {
+      "col": 4,
+      "row": 10,
+      "type": "egg"
+    },
+    {
+      "col": 14,
+      "row": 10,
       "type": "egg"
     }
   ],
-  "eggCount": 7,
+  "eggCount": 6,
   "enemySpawns": [
     {
       "type": "enemy1",
@@ -223,15 +488,18 @@
   "balloonSchedule": [
     {
       "type": "lifePlus",
-      "atTimeMs": 30000
+      "atTimeMs": 30000,
+      "col": 9
     },
     {
       "type": "berserk",
-      "atTimeMs": 86000
+      "atTimeMs": 86000,
+      "col": 9
     },
     {
       "type": "timeFreeze",
-      "atTimeMs": 140000
+      "atTimeMs": 140000,
+      "col": 9
     }
   ],
   "winConditions": [

@@ -379,10 +379,26 @@ function setupCanvas() {
     : 1;
   canvas.width = LOGICAL_WIDTH_PX * dpr;
   canvas.height = LOGICAL_HEIGHT_PX * dpr;
-  canvas.style.width = LOGICAL_WIDTH_PX + 'px';
-  canvas.style.height = LOGICAL_HEIGHT_PX + 'px';
   ctx.scale(dpr, dpr);
+  applyResponsiveSize(canvas);
+  window.addEventListener('resize', () => applyResponsiveSize(canvas));
   return { canvas, ctx };
+}
+
+// Scale CSS display size to fit viewport while preserving logical aspect.
+// Guarantees the full grid + HUD are always on screen at any window size.
+function applyResponsiveSize(canvas) {
+  const aspect = LOGICAL_WIDTH_PX / LOGICAL_HEIGHT_PX;
+  const vw = window.innerWidth;
+  const vh = window.innerHeight;
+  let w = vw;
+  let h = w / aspect;
+  if (h > vh) {
+    h = vh;
+    w = h * aspect;
+  }
+  canvas.style.width = Math.floor(w) + 'px';
+  canvas.style.height = Math.floor(h) + 'px';
 }
 
 function drawError(ctx, message) {

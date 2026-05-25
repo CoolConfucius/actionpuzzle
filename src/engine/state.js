@@ -49,10 +49,26 @@ export function createState(level, runSeed) {
 }
 
 export function tick(state, dtMs) {
-  drainCommands(state);
+  // Pause/mute drains every tick (even during countdown) so the player can
+  // always pause; the rest of the queue is filtered by the gate below.
+  drainSystemCommands(state);
   if (state.pauseState === 'paused' || state.pauseState === 'blurred') {
     return;
   }
+
+  // Pre-level countdown — freezes entity logic and discards player input.
+  // Time itself advances so the countdown can elapse and visuals (level intro,
+  // sprite breathing, music) can still tick.
+  const countdownMs = BALANCE.LEVEL_COUNTDOWN_MS || 0;
+  if (countdownMs > 0 && (state.levelTimeMs || 0) < countdownMs) {
+    if (Array.isArray(state.commandQueue)) state.commandQueue.length = 0;
+    state.timeMs += dtMs;
+    state.levelTimeMs += dtMs;
+    state.levelIntroAgeMs = (state.levelIntroAgeMs || 0) + dtMs;
+    return;
+  }
+
+  drainCommands(state);
   tickPlayerMovement(state, dtMs);
   tickEnemies(state, dtMs);
   resolveEnemyContactKills(state);
@@ -214,6 +230,25 @@ function drainCommands(state) {
       state.pauseState = state.pauseState === 'running' ? 'paused' : 'running';
     } else if (cmd.type === 'mute') {
       // Mute is handled by input/audio layers; engine acknowledges silently.
+    }
+  }
+}
+
+// Pass that only handles system commands (pause/mute). Runs every tick so the
+// player can pause/mute during the pre-level countdown without their action
+// being thrown away when the queue is later flushed.
+function drainSystemCommands(state) {
+  if (!Array.isArray(state.commandQueue)) return;
+  for (let i = 0; i < state.commandQueue.length; i++) {
+    const cmd = state.commandQueue[i];
+    if (!cmd) continue;
+    if (cmd.type === 'pause') {
+      state.pauseState = state.pauseState === 'running' ? 'paused' : 'running';
+      state.commandQueue.splice(i, 1);
+      i -= 1;
+    } else if (cmd.type === 'mute') {
+      state.commandQueue.splice(i, 1);
+      i -= 1;
     }
   }
 }

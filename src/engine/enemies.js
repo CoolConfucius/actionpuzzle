@@ -96,9 +96,24 @@ export function tickEnemies(state, dtMs) {
       continue;
     }
     const aggro = pickAggressiveDirection(state, enemy);
+    if (aggro != null && aggro !== enemy.dir) {
+      // Turn this tick so the player can see the enemy line up its target.
+      // The next decision tick will act on the rock if it still qualifies.
+      enemy.dir = aggro;
+      continue;
+    }
+    if (aggro != null && !canEnemyAct(state, enemy)) {
+      // Aggro fired, but we're still in the post-action cooldown — hold.
+      continue;
+    }
     const dir = aggro || pickEnemyDirection(state, enemy);
     if (dir != null) processEnemyAction(state, enemy, dir);
   }
+}
+
+function canEnemyAct(state, enemy) {
+  const next = enemy.nextActionMs || 0;
+  return state.timeMs >= next;
 }
 
 function pickAggressiveDirection(state, enemy) {
@@ -112,27 +127,40 @@ function pickAggressiveDirection(state, enemy) {
     return null;
   }
   if (state.rng() >= roll) return null;
+  // An enemy can only act on the rock directly in front of its current facing.
+  // The caller turns the enemy toward a nearby rock on the prior tick if
+  // needed; this keeps actions deliberate and readable to the player.
+  const facing = enemy.dir;
+  if (facing && rockActionable(state, enemy, facing)) return facing;
+  // No rock dead ahead — try turning toward a neighbouring rock so the next
+  // decision tick can act. Picking from the surrounding cells (other than
+  // current dir) gives the enemy intent to line up.
   const candidates = [];
   for (const dir of ['up', 'down', 'left', 'right']) {
-    const delta = DIR_DELTAS[dir];
-    const c = enemy.pos.col + delta.dc;
-    const r = enemy.pos.row + delta.dr;
-    if (!inBounds(state.grid, c, r)) continue;
-    const cell = cellAt(state.grid, c, r);
-    if (!cell || !cell.object) continue;
-    if (cell.object.type === 'fried-egg') continue;
-    if (HURL_ENEMY_TYPES.has(enemy.type)) {
-      const tc = c + delta.dc;
-      const tr = r + delta.dr;
-      const reachable = inBounds(state.grid, tc, tr)
-        && !cellAt(state.grid, tc, tr).object;
-      if (!reachable) continue;
-    }
-    candidates.push(dir);
+    if (dir === facing) continue;
+    if (rockActionable(state, enemy, dir)) candidates.push(dir);
   }
   if (candidates.length === 0) return null;
   const idx = Math.min(Math.floor(state.rng() * candidates.length), candidates.length - 1);
   return candidates[idx];
+}
+
+function rockActionable(state, enemy, dir) {
+  const delta = DIR_DELTAS[dir];
+  if (!delta) return false;
+  const c = enemy.pos.col + delta.dc;
+  const r = enemy.pos.row + delta.dr;
+  if (!inBounds(state.grid, c, r)) return false;
+  const cell = cellAt(state.grid, c, r);
+  if (!cell || !cell.object) return false;
+  if (cell.object.type === 'fried-egg') return false;
+  if (HURL_ENEMY_TYPES.has(enemy.type)) {
+    const tc = c + delta.dc;
+    const tr = r + delta.dr;
+    if (!inBounds(state.grid, tc, tr)) return false;
+    if (cellAt(state.grid, tc, tr).object) return false;
+  }
+  return true;
 }
 
 export function processEnemyAction(state, enemy, dir) {
@@ -147,8 +175,10 @@ export function processEnemyAction(state, enemy, dir) {
     if (frontCell.object.type === 'fried-egg') return;
     if (enemy.type === 'enemy1') {
       enemyDestroyInPlace(state, frontCol, frontRow);
+      enemy.nextActionMs = state.timeMs + (BALANCE.ENEMY_ACTION_COOLDOWN_MS || 0);
     } else if (HURL_ENEMY_TYPES.has(enemy.type)) {
       enemyHurl(state, enemy, dir, frontCol, frontRow);
+      enemy.nextActionMs = state.timeMs + (BALANCE.ENEMY_ACTION_COOLDOWN_MS || 0);
     }
     return;
   }

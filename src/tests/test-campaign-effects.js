@@ -8,7 +8,7 @@ const STUB_LEVEL = {
   id: '01',
   world: 1,
   title: 'Test',
-  dims: { cols: 19, rows: 15 },
+  dims: { cols: 19, rows: 13 },
   timeLimitMs: 180000,
   playerSpawns: [{ playerSlot: 1, col: 1, row: 1, dir: 'down' }],
   objects: [],
@@ -526,6 +526,7 @@ test('campaign C3: proximity bomb detonates when enemy adjacent', () => {
     maxHp: 1,
   });
   // Tick once — proximity check should detect + detonate
+  state.levelTimeMs = 5000; // skip pre-level countdown freeze
   tickState(state, 16);
   assert.equal(cell.object, null, 'fireball consumed by detonation');
   assert.equal(cell.proximityBomb, false, 'flag cleared');
@@ -553,6 +554,7 @@ test('campaign C3: proximity bomb does NOT detonate when no enemy adjacent', () 
     hp: 1,
     maxHp: 1,
   });
+  state.levelTimeMs = 5000; // skip pre-level countdown freeze
   tickState(state, 16);
   assert.equal(cell.proximityBomb, true, 'still armed');
   assert.ok(cell.object, 'fireball still there');

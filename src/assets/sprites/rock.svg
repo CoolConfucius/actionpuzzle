@@ -1,4 +1,14 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32">
-<rect x="4" y="4" width="24" height="24" rx="4" fill="#9A9A9A" stroke="#555" stroke-width="2"/>
-<text x="16" y="16" text-anchor="middle" dominant-baseline="central" font-family="sans-serif" font-size="18" fill="#202020">#</text>
+<defs>
+<radialGradient id="rockGrad" cx="0.35" cy="0.30" r="0.85">
+<stop offset="0" stop-color="#B5814A"/>
+<stop offset="0.55" stop-color="#8B5A2B"/>
+<stop offset="1" stop-color="#5A3A1A"/>
+</radialGradient>
+</defs>
+<ellipse cx="16" cy="17" rx="12" ry="11" fill="url(#rockGrad)" stroke="#3E2812" stroke-width="1.5"/>
+<ellipse cx="12" cy="13" rx="3.2" ry="1.8" fill="#D9A86A" opacity="0.55"/>
+<circle cx="20" cy="20" r="1.1" fill="#3E2812" opacity="0.7"/>
+<circle cx="22" cy="14" r="0.9" fill="#3E2812" opacity="0.5"/>
+<circle cx="11" cy="22" r="1.0" fill="#3E2812" opacity="0.6"/>
 </svg>

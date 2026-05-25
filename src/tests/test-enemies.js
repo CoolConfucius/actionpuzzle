@@ -53,7 +53,8 @@ function makeState() {
     commandQueue: [],
     eventQueue: [],
     timeMs: 0,
-    levelTimeMs: 0,
+    // Past the LEVEL_COUNTDOWN_MS gate so tick() actually runs the enemy logic.
+    levelTimeMs: 5000,
     timeFreezeUntilMs: null,
     rng: () => 0.5,
     status: 'playing',

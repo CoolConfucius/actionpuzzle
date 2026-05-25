@@ -3,7 +3,7 @@
   "world": 2,
   "dims": {
     "cols": 19,
-    "rows": 15
+    "rows": 13
   },
   "timeLimitMs": 180000,
   "music": "canon-in-d",
@@ -12,360 +12,435 @@
     {
       "playerSlot": 1,
       "col": 3,
-      "row": 7,
+      "row": 6,
       "dir": "right"
     },
     {
       "playerSlot": 2,
       "col": 15,
-      "row": 7,
+      "row": 6,
       "dir": "left"
     }
   ],
   "objects": [
     {
       "col": 1,
-      "row": 10,
+      "row": 1,
+      "type": "rock"
+    },
+    {
+      "col": 17,
+      "row": 1,
       "type": "rock"
     },
     {
       "col": 2,
-      "row": 4,
+      "row": 1,
       "type": "rock"
     },
     {
-      "col": 2,
-      "row": 10,
+      "col": 16,
+      "row": 1,
       "type": "rock"
     },
     {
       "col": 3,
+      "row": 1,
+      "type": "rock"
+    },
+    {
+      "col": 15,
+      "row": 1,
+      "type": "rock"
+    },
+    {
+      "col": 4,
+      "row": 1,
+      "type": "rock"
+    },
+    {
+      "col": 14,
+      "row": 1,
+      "type": "rock"
+    },
+    {
+      "col": 5,
+      "row": 1,
+      "type": "rock"
+    },
+    {
+      "col": 13,
+      "row": 1,
+      "type": "rock"
+    },
+    {
+      "col": 6,
+      "row": 1,
+      "type": "rock"
+    },
+    {
+      "col": 12,
+      "row": 1,
+      "type": "rock"
+    },
+    {
+      "col": 7,
+      "row": 1,
+      "type": "rock"
+    },
+    {
+      "col": 11,
+      "row": 1,
+      "type": "rock"
+    },
+    {
+      "col": 8,
+      "row": 1,
+      "type": "rock"
+    },
+    {
+      "col": 10,
+      "row": 1,
+      "type": "rock"
+    },
+    {
+      "col": 9,
+      "row": 1,
+      "type": "rock"
+    },
+    {
+      "col": 1,
+      "row": 2,
+      "type": "rock"
+    },
+    {
+      "col": 17,
+      "row": 2,
+      "type": "rock"
+    },
+    {
+      "col": 1,
+      "row": 3,
+      "type": "rock"
+    },
+    {
+      "col": 17,
+      "row": 3,
+      "type": "rock"
+    },
+    {
+      "col": 1,
       "row": 4,
+      "type": "rock"
+    },
+    {
+      "col": 17,
+      "row": 4,
+      "type": "rock"
+    },
+    {
+      "col": 4,
+      "row": 4,
+      "type": "rock"
+    },
+    {
+      "col": 14,
+      "row": 4,
+      "type": "rock"
+    },
+    {
+      "col": 5,
+      "row": 4,
+      "type": "rock"
+    },
+    {
+      "col": 13,
+      "row": 4,
+      "type": "rock"
+    },
+    {
+      "col": 6,
+      "row": 4,
+      "type": "rock"
+    },
+    {
+      "col": 12,
+      "row": 4,
+      "type": "rock"
+    },
+    {
+      "col": 7,
+      "row": 4,
+      "type": "rock"
+    },
+    {
+      "col": 11,
+      "row": 4,
+      "type": "rock"
+    },
+    {
+      "col": 8,
+      "row": 4,
+      "type": "rock"
+    },
+    {
+      "col": 10,
+      "row": 4,
+      "type": "rock"
+    },
+    {
+      "col": 9,
+      "row": 4,
+      "type": "rock"
+    },
+    {
+      "col": 1,
+      "row": 5,
+      "type": "rock"
+    },
+    {
+      "col": 17,
+      "row": 5,
+      "type": "rock"
+    },
+    {
+      "col": 4,
+      "row": 5,
+      "type": "rock"
+    },
+    {
+      "col": 14,
+      "row": 5,
+      "type": "rock"
+    },
+    {
+      "col": 1,
+      "row": 6,
+      "type": "rock"
+    },
+    {
+      "col": 17,
+      "row": 6,
+      "type": "rock"
+    },
+    {
+      "col": 4,
+      "row": 6,
+      "type": "rock"
+    },
+    {
+      "col": 14,
+      "row": 6,
+      "type": "rock"
+    },
+    {
+      "col": 1,
+      "row": 7,
+      "type": "rock"
+    },
+    {
+      "col": 17,
+      "row": 7,
+      "type": "rock"
+    },
+    {
+      "col": 4,
+      "row": 7,
+      "type": "rock"
+    },
+    {
+      "col": 14,
+      "row": 7,
+      "type": "rock"
+    },
+    {
+      "col": 1,
+      "row": 8,
+      "type": "rock"
+    },
+    {
+      "col": 17,
+      "row": 8,
+      "type": "rock"
+    },
+    {
+      "col": 4,
+      "row": 8,
+      "type": "rock"
+    },
+    {
+      "col": 14,
+      "row": 8,
+      "type": "rock"
+    },
+    {
+      "col": 5,
+      "row": 8,
+      "type": "rock"
+    },
+    {
+      "col": 13,
+      "row": 8,
+      "type": "rock"
+    },
+    {
+      "col": 6,
+      "row": 8,
+      "type": "rock"
+    },
+    {
+      "col": 12,
+      "row": 8,
+      "type": "rock"
+    },
+    {
+      "col": 7,
+      "row": 8,
+      "type": "rock"
+    },
+    {
+      "col": 11,
+      "row": 8,
+      "type": "rock"
+    },
+    {
+      "col": 8,
+      "row": 8,
+      "type": "rock"
+    },
+    {
+      "col": 10,
+      "row": 8,
+      "type": "rock"
+    },
+    {
+      "col": 9,
+      "row": 8,
+      "type": "rock"
+    },
+    {
+      "col": 1,
+      "row": 9,
+      "type": "rock"
+    },
+    {
+      "col": 17,
+      "row": 9,
+      "type": "rock"
+    },
+    {
+      "col": 1,
+      "row": 10,
+      "type": "rock"
+    },
+    {
+      "col": 17,
+      "row": 10,
+      "type": "rock"
+    },
+    {
+      "col": 1,
+      "row": 11,
+      "type": "rock"
+    },
+    {
+      "col": 17,
+      "row": 11,
+      "type": "rock"
+    },
+    {
+      "col": 2,
+      "row": 11,
+      "type": "rock"
+    },
+    {
+      "col": 16,
+      "row": 11,
       "type": "rock"
     },
     {
       "col": 3,
-      "row": 10,
-      "type": "rock"
-    },
-    {
-      "col": 4,
-      "row": 4,
-      "type": "rock"
-    },
-    {
-      "col": 4,
-      "row": 10,
-      "type": "rock"
-    },
-    {
-      "col": 5,
-      "row": 4,
-      "type": "rock"
-    },
-    {
-      "col": 5,
-      "row": 10,
-      "type": "rock"
-    },
-    {
-      "col": 1,
-      "row": 5,
-      "type": "rock"
-    },
-    {
-      "col": 5,
-      "row": 5,
-      "type": "rock"
-    },
-    {
-      "col": 1,
-      "row": 6,
-      "type": "rock"
-    },
-    {
-      "col": 5,
-      "row": 6,
-      "type": "rock"
-    },
-    {
-      "col": 1,
-      "row": 7,
-      "type": "rock"
-    },
-    {
-      "col": 5,
-      "row": 7,
-      "type": "rock"
-    },
-    {
-      "col": 1,
-      "row": 8,
-      "type": "rock"
-    },
-    {
-      "col": 5,
-      "row": 8,
-      "type": "rock"
-    },
-    {
-      "col": 1,
-      "row": 9,
-      "type": "rock"
-    },
-    {
-      "col": 5,
-      "row": 9,
-      "type": "rock"
-    },
-    {
-      "col": 7,
-      "row": 4,
-      "type": "rock"
-    },
-    {
-      "col": 7,
-      "row": 10,
-      "type": "rock"
-    },
-    {
-      "col": 8,
-      "row": 4,
-      "type": "rock"
-    },
-    {
-      "col": 8,
-      "row": 10,
-      "type": "rock"
-    },
-    {
-      "col": 9,
-      "row": 4,
-      "type": "rock"
-    },
-    {
-      "col": 9,
-      "row": 10,
-      "type": "rock"
-    },
-    {
-      "col": 10,
-      "row": 4,
-      "type": "rock"
-    },
-    {
-      "col": 10,
-      "row": 10,
-      "type": "rock"
-    },
-    {
-      "col": 11,
-      "row": 10,
-      "type": "rock"
-    },
-    {
-      "col": 7,
-      "row": 5,
-      "type": "rock"
-    },
-    {
-      "col": 11,
-      "row": 5,
-      "type": "rock"
-    },
-    {
-      "col": 7,
-      "row": 6,
-      "type": "rock"
-    },
-    {
-      "col": 11,
-      "row": 6,
-      "type": "rock"
-    },
-    {
-      "col": 7,
-      "row": 7,
-      "type": "rock"
-    },
-    {
-      "col": 11,
-      "row": 7,
-      "type": "rock"
-    },
-    {
-      "col": 7,
-      "row": 8,
-      "type": "rock"
-    },
-    {
-      "col": 11,
-      "row": 8,
-      "type": "rock"
-    },
-    {
-      "col": 7,
-      "row": 9,
-      "type": "rock"
-    },
-    {
-      "col": 11,
-      "row": 9,
-      "type": "rock"
-    },
-    {
-      "col": 13,
-      "row": 4,
-      "type": "rock"
-    },
-    {
-      "col": 13,
-      "row": 10,
-      "type": "rock"
-    },
-    {
-      "col": 14,
-      "row": 4,
-      "type": "rock"
-    },
-    {
-      "col": 14,
-      "row": 10,
+      "row": 11,
       "type": "rock"
     },
     {
       "col": 15,
-      "row": 4,
-      "type": "rock"
-    },
-    {
-      "col": 15,
-      "row": 10,
-      "type": "rock"
-    },
-    {
-      "col": 16,
-      "row": 4,
-      "type": "rock"
-    },
-    {
-      "col": 16,
-      "row": 10,
-      "type": "rock"
-    },
-    {
-      "col": 17,
-      "row": 4,
-      "type": "rock"
-    },
-    {
-      "col": 13,
-      "row": 5,
-      "type": "rock"
-    },
-    {
-      "col": 17,
-      "row": 5,
-      "type": "rock"
-    },
-    {
-      "col": 13,
-      "row": 6,
-      "type": "rock"
-    },
-    {
-      "col": 17,
-      "row": 6,
-      "type": "rock"
-    },
-    {
-      "col": 13,
-      "row": 7,
-      "type": "rock"
-    },
-    {
-      "col": 17,
-      "row": 7,
-      "type": "rock"
-    },
-    {
-      "col": 13,
-      "row": 8,
-      "type": "rock"
-    },
-    {
-      "col": 17,
-      "row": 8,
-      "type": "rock"
-    },
-    {
-      "col": 13,
-      "row": 9,
-      "type": "rock"
-    },
-    {
-      "col": 17,
-      "row": 9,
-      "type": "rock"
-    },
-    {
-      "col": 6,
-      "row": 5,
-      "type": "rock"
-    },
-    {
-      "col": 6,
-      "row": 9,
-      "type": "rock"
-    },
-    {
-      "col": 12,
-      "row": 5,
-      "type": "rock"
-    },
-    {
-      "col": 12,
-      "row": 9,
-      "type": "rock"
-    },
-    {
-      "col": 9,
-      "row": 3,
-      "type": "egg"
-    },
-    {
-      "col": 9,
       "row": 11,
-      "type": "egg"
+      "type": "rock"
     },
     {
       "col": 4,
-      "row": 3,
-      "type": "fireball"
+      "row": 11,
+      "type": "rock"
     },
     {
       "col": 14,
       "row": 11,
-      "type": "fireball"
+      "type": "rock"
+    },
+    {
+      "col": 5,
+      "row": 11,
+      "type": "rock"
+    },
+    {
+      "col": 13,
+      "row": 11,
+      "type": "rock"
+    },
+    {
+      "col": 6,
+      "row": 11,
+      "type": "rock"
+    },
+    {
+      "col": 12,
+      "row": 11,
+      "type": "rock"
+    },
+    {
+      "col": 7,
+      "row": 11,
+      "type": "rock"
+    },
+    {
+      "col": 11,
+      "row": 11,
+      "type": "rock"
     },
     {
       "col": 8,
-      "row": 7,
-      "type": "donut"
+      "row": 11,
+      "type": "rock"
     },
     {
       "col": 10,
-      "row": 7,
-      "type": "donut"
+      "row": 11,
+      "type": "rock"
     },
     {
-      "col": 2,
-      "row": 12,
+      "col": 9,
+      "row": 11,
+      "type": "rock"
+    },
+    {
+      "col": 3,
+      "row": 3,
       "type": "egg"
     },
     {
-      "col": 16,
-      "row": 12,
+      "col": 15,
+      "row": 3,
+      "type": "egg"
+    },
+    {
+      "col": 3,
+      "row": 2,
+      "type": "egg"
+    },
+    {
+      "col": 15,
+      "row": 2,
       "type": "egg"
     }
   ],

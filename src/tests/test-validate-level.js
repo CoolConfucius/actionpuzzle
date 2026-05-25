@@ -13,7 +13,7 @@ const VALIDATOR = join(__dirname, '..', '..', 'scripts', 'validate-level.mjs');
 
 function validStub() {
   return {
-    id: '01', world: 1, dims: { cols: 19, rows: 15 },
+    id: '01', world: 1, dims: { cols: 19, rows: 13 },
     playerSpawns: [{ playerSlot: 1, col: 1, row: 1, dir: 'down' }],
     objects: [{ type: 'rock', col: 6, row: 6 }],
     eggCount: 0,
@@ -53,7 +53,7 @@ test('dims mismatch message uses U+00D7', () => {
   lvl.dims = { cols: 12, rows: 11 };
   const r = validateLevel(lvl);
   assert.equal(r.ok, false);
-  assert.equal(r.error, 'dims mismatch: expected 19\u00D715');
+  assert.equal(r.error, 'dims mismatch: expected 19\u00D713');
 });
 
 test('unknown enemy type uses literal [i]', () => {

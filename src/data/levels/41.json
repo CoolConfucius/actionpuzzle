@@ -3,7 +3,7 @@
   "world": 7,
   "dims": {
     "cols": 19,
-    "rows": 15
+    "rows": 13
   },
   "timeLimitMs": 180000,
   "music": "mountain-king",
@@ -12,75 +12,25 @@
     {
       "playerSlot": 1,
       "col": 3,
-      "row": 7,
+      "row": 6,
       "dir": "right"
     },
     {
       "playerSlot": 2,
       "col": 15,
-      "row": 7,
+      "row": 6,
       "dir": "left"
     }
   ],
   "objects": [
     {
-      "col": 7,
-      "row": 5,
+      "col": 2,
+      "row": 2,
       "type": "rock"
     },
     {
-      "col": 8,
-      "row": 5,
-      "type": "rock"
-    },
-    {
-      "col": 10,
-      "row": 5,
-      "type": "rock"
-    },
-    {
-      "col": 11,
-      "row": 5,
-      "type": "rock"
-    },
-    {
-      "col": 7,
-      "row": 6,
-      "type": "rock"
-    },
-    {
-      "col": 11,
-      "row": 6,
-      "type": "rock"
-    },
-    {
-      "col": 7,
-      "row": 8,
-      "type": "rock"
-    },
-    {
-      "col": 11,
-      "row": 8,
-      "type": "rock"
-    },
-    {
-      "col": 7,
-      "row": 9,
-      "type": "rock"
-    },
-    {
-      "col": 8,
-      "row": 9,
-      "type": "rock"
-    },
-    {
-      "col": 10,
-      "row": 9,
-      "type": "rock"
-    },
-    {
-      "col": 11,
-      "row": 9,
+      "col": 16,
+      "row": 2,
       "type": "rock"
     },
     {
@@ -94,87 +44,412 @@
       "type": "rock"
     },
     {
-      "col": 3,
-      "row": 12,
-      "type": "rock"
-    },
-    {
-      "col": 15,
-      "row": 12,
-      "type": "rock"
-    },
-    {
-      "col": 9,
+      "col": 4,
       "row": 2,
       "type": "rock"
     },
     {
-      "col": 9,
-      "row": 12,
+      "col": 14,
+      "row": 2,
       "type": "rock"
-    },
-    {
-      "col": 8,
-      "row": 6,
-      "type": "egg"
-    },
-    {
-      "col": 10,
-      "row": 6,
-      "type": "egg"
-    },
-    {
-      "col": 8,
-      "row": 8,
-      "type": "egg"
-    },
-    {
-      "col": 10,
-      "row": 8,
-      "type": "egg"
-    },
-    {
-      "col": 6,
-      "row": 4,
-      "type": "fireball"
-    },
-    {
-      "col": 12,
-      "row": 10,
-      "type": "fireball"
-    },
-    {
-      "col": 12,
-      "row": 4,
-      "type": "fireball"
-    },
-    {
-      "col": 6,
-      "row": 10,
-      "type": "fireball"
-    },
-    {
-      "col": 9,
-      "row": 6,
-      "type": "egg"
-    },
-    {
-      "col": 9,
-      "row": 8,
-      "type": "egg"
     },
     {
       "col": 5,
-      "row": 7,
+      "row": 2,
       "type": "rock"
     },
     {
       "col": 13,
+      "row": 2,
+      "type": "rock"
+    },
+    {
+      "col": 6,
+      "row": 2,
+      "type": "rock"
+    },
+    {
+      "col": 12,
+      "row": 2,
+      "type": "rock"
+    },
+    {
+      "col": 7,
+      "row": 2,
+      "type": "rock"
+    },
+    {
+      "col": 11,
+      "row": 2,
+      "type": "rock"
+    },
+    {
+      "col": 8,
+      "row": 2,
+      "type": "rock"
+    },
+    {
+      "col": 10,
+      "row": 2,
+      "type": "rock"
+    },
+    {
+      "col": 9,
+      "row": 2,
+      "type": "rock"
+    },
+    {
+      "col": 2,
+      "row": 3,
+      "type": "rock"
+    },
+    {
+      "col": 16,
+      "row": 3,
+      "type": "rock"
+    },
+    {
+      "col": 9,
+      "row": 3,
+      "type": "rock"
+    },
+    {
+      "col": 2,
+      "row": 4,
+      "type": "rock"
+    },
+    {
+      "col": 16,
+      "row": 4,
+      "type": "rock"
+    },
+    {
+      "col": 4,
+      "row": 4,
+      "type": "rock"
+    },
+    {
+      "col": 14,
+      "row": 4,
+      "type": "rock"
+    },
+    {
+      "col": 5,
+      "row": 4,
+      "type": "rock"
+    },
+    {
+      "col": 13,
+      "row": 4,
+      "type": "rock"
+    },
+    {
+      "col": 6,
+      "row": 4,
+      "type": "rock"
+    },
+    {
+      "col": 12,
+      "row": 4,
+      "type": "rock"
+    },
+    {
+      "col": 7,
+      "row": 4,
+      "type": "rock"
+    },
+    {
+      "col": 11,
+      "row": 4,
+      "type": "rock"
+    },
+    {
+      "col": 9,
+      "row": 4,
+      "type": "rock"
+    },
+    {
+      "col": 2,
+      "row": 5,
+      "type": "rock"
+    },
+    {
+      "col": 16,
+      "row": 5,
+      "type": "rock"
+    },
+    {
+      "col": 4,
+      "row": 5,
+      "type": "rock"
+    },
+    {
+      "col": 14,
+      "row": 5,
+      "type": "rock"
+    },
+    {
+      "col": 7,
+      "row": 5,
+      "type": "rock"
+    },
+    {
+      "col": 11,
+      "row": 5,
+      "type": "rock"
+    },
+    {
+      "col": 9,
+      "row": 5,
+      "type": "rock"
+    },
+    {
+      "col": 2,
+      "row": 6,
+      "type": "rock"
+    },
+    {
+      "col": 16,
+      "row": 6,
+      "type": "rock"
+    },
+    {
+      "col": 4,
+      "row": 6,
+      "type": "rock"
+    },
+    {
+      "col": 14,
+      "row": 6,
+      "type": "rock"
+    },
+    {
+      "col": 7,
+      "row": 6,
+      "type": "rock"
+    },
+    {
+      "col": 11,
+      "row": 6,
+      "type": "rock"
+    },
+    {
+      "col": 9,
+      "row": 6,
+      "type": "rock"
+    },
+    {
+      "col": 2,
       "row": 7,
       "type": "rock"
+    },
+    {
+      "col": 16,
+      "row": 7,
+      "type": "rock"
+    },
+    {
+      "col": 4,
+      "row": 7,
+      "type": "rock"
+    },
+    {
+      "col": 14,
+      "row": 7,
+      "type": "rock"
+    },
+    {
+      "col": 7,
+      "row": 7,
+      "type": "rock"
+    },
+    {
+      "col": 11,
+      "row": 7,
+      "type": "rock"
+    },
+    {
+      "col": 9,
+      "row": 7,
+      "type": "rock"
+    },
+    {
+      "col": 2,
+      "row": 8,
+      "type": "rock"
+    },
+    {
+      "col": 16,
+      "row": 8,
+      "type": "rock"
+    },
+    {
+      "col": 4,
+      "row": 8,
+      "type": "rock"
+    },
+    {
+      "col": 14,
+      "row": 8,
+      "type": "rock"
+    },
+    {
+      "col": 5,
+      "row": 8,
+      "type": "rock"
+    },
+    {
+      "col": 13,
+      "row": 8,
+      "type": "rock"
+    },
+    {
+      "col": 6,
+      "row": 8,
+      "type": "rock"
+    },
+    {
+      "col": 12,
+      "row": 8,
+      "type": "rock"
+    },
+    {
+      "col": 7,
+      "row": 8,
+      "type": "rock"
+    },
+    {
+      "col": 11,
+      "row": 8,
+      "type": "rock"
+    },
+    {
+      "col": 9,
+      "row": 8,
+      "type": "rock"
+    },
+    {
+      "col": 2,
+      "row": 9,
+      "type": "rock"
+    },
+    {
+      "col": 16,
+      "row": 9,
+      "type": "rock"
+    },
+    {
+      "col": 9,
+      "row": 9,
+      "type": "rock"
+    },
+    {
+      "col": 2,
+      "row": 10,
+      "type": "rock"
+    },
+    {
+      "col": 16,
+      "row": 10,
+      "type": "rock"
+    },
+    {
+      "col": 3,
+      "row": 10,
+      "type": "rock"
+    },
+    {
+      "col": 15,
+      "row": 10,
+      "type": "rock"
+    },
+    {
+      "col": 4,
+      "row": 10,
+      "type": "rock"
+    },
+    {
+      "col": 14,
+      "row": 10,
+      "type": "rock"
+    },
+    {
+      "col": 5,
+      "row": 10,
+      "type": "rock"
+    },
+    {
+      "col": 13,
+      "row": 10,
+      "type": "rock"
+    },
+    {
+      "col": 6,
+      "row": 10,
+      "type": "rock"
+    },
+    {
+      "col": 12,
+      "row": 10,
+      "type": "rock"
+    },
+    {
+      "col": 7,
+      "row": 10,
+      "type": "rock"
+    },
+    {
+      "col": 11,
+      "row": 10,
+      "type": "rock"
+    },
+    {
+      "col": 8,
+      "row": 10,
+      "type": "rock"
+    },
+    {
+      "col": 10,
+      "row": 10,
+      "type": "rock"
+    },
+    {
+      "col": 9,
+      "row": 10,
+      "type": "rock"
+    },
+    {
+      "col": 1,
+      "row": 6,
+      "type": "egg"
+    },
+    {
+      "col": 17,
+      "row": 6,
+      "type": "egg"
+    },
+    {
+      "col": 1,
+      "row": 7,
+      "type": "egg"
+    },
+    {
+      "col": 17,
+      "row": 7,
+      "type": "egg"
+    },
+    {
+      "col": 1,
+      "row": 9,
+      "type": "egg"
+    },
+    {
+      "col": 17,
+      "row": 9,
+      "type": "egg"
     }
   ],
-  "eggCount": 0,
+  "eggCount": 6,
   "enemySpawns": [
     {
       "type": "enemy1",

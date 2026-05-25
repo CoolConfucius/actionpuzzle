@@ -170,15 +170,20 @@ function drawEntry(ctx, entry) {
   }
 }
 
-// Rough quadrilateral — rocky chunk.
+// Pebble — rounded irregular blob to match the smoother rock sprite.
 function drawChunk(ctx, size, seed) {
   const r = size;
-  const wobble = 0.35;
+  const k = 0.55; // bezier handle to approximate a circle
+  const j1 = 1 - (seed * 0.30);
+  const j2 = 0.85 + (seed * 0.25);
+  const j3 = 0.92 + ((1 - seed) * 0.22);
+  const j4 = 0.78 + (seed * 0.30);
   ctx.beginPath();
-  ctx.moveTo(-r, -r * (1 - wobble * (0.5 - seed)));
-  ctx.lineTo( r * (1 - wobble * seed), -r);
-  ctx.lineTo( r, r * (1 - wobble * seed));
-  ctx.lineTo(-r * (1 - wobble * (0.5 - seed)), r);
+  ctx.moveTo(0, -r * j1);
+  ctx.bezierCurveTo( r * k * j2, -r * j1,  r * j2,  -r * k,  r * j2, 0);
+  ctx.bezierCurveTo( r * j2,  r * k * j3,  r * k * j3,  r * j3,  0,  r * j3);
+  ctx.bezierCurveTo(-r * k * j4,  r * j3, -r * j4,  r * k,  -r * j4, 0);
+  ctx.bezierCurveTo(-r * j4, -r * k * j1, -r * k * j1, -r * j1,  0, -r * j1);
   ctx.closePath();
   ctx.fill();
 }

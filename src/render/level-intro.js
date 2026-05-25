@@ -1,5 +1,6 @@
-// Shows a brief "W#L# Title" banner at the start of each level.
-// Fades in then out over ~1.6s.
+// Shows a brief "W#L# Title" banner at the start of each level. Gameplay is
+// frozen for the first LEVEL_COUNTDOWN_MS but no numerals are rendered —
+// the player just sees the static level for a beat before they can act.
 import { BALANCE } from '../engine/constants.js';
 
 const DURATION_MS = 1600;
@@ -48,6 +49,7 @@ export function drawLevelIntro(ctx, intro) {
   ctx.fillText(intro.label, W / 2, cy);
   ctx.restore();
 }
+
 
 function formatWorldLevel(id) {
   if (typeof id !== 'string' || !/^\d{2}$/.test(id)) return '';

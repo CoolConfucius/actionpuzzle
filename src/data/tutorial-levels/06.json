@@ -3,7 +3,7 @@
   "world": 0,
   "dims": {
     "cols": 19,
-    "rows": 15
+    "rows": 13
   },
   "timeLimitMs": 300000,
   "music": "beethovens-fifth",

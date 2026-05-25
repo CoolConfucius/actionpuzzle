@@ -22,7 +22,7 @@ const STUB_LEVEL = (id) => ({
   id,
   world: 1,
   title: `Test ${id}`,
-  dims: { cols: 19, rows: 15 },
+  dims: { cols: 19, rows: 13 },
   timeLimitMs: 180000,
   playerSpawns: [{ playerSlot: 1, col: 1, row: 1, dir: 'down' }],
   objects: [],

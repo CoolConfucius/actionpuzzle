@@ -4,7 +4,7 @@ import { BALANCE, COLORS, GLYPHS, BINDINGS } from '../engine/constants.js';
 
 test('grid dimensions match mechanics spec', () => {
   assert.equal(BALANCE.GRID_COLS, 19);
-  assert.equal(BALANCE.GRID_ROWS, 15);
+  assert.equal(BALANCE.GRID_ROWS, 13);
 });
 
 test('player and enemy 5 speeds match spec', () => {
