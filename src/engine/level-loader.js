@@ -40,6 +40,13 @@ export function loadLevel(json, runSeed, options) {
       && opts.campaignUpgrades && typeof opts.campaignUpgrades === 'object') {
     applyCampaignSpawnUpgrades(players, opts.campaignUpgrades);
   }
+  // Items (Item Shop purchases) apply in every mode — they're equipment paid
+  // for with coins and not gated to campaign. Tutorial / daily skip items so
+  // the official challenge is unaltered.
+  if (opts.items && typeof opts.items === 'object'
+      && mode !== 'tutorial' && mode !== 'daily') {
+    applyItemSpawnEffects(players, opts.items);
+  }
   const seed0 = (runSeed === undefined ? 0 : runSeed) >>> 0;
   const level = buildLevelMeta(json, seed0);
   const seed = (hashLevelId(level.id) ^ seed0) >>> 0;
@@ -290,7 +297,100 @@ function makePlayer(id, spawn, alive, character) {
     upgrades: {},
     killsThisLevel: 0,
     inventory: {},
+    items: {},
   };
+}
+
+// Item Shop spawn effects. Each lane has a consumable ladder (3 tiers) plus a
+// permanent ladder (3 tiers). At spawn, we burn one charge of the highest
+// consumable tier the player has (per lane) and add the highest permanent
+// tier's effect on top.
+//
+// Effects stack with character abilities (e.g. Elephant Big Heart, Bear Fast
+// Start) — those are applied separately in applyCampaignSpawnUpgrades. The
+// caller (main.js) decrements the campaign blob's consumable stacks via the
+// returned consumedConsumables list / by reading player.items afterwards.
+
+const ITEM_BASES = ['shieldPotion', 'shieldRing', 'swordPotion', 'swordRing',
+  'revivalPotion', 'heartRing', 'hastePotion', 'swiftRing'];
+
+function highestPermanent(itemsMap, baseId) {
+  for (let t = 3; t >= 1; t--) {
+    if (itemsMap[`${baseId}${t}`] === true) return t;
+  }
+  return 0;
+}
+function highestConsumable(itemsMap, baseId) {
+  for (let t = 3; t >= 1; t--) {
+    const v = itemsMap[`${baseId}${t}`];
+    if (Number.isFinite(v) && v > 0) return t;
+  }
+  return 0;
+}
+
+function applyItemSpawnEffects(players, itemsMap) {
+  if (!players || players.length === 0) return;
+  const targets = players.filter((p) => p && p.alive !== false);
+  if (targets.length === 0) return;
+
+  // Compute lane budgets ONCE per loadLevel call (shared across coop players).
+  // Consumable selection (which tier to burn) is per-lane, decremented later
+  // by main.js after reading itemsMap._consumedConsumables.
+  const consumedConsumables = [];
+  const compute = (baseConsumable, basePermanent) => {
+    let total = highestPermanent(itemsMap, basePermanent);
+    const consT = highestConsumable(itemsMap, baseConsumable);
+    if (consT > 0) {
+      total += consT;
+      consumedConsumables.push(`${baseConsumable}${consT}`);
+    }
+    return total;
+  };
+
+  const shieldBudget = compute('shieldPotion', 'shieldRing');
+  const swordBudget = compute('swordPotion', 'swordRing');
+  const reviveBudget = compute('revivalPotion', 'heartRing');
+  const speedBonus = compute('hastePotion', 'swiftRing');
+  const hasTelegraph = itemsMap.throwTelegraph === true;
+
+  for (const p of targets) {
+    p.items = p.items || {};
+    // Mirror raw flags onto the player for the HUD / debug.
+    for (const baseId of ITEM_BASES) {
+      for (let t = 1; t <= 3; t++) {
+        const id = `${baseId}${t}`;
+        if (itemsMap[id] !== undefined) p.items[id] = itemsMap[id];
+      }
+    }
+    if (hasTelegraph) p.items.throwTelegraph = true;
+
+    // Apply per-lane budgets.
+    if (shieldBudget > 0) {
+      p.shieldBudget = shieldBudget;
+      p.shieldActive = true; // legacy flag still consulted by some code paths
+    }
+    if (swordBudget > 0) {
+      p.swordCharges = swordBudget;
+    }
+    if (reviveBudget > 0) {
+      // Revival budget is per-level "free revives" the engine consumes when
+      // the player would die. NOT the same as +lives at spawn — Heart Locket
+      // already grants +lives via the carry path. (Both happen.)
+      p.reviveBudget = reviveBudget;
+    }
+    if (speedBonus > 0) {
+      // Stack with whatever applyCampaignSpawnUpgrades set (Bear's Fast Start).
+      p.speedStacks = (p.speedStacks || 0) + speedBonus;
+    }
+    // Heart Ring also adds raw lives at spawn (independent of revive budget).
+    const heartTier = highestPermanent(itemsMap, 'heartRing');
+    if (heartTier > 0) p.lives = (p.lives || 0) + heartTier;
+  }
+
+  // Hand the consumed list back to the caller so the campaign blob can be
+  // decremented. Stored on the map itself so it round-trips without changing
+  // the function signature.
+  itemsMap._consumedConsumables = consumedConsumables;
 }
 
 // Apply spawn-time campaign upgrade effects. The map is keyed by character id

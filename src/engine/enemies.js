@@ -4,6 +4,7 @@ import { pickEnemyDirection } from './enemy-ai.js';
 import { awardScore } from './score.js';
 import { clearPowerupsOnDeath } from './powerup.js';
 import { applyExplosion } from './explode.js';
+import { tryAbsorbHit as tryAbsorbItemHit } from './item-effects.js';
 
 const SPEED_BY_TYPE = {
   enemy1: 'ENEMY_1_SPEED',
@@ -492,7 +493,7 @@ export function resolveEnemyContactKills(state) {
       if (!enemy) continue;
       if (!actorsOverlap(player, enemy)) continue;
       if (isEnemyFrozen(enemy, state)) continue;
-      killPlayerOnContact(state, player);
+      killPlayerOnContact(state, player, enemy);
       break;
     }
   }
@@ -571,7 +572,11 @@ function sameCell(a, b) {
   return !!a && !!b && a.col === b.col && a.row === b.row;
 }
 
-function killPlayerOnContact(state, player) {
+function killPlayerOnContact(state, player, enemy) {
+  // Item Shop: Sage Sword consumes one charge & kills the enemy instead.
+  // Shield Talisman absorbs the first hit per level.
+  const absorb = tryAbsorbItemHit(state, player, { cause: 'enemyContact', enemy });
+  if (absorb && absorb.absorbed) return;
   player.alive = false;
   player.deathTimeMs = state.timeMs;
   if (typeof player.lives === 'number') player.lives -= 1;

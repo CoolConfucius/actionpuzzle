@@ -24,7 +24,16 @@ import {
   grantUpgrade,
   awardCoins,
   resetCampaign,
+  awardXpForScoreEvents,
+  awardXp,
+  spendXp,
+  getXp,
+  ownsItem,
+  itemCount,
+  grantItem,
+  consumeItem,
 } from './engine/campaign.js';
+import { ITEMS, lookupItem } from './engine/item-defs.js';
 import { resetStats as resetLifetimeStats } from './engine/lifetime-stats.js';
 import { purchaseStatus, UPGRADES } from './engine/upgrade-defs.js';
 import {
@@ -39,6 +48,31 @@ import {
   shopClick,
   shopHover,
 } from './render/shop-screen.js';
+import {
+  createCharacterSelectState,
+  openCharacterSelect,
+  closeCharacterSelect,
+  isCharacterSelectOpen,
+  drawCharacterSelect,
+  characterSelectClick,
+  characterSelectHover,
+  characterSelectKey,
+  characterSelectId,
+  consumeCharacterSelectAction,
+} from './render/character-select-screen.js';
+import {
+  createItemShopState,
+  openItemShop,
+  closeItemShop,
+  isItemShopOpen,
+  drawItemShopScreen,
+  itemShopClick,
+  itemShopHover,
+  itemShopKey,
+  selectedItem,
+  markPurchaseAnimation,
+  consumeItemShopAction,
+} from './render/item-shop-screen.js';
 import {
   createLevelSelectState,
   openLevelSelect,
@@ -114,6 +148,7 @@ import {
   consumeLevelSelectRequest,
   getSelectedSkin,
   getSelectedP2Skin,
+  setSelectedSkin,
 } from './render/title-screen.js';
 import { drawHelpScreen, scrollHelpScreen, resetHelpScroll } from './render/help-screen.js';
 import { drawAchievementsScreen } from './render/achievements-screen.js';
@@ -750,12 +785,33 @@ async function boot() {
         upgrades[u.character][u.id] = true;
       }
     }
+    // Pass a SHALLOW copy of items so level-loader can attach
+    // `_consumedConsumables` (an array of "<base><tier>" ids it burned at
+    // spawn). We decrement the campaign blob below based on that list.
+    const itemsForLoad = { ...(campaignState.items || {}) };
     return {
       mode,
       skin: getSelectedSkin(),
       p2Skin: getSelectedP2Skin(),
       campaignUpgrades: upgrades,
+      items: itemsForLoad,
     };
+  }
+
+  // After loadLevel, decrement the campaign blob for any consumable charges
+  // that were burned at spawn (per level-loader._consumedConsumables).
+  function reconcileSpawnConsumables(itemsForLoad) {
+    const list = itemsForLoad && itemsForLoad._consumedConsumables;
+    if (!Array.isArray(list) || list.length === 0) return;
+    campaignState.items = campaignState.items || {};
+    for (const id of list) {
+      const cur = campaignState.items[id];
+      if (!Number.isFinite(cur)) continue;
+      const next = cur - 1;
+      if (next <= 0) delete campaignState.items[id];
+      else campaignState.items[id] = next;
+      campaignDirty = true;
+    }
   }
 
   function routeMusicForLevel(levelJson) {
@@ -790,10 +846,119 @@ async function boot() {
   const campaignState = readCampaign();
   let campaignDirty = false;
   const shopState = createShopState();
+  const itemShopState = createItemShopState();
+  const charSelectState = createCharacterSelectState(getSelectedSkin());
   let shopBlocksNextLevel = false; // set true after transition done, cleared by space
   let currentRunIsReplay = false; // halves campaign coin rewards on grind runs
   const levelSelectState = createLevelSelectState();
   const testSelectState = createTestSelectState();
+
+  function attemptItemPurchase() {
+    const item = selectedItem(itemShopState);
+    if (!item) {
+      try { audio.playShopReject(); } catch (e) { /* ignore */ }
+      return false;
+    }
+    const owned = ownsItem(campaignState, item.id);
+    if (item.type === 'permanent' && owned) {
+      try { audio.playShopReject(); } catch (e) { /* ignore */ }
+      return false;
+    }
+    // Permanent ladders require the previous tier first.
+    if (item.type === 'permanent' && item.prereq && !ownsItem(campaignState, item.prereq)) {
+      try { audio.playShopReject(); } catch (e) { /* ignore */ }
+      return false;
+    }
+    if (item.type === 'consumable') {
+      const cur = itemCount(campaignState, item.id);
+      const max = Number.isFinite(item.stackMax) ? item.stackMax : 9;
+      if (cur >= max) { try { audio.playShopReject(); } catch (e) { /* ignore */ } return false; }
+    }
+    if (!spendCoins(campaignState, item.cost)) {
+      try { audio.playShopReject(); } catch (e) { /* ignore */ }
+      return false;
+    }
+    grantItem(campaignState, item.id, { stackable: item.type === 'consumable', max: item.stackMax || 9 });
+    campaignDirty = true;
+    persistCampaignIfDirty();
+    markPurchaseAnimation(itemShopState, item.id, 700);
+    try { audio.playShopPurchase(); } catch (e) { /* ignore */ }
+    return true;
+  }
+
+  // Open character select before Arcade/Campaign START. `purpose='preplay'`
+  // tells the screen to show PLAY as the primary action and to route the
+  // user back to gameplay (or level-select) on confirm.
+  function openCharSelectForPreplay() {
+    openCharacterSelect(charSelectState, getSelectedSkin(), 'preplay');
+    phase = 'charselect';
+  }
+  // Open character select from title via "Character" entry — browse purpose.
+  function openCharSelectForBrowse() {
+    openCharacterSelect(charSelectState, getSelectedSkin(), 'browse');
+    phase = 'charselect';
+  }
+
+  // Drain any sub-screen actions (shop / item shop nested under charselect)
+  // first, then drain the charselect's own action queue.
+  function handleCharSelectActions() {
+    // Nested Skill Tree on top of charselect
+    if (isShopOpen(shopState) && shopState.closeRequested) {
+      closeShop(shopState);
+      shopState.closeRequested = false;
+    }
+    if (isShopOpen(shopState) && shopState.backToSelectRequested) {
+      closeShop(shopState);
+      shopState.backToSelectRequested = false;
+    }
+    if (isShopOpen(shopState) && shopState.itemShopRequested) {
+      closeShop(shopState);
+      shopState.itemShopRequested = false;
+      openItemShop(itemShopState, {});
+    }
+    if (isItemShopOpen(itemShopState)) {
+      const a = consumeItemShopAction(itemShopState);
+      if (a === 'close') {
+        closeItemShop(itemShopState);
+      } else if (a === 'backToSelect') {
+        closeItemShop(itemShopState);
+      } else if (a === 'skillTree') {
+        closeItemShop(itemShopState);
+        shopState.character = characterSelectId(charSelectState) || getSelectedSkin() || 'bear';
+        openShop(shopState, shopState.character, '', true);
+        try { audio.playShopOpen(); } catch (e) { /* ignore */ }
+      }
+      return;
+    }
+    if (isShopOpen(shopState)) {
+      // Skill tree handled in its own key/mouse path; consume nothing here.
+      return;
+    }
+    const action = consumeCharacterSelectAction(charSelectState);
+    if (!action) return;
+    const charId = characterSelectId(charSelectState);
+    setSelectedSkin(charId);
+    if (action === 'close') {
+      closeCharacterSelect(charSelectState);
+      phase = 'title';
+    } else if (action === 'skillTree') {
+      shopState.character = charId;
+      openShop(shopState, charId, '', true);
+      try { audio.playShopOpen(); } catch (e) { /* ignore */ }
+    } else if (action === 'itemShop') {
+      openItemShop(itemShopState, {});
+    } else if (action === 'play') {
+      const m = getMode();
+      closeCharacterSelect(charSelectState);
+      if (m === 'campaign' || m === 'campaign-coop') {
+        phase = 'title';
+        openLevelSelect(levelSelectState);
+      } else {
+        // Arcade and anything else routed here: jump straight in.
+        startGameplay(pendingStartLevelId);
+      }
+    }
+  }
 
   function persistCampaignIfDirty() {
     if (!campaignDirty) return;
@@ -812,7 +977,8 @@ async function boot() {
       try { audio.playShopReject(); } catch (e) { /* ignore */ }
       return false;
     }
-    if (!spendCoins(campaignState, upgrade.cost)) {
+    // Skills now cost the character's XP, not shared coins.
+    if (!spendXp(campaignState, upgrade.character, upgrade.cost)) {
       try { audio.playShopReject(); } catch (e) { /* ignore */ }
       return false;
     }
@@ -827,6 +993,68 @@ async function boot() {
     closeShop(shopState);
     shopBlocksNextLevel = false;
     transitionToNextLevel();
+  }
+
+  function continuePastItemShop() {
+    closeItemShop(itemShopState);
+    shopBlocksNextLevel = false;
+    transitionToNextLevel();
+  }
+
+  // Drain button intents from the in-game item shop intermission. Called once
+  // per frame while it's open. Routes "skill tree" → opens shop on top of the
+  // item shop (skill tree intermission), "back to select" → closes & shows
+  // char-select interstitial, "close" → continues to next level.
+  function handleIntermissionItemShop() {
+    if (!isItemShopOpen(itemShopState)) return;
+    const a = consumeItemShopAction(itemShopState);
+    if (!a) return;
+    if (a === 'close') {
+      // During the post-level intermission, CONTINUE advances the run.
+      // During title browse (nextLevelId === ''), close just returns.
+      if (itemShopState.nextLevelId) continuePastItemShop();
+      else closeItemShop(itemShopState);
+    } else if (a === 'skillTree') {
+      const charId = getSelectedSkin() || 'bear';
+      closeItemShop(itemShopState);
+      openShop(shopState, charId, itemShopState.nextLevelId || '', !itemShopState.nextLevelId);
+      try { audio.playShopOpen(); } catch (e) { /* ignore */ }
+    } else if (a === 'backToSelect') {
+      // From in-game intermission, "change character" pops to char-select
+      // overlay (preplay purpose) so the player can swap heroes between levels.
+      closeItemShop(itemShopState);
+      openCharacterSelect(charSelectState, getSelectedSkin() || 'bear', 'preplay');
+      phase = 'charselect';
+    }
+  }
+
+  // Drain button intents from the in-game skill tree intermission.
+  function handleIntermissionSkillTree() {
+    if (!isShopOpen(shopState)) return;
+    if (shopState.itemShopRequested) {
+      shopState.itemShopRequested = false;
+      const nextLevelId = shopState.nextLevelId;
+      closeShop(shopState);
+      openItemShop(itemShopState, { nextLevelId: nextLevelId || '' });
+      try { audio.playShopOpen(); } catch (e) { /* ignore */ }
+      return;
+    }
+    if (shopState.backToSelectRequested) {
+      shopState.backToSelectRequested = false;
+      closeShop(shopState);
+      openCharacterSelect(charSelectState, shopState.character || getSelectedSkin() || 'bear',
+        shopBlocksNextLevel ? 'preplay' : 'browse');
+      phase = shopBlocksNextLevel ? 'charselect' : phase;
+      return;
+    }
+    if (shopState.closeRequested) {
+      shopState.closeRequested = false;
+      if (shopState.browseMode) {
+        closeShop(shopState);
+      } else {
+        continuePastShop();
+      }
+    }
   }
 
   // Theodore's "Speed on Kill" upgrade: +1 speedStack every 5 enemies killed
@@ -878,6 +1106,13 @@ async function boot() {
       });
     }
   }
+
+  // Consumable charges are now decremented from the campaign blob at level
+  // load (via reconcileSpawnConsumables). Mid-level uses operate on player
+  // budgets (shieldBudget / reviveBudget / swordCharges) which don't need to
+  // round-trip back to the campaign. This stub stays so the existing tick
+  // callsite remains stable.
+  function reconcileItemConsumes(_s, _camp) {}
 
   const transients = {
     popups: [],
@@ -955,9 +1190,13 @@ async function boot() {
       } else if (isPauseMenuOpen(pauseMenu)) {
         pauseMenuHover(pauseMenu, x, y);
         cursorPointer = pauseMenu._hoverRow >= 0;
+      } else if (isItemShopOpen(itemShopState)) {
+        cursorPointer = itemShopHover(itemShopState, x, y);
       } else if (isShopOpen(shopState)) {
         shopHover(shopState, x, y);
-        cursorPointer = (shopState._hoverRow >= 0 || shopState._hoverChar !== 0);
+        cursorPointer = (shopState._hoverRow >= 0 || !!shopState._hoverBtn);
+      } else if (isCharacterSelectOpen(charSelectState)) {
+        cursorPointer = characterSelectHover(charSelectState, x, y);
       } else if (phase === 'title') {
         titleScreenHover(titleState, x, y);
         cursorPointer = (titleState._hoverRow != null && titleState._hoverRow >= 0);
@@ -976,12 +1215,21 @@ async function boot() {
         if (action) handlePauseAction(action);
         return;
       }
+      if (isItemShopOpen(itemShopState)) {
+        const click = itemShopClick(itemShopState, x, y);
+        if (click && click.type === 'buy') attemptItemPurchase();
+        return;
+      }
       if (isShopOpen(shopState)) {
         const click = shopClick(shopState, x, y);
         if (click) {
-          if (click.type === 'cycleChar') cycleShopCharacter(shopState, click.delta);
-          else if (click.type === 'buy') attemptShopPurchase();
+          if (click.type === 'buy') attemptShopPurchase();
+          // other intents drain via shopState.*Requested flags in next frame
         }
+        return;
+      }
+      if (isCharacterSelectOpen(charSelectState)) {
+        characterSelectClick(charSelectState, x, y, (charId) => setSelectedSkin(charId));
         return;
       }
       if (phase === 'title') {
@@ -1032,7 +1280,14 @@ async function boot() {
       e.preventDefault();
       return;
     }
-    // Shop intermission captures keys before pause/admin/etc.
+    // Item Shop captures keys (sits on top of skill tree / charselect / title).
+    if (isItemShopOpen(itemShopState)) {
+      const intent = itemShopKey(itemShopState, e.key);
+      if (intent && intent.type === 'buy') attemptItemPurchase();
+      e.preventDefault();
+      return;
+    }
+    // Skill Tree intermission captures keys before pause/admin/etc.
     if (isShopOpen(shopState)) {
       if (e.key === 'ArrowUp' || e.key === 'w' || e.key === 'W') {
         navigateShop(shopState, -1);
@@ -1044,23 +1299,31 @@ async function boot() {
         e.preventDefault();
         return;
       }
-      if (e.key === 'ArrowLeft') {
-        cycleShopCharacter(shopState, -1);
-        e.preventDefault();
-        return;
-      }
-      if (e.key === 'ArrowRight') {
-        cycleShopCharacter(shopState, 1);
-        e.preventDefault();
-        return;
-      }
       if (e.key === 'Enter') {
         attemptShopPurchase();
         e.preventDefault();
         return;
       }
+      if (e.key === 'i' || e.key === 'I') {
+        // Quick-jump from Skill Tree to Item Shop.
+        closeShop(shopState);
+        openItemShop(itemShopState, { nextLevelId: shopState.nextLevelId || '' });
+        try { audio.playShopOpen(); } catch (err) { /* ignore */ }
+        e.preventDefault();
+        return;
+      }
+      if (e.key === 'c' || e.key === 'C') {
+        // Quick-jump back to character select.
+        closeShop(shopState);
+        if (phase !== 'charselect') {
+          openCharacterSelect(charSelectState, shopState.character || getSelectedSkin(),
+            phase === 'title' ? 'browse' : 'preplay');
+          phase = 'charselect';
+        }
+        e.preventDefault();
+        return;
+      }
       if (e.key === ' ' || e.code === 'Space') {
-        // Browse mode (from title) just closes; in-game mode advances.
         if (shopState.browseMode) {
           closeShop(shopState);
         } else {
@@ -1076,6 +1339,12 @@ async function boot() {
         e.preventDefault();
         return;
       }
+      e.preventDefault();
+      return;
+    }
+    // Character Select captures keys when open.
+    if (isCharacterSelectOpen(charSelectState)) {
+      characterSelectKey(charSelectState, e.key, (charId) => setSelectedSkin(charId));
       e.preventDefault();
       return;
     }
@@ -1341,6 +1610,19 @@ async function boot() {
     }
     if (phase === 'title') {
       const k = e.key;
+      // 'K' opens character-select in browse mode directly from title.
+      if (k === 'k' || k === 'K') {
+        openCharSelectForBrowse();
+        e.preventDefault();
+        return;
+      }
+      // 'I' opens the Item Shop in browse mode directly from title (any mode).
+      if (k === 'i' || k === 'I') {
+        openItemShop(itemShopState, {});
+        try { audio.playShopOpen(); } catch (err) { /* ignore */ }
+        e.preventDefault();
+        return;
+      }
       if (['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight', ' ', 'Enter'].includes(k)) {
         e.preventDefault();
       }
@@ -1430,7 +1712,9 @@ async function boot() {
     }
     let fresh;
     try {
-      fresh = loadLevel(levelJson, currentSeed, levelOpts());
+      const startLvlOpts = levelOpts();
+      fresh = loadLevel(levelJson, currentSeed, startLvlOpts);
+      reconcileSpawnConsumables(startLvlOpts.items);
     } catch (err) {
       console.error('boot: loadLevel failed', err);
       drawError(ctx, 'Level load error');
@@ -1487,7 +1771,9 @@ async function boot() {
     currentSeed = (Date.now() & 0xffffffff);
     try {
       const json = await fetchLevel('01', getMode());
-      const fresh = loadLevel(json, currentSeed, levelOpts());
+      const restartOpts = levelOpts();
+      const fresh = loadLevel(json, currentSeed, restartOpts);
+      reconcileSpawnConsumables(restartOpts.items);
       adoptStateInPlace(state, fresh);
       transients.popups.length = 0;
       transients.explosionFx.length = 0;
@@ -1511,7 +1797,9 @@ async function boot() {
     currentSeed = (Date.now() & 0xffffffff);
     try {
       const json = await fetchLevel(failedLevelId, getMode());
-      const fresh = loadLevel(json, currentSeed, levelOpts());
+      const retryOpts = levelOpts();
+      const fresh = loadLevel(json, currentSeed, retryOpts);
+      reconcileSpawnConsumables(retryOpts.items);
       if (Array.isArray(fresh.players)) {
         for (const p of fresh.players) {
           p.lives = BALANCE.LIFE_STOCKS_INITIAL;
@@ -1611,11 +1899,22 @@ async function boot() {
         const loops = state.endlessLoopCount;
         nextJson = scaleLevelForEndless(nextJson, loops);
       }
-      const nextState = loadLevel(nextJson, currentSeed, levelOpts());
+      const lvlOpts = levelOpts();
+      const nextState = loadLevel(nextJson, currentSeed, lvlOpts);
+      reconcileSpawnConsumables(lvlOpts.items);
       for (const carried of carry.players) {
         const fresh = nextState.players.find((p) => p.id === carried.id);
         if (fresh) {
-          fresh.lives = carried.lives;
+          // Heart Ring promises "+N each level" — add the highest owned
+          // tier on top of carried lives so the bonus survives the
+          // carry-overwrite. (Tier 0 = no ring → bonus 0.)
+          let ringBonus = 0;
+          if (fresh.items) {
+            for (let t = 3; t >= 1; t--) {
+              if (fresh.items[`heartRing${t}`] === true) { ringBonus = t; break; }
+            }
+          }
+          fresh.lives = carried.lives + ringBonus;
           fresh.score = carried.score;
         }
       }
@@ -1650,10 +1949,35 @@ async function boot() {
       }
     }
 
+    if (phase === 'charselect') {
+      drawCharacterSelect(ctx, charSelectState, LOGICAL_WIDTH_PX, LOGICAL_HEIGHT_PX);
+      if (isShopOpen(shopState)) {
+        drawShopScreen(ctx, shopState, campaignState, LOGICAL_WIDTH_PX, LOGICAL_HEIGHT_PX);
+      } else if (isItemShopOpen(itemShopState)) {
+        drawItemShopScreen(ctx, itemShopState, campaignState, LOGICAL_WIDTH_PX, LOGICAL_HEIGHT_PX);
+      }
+      if (isAdminOverlayOpen(adminOverlay)) {
+        drawAdminOverlay(ctx, adminOverlay, LOGICAL_WIDTH_PX, LOGICAL_HEIGHT_PX);
+      }
+      handleCharSelectActions();
+      requestAnimationFrame(frame);
+      return;
+    }
+
     if (phase === 'title') {
       drawTitleScreen(ctx, titleState, LOGICAL_WIDTH_PX, LOGICAL_HEIGHT_PX);
       if (isShopOpen(shopState)) {
         drawShopScreen(ctx, shopState, campaignState, LOGICAL_WIDTH_PX, LOGICAL_HEIGHT_PX);
+        handleIntermissionSkillTree();
+        if (isAdminOverlayOpen(adminOverlay)) {
+          drawAdminOverlay(ctx, adminOverlay, LOGICAL_WIDTH_PX, LOGICAL_HEIGHT_PX);
+        }
+        requestAnimationFrame(frame);
+        return;
+      }
+      if (isItemShopOpen(itemShopState)) {
+        drawItemShopScreen(ctx, itemShopState, campaignState, LOGICAL_WIDTH_PX, LOGICAL_HEIGHT_PX);
+        handleIntermissionItemShop();
         if (isAdminOverlayOpen(adminOverlay)) {
           drawAdminOverlay(ctx, adminOverlay, LOGICAL_WIDTH_PX, LOGICAL_HEIGHT_PX);
         }
@@ -1671,13 +1995,14 @@ async function boot() {
         return;
       }
       if (consumeStartRequest(titleState)) {
-        // Campaign START opens the level-select / shop screen instead of
-        // jumping straight into LV-01. Players pick where to drop in (gated
-        // by the unlock check inside the level-select Enter handler) or
-        // press S there to enter the shop.
+        // START in Arcade / Campaign first opens the Character Select screen
+        // so the player can review skills/items before committing. Coop START
+        // goes straight through (P2 picks via the title's P2 SKIN row). Other
+        // modes (tutorial / daily / test / endless / boss-rush / random) skip
+        // the interstitial.
         const m = getMode();
-        if (m === 'campaign' || m === 'campaign-coop') {
-          openLevelSelect(levelSelectState);
+        if (m === 'campaign' || m === 'campaign-coop' || m === 'arcade') {
+          openCharSelectForPreplay();
         } else if (m === 'test') {
           openTestSelect(testSelectState);
         } else {
@@ -1790,12 +2115,14 @@ async function boot() {
             };
             recordFastestClear(lifetimeStats, clearMs);
           }
-          // Campaign C1: award level-clear coins (base + time bonus).
-          if ((getMode() === 'campaign' || getMode() === 'campaign-coop')) {
+          // Level-clear coins now apply in every mode except tutorial / daily.
+          const clearMode = getMode();
+          if (clearMode !== 'tutorial' && clearMode !== 'daily') {
             const limit = (state.level && state.level.timeLimitMs) || 0;
             const remaining = Math.max(0, limit - (state.levelTimeMs || 0));
             const timeBonusPts = Math.floor(remaining / 1000) * (BALANCE.TIME_BONUS_PER_SEC || 0);
-            const mult = currentRunIsReplay ? 0.5 : 1;
+            const isCampaign = clearMode === 'campaign' || clearMode === 'campaign-coop';
+            const mult = (isCampaign && currentRunIsReplay) ? 0.5 : 1;
             const coinsAwarded = awardCoinsForLevelClear(campaignState, timeBonusPts, mult);
             state.lastCampaignClearCoins = coinsAwarded;
             state.lastCoinAwardAtMs = state.timeMs || 0;
@@ -1813,19 +2140,22 @@ async function boot() {
         tickExplosionFx(transients.explosionFx, dtMs);
         tickLaneTelegraph(transients.laneTelegraph, dtMs);
         if (done && !loadingNext) {
-          // Campaign-mode shop intermission: pause before loading next level so
-          // the player can spend coins. Skipped on the final level (handled by
-          // transitionToNextLevel's null-next path) and outside campaign mode.
+          // Campaign-mode intermission: open the Item Shop first (coins are the
+          // post-level reward; consumables benefit immediately next level).
+          // Player can press C to jump to char-select/skill tree from there.
           const mode = getMode();
           const clearedId = state.level ? state.level.id : null;
           const willHaveNext = clearedId && /^\d{2}$/.test(clearedId) && parseInt(clearedId, 10) < 48
             && mode !== 'daily' && mode !== 'tutorial';
           if ((mode === 'campaign' || mode === 'campaign-coop') && willHaveNext && !shopBlocksNextLevel) {
             shopBlocksNextLevel = true;
-            shopState.character = getSelectedSkin() || 'bear';
             const nextN = parseInt(clearedId, 10) + 1;
             const nextId = String(nextN).padStart(2, '0');
-            openShop(shopState, shopState.character, nextId);
+            openItemShop(itemShopState, { nextLevelId: nextId });
+            // Stash the nextLevelId on shopState too so the skill-tree screen
+            // can show the next-up indicator if the player switches to it.
+            shopState.nextLevelId = nextId;
+            shopState.character = getSelectedSkin() || 'bear';
             try { audio.playShopOpen(); } catch (e) { /* ignore */ }
           } else if (!shopBlocksNextLevel) {
             transitionToNextLevel();
@@ -1838,11 +2168,11 @@ async function boot() {
           runStreak = 0;
           if (state) state.runStreak = 0;
         }
-        // Campaign C1: award per-enemy-kill coins from this tick's events.
-        if ((getMode() === 'campaign' || getMode() === 'campaign-coop')) {
-          // Replays grind at half-reward to keep first-clear runs meaningful.
-          // Rabbit's "Lucky Foot" (+25%) and "Lucky Foot+" (+50%) stack as
-          // a single coin-source multiplier. Tier 2 wins over tier 1.
+        // Coins + XP earned in every mode except tutorial / daily. Coins fund
+        // the Item Shop; per-character XP funds the Skill Tree.
+        const earnMode = getMode();
+        const earnsRewards = earnMode !== 'tutorial' && earnMode !== 'daily';
+        if (earnsRewards) {
           const p0 = state.players && state.players[0];
           let mult = currentRunIsReplay ? 0.5 : 1;
           if (p0 && p0.upgrades) {
@@ -1851,9 +2181,22 @@ async function boot() {
           }
           const coined = awardCoinsForEnemyKills(campaignState, state.eventQueue, mult);
           if (coined > 0) campaignDirty = true;
+          // XP per scorePopup, routed to the scoring player's character.
+          const charMap = {};
+          if (Array.isArray(state.players)) {
+            for (const pp of state.players) if (pp && pp.id) charMap[pp.id] = pp.character;
+          }
+          const xpGained = awardXpForScoreEvents(campaignState, state.eventQueue, charMap, mult);
+          if (xpGained > 0) campaignDirty = true;
+        }
+        if ((earnMode === 'campaign' || earnMode === 'campaign-coop')) {
           applyCampaignKillEffects(state);
           applyMonkeyLuckyDrop(state);
         }
+        // Reconcile consumable items on the campaign blob: if the engine
+        // consumed a player-side stack (e.g. revivalPotion), decrement the
+        // campaign-side count so the change persists.
+        reconcileItemConsumes(state, campaignState);
               // Pickup flash: powerup events flash the receiving player. Color is
         // chosen by powerup type so each pickup reads instantly (red for life,
         // gold for fried egg/score, magenta for berserk, cyan for invisibility,
@@ -1942,8 +2285,13 @@ async function boot() {
     drawAchievementToasts(ctx, achievementToasts);
     drawBossBanner(ctx, bossBanners);
     drawLevelIntro(ctx, levelIntro);
+    if (isItemShopOpen(itemShopState)) {
+      drawItemShopScreen(ctx, itemShopState, campaignState, LOGICAL_WIDTH_PX, LOGICAL_HEIGHT_PX);
+      handleIntermissionItemShop();
+    }
     if (isShopOpen(shopState)) {
       drawShopScreen(ctx, shopState, campaignState, LOGICAL_WIDTH_PX, LOGICAL_HEIGHT_PX);
+      handleIntermissionSkillTree();
     }
 
     if (gameOver) {

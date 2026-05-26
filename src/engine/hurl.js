@@ -4,6 +4,7 @@ import { awardScore } from './score.js';
 import { applyExplosion } from './explode.js';
 import { cancelSpawnAt } from './destroy.js';
 import { clearPowerupsOnDeath } from './powerup.js';
+import { tryAbsorbHit as tryAbsorbItemHit } from './item-effects.js';
 
 const DIR_DELTA = {
   up: { col: 0, row: -1 },
@@ -309,6 +310,10 @@ function isPartner(mover, player) {
 function killPlayer(state, player, cell) {
   const invulnUntil = player.status && player.status.invulnUntilMs;
   if (typeof invulnUntil === 'number' && invulnUntil > state.timeMs) return;
+  // Shield Talisman absorbs the first hit. Sage Sword doesn't apply for hurl
+  // damage (no enemy contact), but shield still saves you from a stray rock.
+  const absorb = tryAbsorbItemHit(state, player, { cause: 'hurl' });
+  if (absorb && absorb.absorbed) return;
   player.alive = false;
   player.deathTimeMs = state.timeMs;
   if (typeof player.lives === 'number') player.lives -= 1;

@@ -70,11 +70,86 @@ export function render(ctx, state, fxLists) {
   drawLaneTelegraph(ctx, laneTelegraph);
   drawPopups(ctx, popups);
   drawLowLifeIndicator(ctx, state);
+  drawThrowTelegraph(ctx, state);
   drawLevelIntroBanner(ctx, state, width, height);
 
   ctx.restore();
   // HUD stays still — score/lives never bounce.
   drawHud(ctx, state);
+}
+
+// Throw Telegraph item: simulates a hurl from each player's current facing,
+// and highlights the predicted impact cell. Tints the cell:
+//   GREEN  → hurled object would kill an enemy
+//   RED    → hurl would hit a teammate (coop)
+//   GRAY   → hurl would just stop / break a wall (no kill)
+function drawThrowTelegraph(ctx, state) {
+  if (!state || !Array.isArray(state.players)) return;
+  const grid = state.grid;
+  if (!grid) return;
+  const tile = BALANCE.TILE_PX;
+  const hudH = BALANCE.HUD_HEIGHT_PX;
+  const tNow = state.timeMs || 0;
+  const pulse = 0.5 + 0.5 * Math.sin(tNow / 200);
+  const DIR = { up: { dc: 0, dr: -1 }, down: { dc: 0, dr: 1 }, left: { dc: -1, dr: 0 }, right: { dc: 1, dr: 0 } };
+  for (const p of state.players) {
+    if (!p || p.alive === false) continue;
+    if (!p.items || !p.items.throwTelegraph) continue;
+    // Only render the prediction when the player is standing on a hurlable.
+    const here = grid[p.pos.row] && grid[p.pos.row][p.pos.col];
+    if (!here || !here.object) continue;
+    const ot = here.object.type;
+    if (ot !== 'rock' && ot !== 'egg' && ot !== 'donut' && ot !== 'fired-egg' && ot !== 'fireball' && ot !== 'fried-egg') continue;
+    const dir = DIR[p.dir] || DIR.down;
+    let cc = p.pos.col + dir.dc;
+    let cr = p.pos.row + dir.dr;
+    let outcome = 'miss';
+    let target = null;
+    const maxSteps = 20;
+    for (let step = 0; step < maxSteps; step++) {
+      if (cr < 0 || cr >= grid.length || cc < 0 || cc >= (grid[0] ? grid[0].length : 0)) {
+        // Off the grid: stop.
+        target = { col: cc - dir.dc, row: cr - dir.dr };
+        break;
+      }
+      // Check enemies at this cell.
+      const enemyHere = (state.enemies || []).find((e) => e && e.pos && e.pos.col === cc && e.pos.row === cr);
+      if (enemyHere) { outcome = 'kill'; target = { col: cc, row: cr }; break; }
+      // Check other players (coop friendly fire).
+      const allyHere = (state.players || []).find((q) => q && q.alive !== false && q.id !== p.id && q.pos.col === cc && q.pos.row === cr);
+      if (allyHere) { outcome = 'ally'; target = { col: cc, row: cr }; break; }
+      // Check blocking object.
+      const cell = grid[cr][cc];
+      if (cell && cell.object) {
+        outcome = 'miss'; target = { col: cc, row: cr };
+        break;
+      }
+      cc += dir.dc; cr += dir.dr;
+    }
+    if (!target) continue;
+    const tx = target.col * tile;
+    const ty = hudH + target.row * tile;
+    let color, label;
+    if (outcome === 'kill') { color = '#66FF99'; label = 'KILL'; }
+    else if (outcome === 'ally') { color = '#FF5555'; label = 'ALLY!'; }
+    else { color = '#AAAAAA'; label = ''; }
+    ctx.save();
+    ctx.globalAlpha = 0.30 + 0.35 * pulse;
+    ctx.fillStyle = color;
+    ctx.fillRect(tx + 2, ty + 2, tile - 4, tile - 4);
+    ctx.globalAlpha = 0.85;
+    ctx.strokeStyle = color;
+    ctx.lineWidth = 2;
+    ctx.strokeRect(tx + 1, ty + 1, tile - 2, tile - 2);
+    if (label) {
+      ctx.fillStyle = '#000';
+      ctx.font = 'bold 11px monospace';
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.fillText(label, tx + tile / 2, ty + tile / 2);
+    }
+    ctx.restore();
+  }
 }
 
 // Per-player "last life" indicator — draws a pulsing red ring around the

@@ -129,7 +129,8 @@ export function lookupUpgrade(id) {
   return null;
 }
 
-// Returns true if the upgrade can be purchased given current ownership + coins.
+// Returns true if the upgrade can be purchased given current XP + ownership.
+// Skills now cost per-character XP rather than coins.
 export function isPurchaseable(upgrade, campaign) {
   if (!upgrade || !campaign) return false;
   const owned = campaign.upgrades && campaign.upgrades[upgrade.character];
@@ -137,16 +138,19 @@ export function isPurchaseable(upgrade, campaign) {
   if (upgrade.prereq) {
     if (!owned || !owned[upgrade.prereq]) return false;
   }
-  if ((campaign.coins || 0) < upgrade.cost) return false;
+  const xpHave = (campaign.xp && campaign.xp[upgrade.character]) || 0;
+  if (xpHave < upgrade.cost) return false;
   return true;
 }
 
 // Returns ownership state for an upgrade: { owned, prereqMet, affordable }.
+// "affordable" is now based on per-character XP, not coins.
 export function purchaseStatus(upgrade, campaign) {
   if (!upgrade || !campaign) return { owned: false, prereqMet: false, affordable: false };
   const ownedTree = (campaign.upgrades && campaign.upgrades[upgrade.character]) || {};
   const owned = !!ownedTree[upgrade.id];
   const prereqMet = !upgrade.prereq || !!ownedTree[upgrade.prereq];
-  const affordable = (campaign.coins || 0) >= upgrade.cost;
+  const xpHave = (campaign.xp && campaign.xp[upgrade.character]) || 0;
+  const affordable = xpHave >= upgrade.cost;
   return { owned, prereqMet, affordable };
 }

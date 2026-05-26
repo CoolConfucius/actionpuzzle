@@ -2,6 +2,7 @@ import { cellAt, inBounds } from './grid.js';
 import { applyChainBonus, awardScore } from './score.js';
 import { clearPowerupsOnDeath } from './powerup.js';
 import { BALANCE } from './constants.js';
+import { tryAbsorbHit as tryAbsorbItemHit } from './item-effects.js';
 
 const ENEMY_KILL_SCORE_KEY = {
   enemy1: 'SCORE_E1_KILL',
@@ -143,6 +144,9 @@ function killActorsInRadius(state, cc, cr, radius, exp) {
     if (!posIn && !moveIn) continue;
     const invulnMs = player.status && player.status.invulnUntilMs;
     if (invulnMs != null && invulnMs > state.timeMs) continue;
+    // Shield Talisman absorbs an explosion just like any other lethal hit.
+    const absorb = tryAbsorbItemHit(state, player, { cause: 'explosion' });
+    if (absorb && absorb.absorbed) continue;
     player.lives = Math.max(0, (player.lives || 0) - 1);
     player.alive = false;
     player.deathTimeMs = state.timeMs;

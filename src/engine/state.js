@@ -146,6 +146,7 @@ function tickPlayerRespawn(state) {
     const upgrades = p.upgrades || {};
     const rebirthCap = upgrades.rebirth2 ? 2 : (upgrades.rebirth ? 1 : 0);
     const rebirthsUsed = p.rebirthsUsedThisLevel || 0;
+    const haveReviveBudget = Number.isFinite(p.reviveBudget) && p.reviveBudget > 0;
     if (rebirthCap > 0 && rebirthsUsed < rebirthCap) {
       p.rebirthsUsedThisLevel = rebirthsUsed + 1;
       p.lives += 1; // refund the deducted life
@@ -155,6 +156,17 @@ function tickPlayerRespawn(state) {
         cell: { col: p.pos.col, row: p.pos.row },
       });
       // fall through with deathTimeMs treated as "now-now" to spawn immediately
+    } else if (haveReviveBudget) {
+      // Heart Locket + Revival Potion (item shop) — both contribute to the
+      // per-level revive budget. Each use refunds one life and respawns now.
+      p.reviveBudget -= 1;
+      p.lives += 1;
+      state.eventQueue.push({
+        type: 'abilityFire',
+        label: 'REVIVE!',
+        cell: { col: p.pos.col, row: p.pos.row },
+      });
+      // fall through and spawn immediately
     } else if (state.timeMs - p.deathTimeMs < BALANCE.DEATH_ANIM_MS) continue;
     // Respawn at the cell where the player died (not the original spawn point).
     // findRespawnCell BFS-searches outward if the death cell is occupied.

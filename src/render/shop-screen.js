@@ -1,22 +1,43 @@
-// Campaign-mode between-level shop. Lists upgrades for the active character.
-// Pure rendering + key handling — actual purchase persistence lives in
-// `engine/campaign.js`; the controller decides when to open/close.
-import { upgradesForCharacter, purchaseStatus, lookupUpgrade, specialtyForCharacter } from '../engine/upgrade-defs.js';
-import { getCoins } from '../engine/campaign.js';
+// Per-character Skill Tree screen (formerly "shop"). Pay with per-character
+// XP. No character cycling inside the tree — set the character via openShop().
+// The render exposes the same module surface (createShopState/openShop/etc.)
+// so older callers continue to work, but the screen is now skill-tree shaped.
+import {
+  upgradesForCharacter,
+  purchaseStatus,
+  lookupUpgrade,
+  specialtyForCharacter,
+} from '../engine/upgrade-defs.js';
+import { getCoins, getXp } from '../engine/campaign.js';
+import characters from '../data/characters.json' with { type: 'json' };
 
-const BG_COLOR = 'rgba(5,5,15,0.92)';
-const PANEL_COLOR = '#0F1020';
-const PANEL_BORDER = '#FFCC44';
+const BG_COLOR = 'rgba(8,8,18,0.95)';
+const PANEL_COLOR = '#10122A';
+const PANEL_BORDER = '#66CCFF';
 const HIGHLIGHT_COLOR = '#66FFAA';
 const TEXT_COLOR = '#FFFFFF';
-const DIM_COLOR = '#888899';
-const OWNED_COLOR = '#55AA55';
-const LOCKED_COLOR = '#664488';
-const UNAFFORDABLE_COLOR = '#AA5555';
+const DIM_COLOR = '#8898AA';
+const OWNED_COLOR = '#88EE88';
+const LOCKED_COLOR = '#6F5A88';
+const UNAFFORDABLE_COLOR = '#CC6666';
+const XP_COLOR = '#66CCFF';
 const COIN_COLOR = '#FFCC44';
 
 export function createShopState() {
-  return { open: false, cursor: 0, character: 'bear', nextLevelId: '', browseMode: false };
+  return {
+    open: false,
+    cursor: 0,
+    character: 'bear',
+    nextLevelId: '',
+    browseMode: false,
+    _rowBounds: [],
+    _btnBounds: {},
+    _hoverRow: -1,
+    _hoverBtn: '',
+    closeRequested: false,
+    backToSelectRequested: false,
+    itemShopRequested: false,
+  };
 }
 
 export function openShop(shop, character, nextLevelId, browseMode) {
@@ -26,6 +47,11 @@ export function openShop(shop, character, nextLevelId, browseMode) {
   if (character) shop.character = character;
   if (typeof nextLevelId === 'string') shop.nextLevelId = nextLevelId;
   shop.browseMode = !!browseMode;
+  shop.closeRequested = false;
+  shop.backToSelectRequested = false;
+  shop.itemShopRequested = false;
+  shop._hoverRow = -1;
+  shop._hoverBtn = '';
 }
 
 export function closeShop(shop) {
@@ -50,194 +76,235 @@ export function selectedShopUpgrade(shop) {
   return list[shop.cursor] || null;
 }
 
+// Compatibility: older callers (admin overlay, etc.) cycle the character.
+// Now this just sets the displayed character without UI controls in-screen.
+export function cycleShopCharacter(shop, delta) {
+  if (!shop) return;
+  const order = ['bear', 'wolf', 'monkey', 'lion', 'pig', 'mole', 'rabbit', 'elephant', 'owl', 'fox'];
+  const idx = order.indexOf(shop.character);
+  const base = idx === -1 ? 0 : idx;
+  shop.character = order[(base + delta + order.length) % order.length];
+  shop.cursor = 0;
+}
+
 export function drawShopScreen(ctx, shop, campaign, widthPx, heightPx) {
   if (!shop || !shop.open) return;
-  const W = widthPx || 912;
-  const H = heightPx || 756;
+  const W = widthPx || 1000;
+  const H = heightPx || 552;
 
+  // Dim full-screen overlay (so the title behind it still hints at the world).
   ctx.fillStyle = BG_COLOR;
   ctx.fillRect(0, 0, W, H);
 
-  const PW = 520;
-  const PH = 420;
+  const PW = Math.min(880, W - 40);
+  const PH = Math.min(H - 60, 540);
   const px = Math.floor((W - PW) / 2);
   const py = Math.floor((H - PH) / 2);
 
+  // Panel
   ctx.fillStyle = PANEL_COLOR;
-  ctx.fillRect(px, py, PW, PH);
+  roundRect(ctx, px, py, PW, PH, 14);
+  ctx.fill();
   ctx.strokeStyle = PANEL_BORDER;
   ctx.lineWidth = 2;
-  ctx.strokeRect(px + 1, py + 1, PW - 2, PH - 2);
+  roundRect(ctx, px, py, PW, PH, 14);
+  ctx.stroke();
 
-  ctx.textAlign = 'center';
-  ctx.textBaseline = 'alphabetic';
-  ctx.fillStyle = COIN_COLOR;
-  ctx.font = 'bold 20px monospace';
-  ctx.fillText('SHOP', px + PW / 2, py + 30);
+  const charEntry = (characters && characters[shop.character]) || { displayName: shop.character, color: '#FFFFFF', glyph: '?' };
 
-  ctx.fillStyle = HIGHLIGHT_COLOR;
-  ctx.font = 'bold 14px monospace';
-  const characterTitle = shop.character.toUpperCase();
-  const ownedHere = countCharacterOwned(shop.character, campaign);
-  const totalHere = upgradesForCharacter(shop.character).length;
-  const nextSuffix = shop.nextLevelId
-    ? `   Next: ${formatNextLevelLabel(shop.nextLevelId)}`
-    : '';
-  ctx.fillText(
-    `${characterTitle} [${ownedHere}/${totalHere}]   Coins: ¢${getCoins(campaign)}${nextSuffix}`,
-    px + PW / 2,
-    py + 52,
-  );
+  // Header band
+  ctx.fillStyle = charEntry.color;
+  roundRect(ctx, px, py, PW, 56, 14);
+  ctx.fill();
 
-  // Specialty line under the header — anchors the character's playstyle.
-  ctx.fillStyle = DIM_COLOR;
-  ctx.font = 'italic 11px monospace';
-  ctx.textAlign = 'center';
-  ctx.fillText(specialtyForCharacter(shop.character), px + PW / 2, py + 68);
+  // Title text
+  ctx.fillStyle = '#101010';
   ctx.textAlign = 'left';
+  ctx.textBaseline = 'middle';
+  ctx.font = '32px sans-serif';
+  ctx.fillText(charEntry.glyph, px + 16, py + 28);
+  ctx.font = 'bold 18px monospace';
+  ctx.fillText(`${charEntry.displayName.toUpperCase()} · SKILL TREE`, px + 60, py + 22);
+  ctx.font = '12px monospace';
+  ctx.fillStyle = 'rgba(0,0,0,0.75)';
+  ctx.fillText(specialtyForCharacter(shop.character), px + 60, py + 42);
 
+  // XP + coins (top-right of header)
+  const xp = getXp(campaign, shop.character);
+  ctx.fillStyle = '#101010';
+  ctx.font = 'bold 16px monospace';
+  ctx.textAlign = 'right';
+  ctx.fillText(`XP ${xp}`, px + PW - 14, py + 22);
+  ctx.font = 'bold 13px monospace';
+  ctx.fillText(`¢${getCoins(campaign)}`, px + PW - 14, py + 42);
+
+  // Upgrade list area
   const upgrades = upgradesForCharacter(shop.character);
-  const baseY = py + 90;
-  const rowH = 32;
-  ctx.textAlign = 'left';
+  const listX = px + 16;
+  const listY = py + 76;
+  const listW = PW - 32;
+  const ROW_H = 36;
+  const visibleH = PH - 76 - 80; // leave room for header + footer buttons
+  const maxRows = Math.max(1, Math.floor(visibleH / ROW_H));
+
+  // Auto-scroll so the cursor stays visible.
+  let scrollStart = 0;
+  if (shop.cursor >= maxRows) scrollStart = shop.cursor - maxRows + 1;
+  const endIdx = Math.min(upgrades.length, scrollStart + maxRows);
 
   shop._rowBounds = [];
-  const ROW_X = px + 12;
-  const ROW_W = PW - 24;
-
-  for (let i = 0; i < upgrades.length; i++) {
+  for (let i = scrollStart; i < endIdx; i++) {
     const u = upgrades[i];
     const status = purchaseStatus(u, campaign);
     const selected = i === shop.cursor;
     const hovered = shop._hoverRow === i;
-    const y = baseY + i * rowH;
-    const rowY = y - 14;
-    const rowH0 = 28;
+    const rowY = listY + (i - scrollStart) * ROW_H;
+    drawSkillRow(ctx, listX, rowY, listW, ROW_H - 4, u, status, selected, hovered);
+    shop._rowBounds.push({ i, bounds: { x: listX, y: rowY, w: listW, h: ROW_H - 4 } });
+  }
 
-    ctx.save();
-    if (selected) {
-      ctx.fillStyle = 'rgba(102,255,170,0.16)';
-      roundRect(ctx, ROW_X, rowY, ROW_W, rowH0, 6);
-      ctx.fill();
-      ctx.strokeStyle = HIGHLIGHT_COLOR;
-      ctx.lineWidth = 1.5;
-      roundRect(ctx, ROW_X, rowY, ROW_W, rowH0, 6);
-      ctx.stroke();
-    } else if (hovered) {
-      ctx.fillStyle = 'rgba(255,255,255,0.06)';
-      roundRect(ctx, ROW_X, rowY, ROW_W, rowH0, 6);
-      ctx.fill();
-    }
-    ctx.restore();
-
-    let labelColor = TEXT_COLOR;
-    let tagText = '';
-    if (status.owned) {
-      labelColor = OWNED_COLOR;
-      tagText = 'OWNED';
-    } else if (!status.prereqMet) {
-      labelColor = LOCKED_COLOR;
-      tagText = 'LOCKED';
-    } else if (!status.affordable) {
-      labelColor = UNAFFORDABLE_COLOR;
-      tagText = 'too few coins';
-    }
-    if (selected) labelColor = HIGHLIGHT_COLOR;
-
-    ctx.fillStyle = labelColor;
-    ctx.font = selected ? 'bold 13px monospace' : '13px monospace';
-    ctx.fillText(u.label, px + 24, y);
-
-    ctx.textAlign = 'right';
-    ctx.font = '12px monospace';
-    ctx.fillStyle = status.owned ? OWNED_COLOR : COIN_COLOR;
-    ctx.fillText(`¢${u.cost}`, px + PW - 24, y);
-    ctx.textAlign = 'left';
-
+  // Pagination indicator
+  if (upgrades.length > maxRows) {
     ctx.fillStyle = DIM_COLOR;
     ctx.font = '10px monospace';
-    ctx.fillText(u.description, px + 32, y + 14);
-
-    if (tagText) {
-      ctx.textAlign = 'right';
-      ctx.fillStyle = DIM_COLOR;
-      ctx.font = '9px monospace';
-      ctx.fillText(tagText, px + PW - 24, y + 14);
-      ctx.textAlign = 'left';
-    }
-
-    shop._rowBounds.push({ i, bounds: { x: ROW_X, y: rowY, w: ROW_W, h: rowH0 } });
+    ctx.textAlign = 'right';
+    ctx.fillText(`${shop.cursor + 1}/${upgrades.length}`, px + PW - 16, py + PH - 64);
   }
 
-  // Left/right character cycle buttons next to the character title.
-  const arrowY = py + 38;
-  const arrowSize = 22;
-  const leftArrowX = px + 24;
-  const rightArrowX = px + PW - 24 - arrowSize;
-  drawArrowButton(ctx, leftArrowX, arrowY, arrowSize, arrowSize, '<', shop._hoverChar === -1);
-  drawArrowButton(ctx, rightArrowX, arrowY, arrowSize, arrowSize, '>', shop._hoverChar === 1);
-  shop._charBounds = {
-    left: { x: leftArrowX, y: arrowY, w: arrowSize, h: arrowSize },
-    right: { x: rightArrowX, y: arrowY, w: arrowSize, h: arrowSize },
-  };
+  // Detail panel (below list area, above buttons)
+  const selectedU = upgrades[shop.cursor];
+  if (selectedU) {
+    drawDetailPanel(ctx, selectedU, campaign, px + 16, py + PH - 60 - 70, PW - 32, 60);
+  }
 
-  // Ability detail panel — the "store-as-tutorial" view of the highlighted upgrade.
-  const selected = upgrades[shop.cursor];
+  // Footer action buttons
+  const btnY = py + PH - 56;
+  const btnH = 40;
+  const btnGap = 10;
+  const btns = [];
+  btns.push({ id: 'buy', label: 'BUY  [Enter]', color: HIGHLIGHT_COLOR });
+  btns.push({ id: 'itemShop', label: '🛒  ITEM SHOP', color: COIN_COLOR });
+  btns.push({ id: 'backToSelect', label: 'CHANGE CHARACTER', color: '#88AACC' });
+  btns.push({ id: 'close', label: shop.browseMode ? '← BACK' : 'CONTINUE  [Space]', color: '#AAAAAA' });
+  const totalW = PW - 32;
+  const btnW = Math.floor((totalW - (btns.length - 1) * btnGap) / btns.length);
+  shop._btnBounds = {};
+  for (let i = 0; i < btns.length; i++) {
+    const bx = px + 16 + i * (btnW + btnGap);
+    const hovered = shop._hoverBtn === btns[i].id;
+    drawActionButton(ctx, bx, btnY, btnW, btnH, btns[i].label, btns[i].color, hovered);
+    shop._btnBounds[btns[i].id] = { x: bx, y: btnY, w: btnW, h: btnH };
+  }
+
+  if (shop.nextLevelId) {
+    ctx.fillStyle = DIM_COLOR;
+    ctx.font = '11px monospace';
+    ctx.textAlign = 'center';
+    ctx.fillText(`Next: ${formatNextLevelLabel(shop.nextLevelId)}`, px + PW / 2, py + PH - 4);
+  }
+}
+
+function drawSkillRow(ctx, x, y, w, h, u, status, selected, hovered) {
+  ctx.save();
+  // Pill background
   if (selected) {
-    const panelY = baseY + upgrades.length * rowH + 8;
-    const panelH = (py + PH - 28) - panelY;
-    drawDetailPanel(ctx, selected, campaign, px + 16, panelY, PW - 32, panelH);
+    ctx.fillStyle = 'rgba(102,255,170,0.16)';
+    roundRect(ctx, x, y, w, h, 8);
+    ctx.fill();
+    ctx.lineWidth = 1.5;
+    ctx.strokeStyle = HIGHLIGHT_COLOR;
+    roundRect(ctx, x, y, w, h, 8);
+    ctx.stroke();
+  } else if (hovered) {
+    ctx.fillStyle = 'rgba(255,255,255,0.06)';
+    roundRect(ctx, x, y, w, h, 8);
+    ctx.fill();
   }
 
+  // Tag column (left)
+  let glyph = '◇';
+  let glyphColor = DIM_COLOR;
+  if (status.owned) { glyph = '★'; glyphColor = OWNED_COLOR; }
+  else if (!status.prereqMet) { glyph = '⊘'; glyphColor = LOCKED_COLOR; }
+  else if (status.affordable) { glyph = '◆'; glyphColor = HIGHLIGHT_COLOR; }
+  else { glyph = '·'; glyphColor = UNAFFORDABLE_COLOR; }
+  ctx.fillStyle = glyphColor;
+  ctx.font = 'bold 16px monospace';
   ctx.textAlign = 'center';
-  ctx.font = '11px monospace';
+  ctx.textBaseline = 'middle';
+  ctx.fillText(glyph, x + 18, y + h / 2);
+
+  // Label
+  let labelColor = TEXT_COLOR;
+  if (status.owned) labelColor = OWNED_COLOR;
+  else if (!status.prereqMet) labelColor = LOCKED_COLOR;
+  else if (!status.affordable) labelColor = UNAFFORDABLE_COLOR;
+  if (selected) labelColor = HIGHLIGHT_COLOR;
+  ctx.fillStyle = labelColor;
+  ctx.font = selected ? 'bold 13px monospace' : '13px monospace';
+  ctx.textAlign = 'left';
+  ctx.textBaseline = 'alphabetic';
+  ctx.fillText(u.label, x + 38, y + 14);
+
+  // Description (smaller, under label)
   ctx.fillStyle = DIM_COLOR;
-  const continueLabel = shop.browseMode ? 'Space returns to title' : 'Space continues';
-  ctx.fillText(`Up/Down · Enter to buy · Left/Right cycles character · ${continueLabel}`, px + PW / 2, py + PH - 14);
+  ctx.font = '10px monospace';
+  ctx.fillText(truncate(u.description, 80), x + 38, y + 28);
+
+  // Cost (right column)
+  ctx.textAlign = 'right';
+  ctx.font = '12px monospace';
+  if (status.owned) {
+    ctx.fillStyle = OWNED_COLOR;
+    ctx.fillText('OWNED', x + w - 14, y + h / 2 + 4);
+  } else {
+    ctx.fillStyle = XP_COLOR;
+    ctx.font = 'bold 12px monospace';
+    ctx.fillText(`${u.cost} XP`, x + w - 14, y + h / 2 + 4);
+  }
+  ctx.restore();
 }
 
 function drawDetailPanel(ctx, upgrade, campaign, x, y, w, h) {
   ctx.save();
-  ctx.fillStyle = 'rgba(255,204,68,0.06)';
-  ctx.fillRect(x, y, w, h);
-  ctx.strokeStyle = 'rgba(255,204,68,0.35)';
+  ctx.fillStyle = 'rgba(102,204,255,0.07)';
+  roundRect(ctx, x, y, w, h, 8);
+  ctx.fill();
+  ctx.strokeStyle = 'rgba(102,204,255,0.30)';
   ctx.lineWidth = 1;
-  ctx.strokeRect(x + 0.5, y + 0.5, w - 1, h - 1);
+  roundRect(ctx, x, y, w, h, 8);
+  ctx.stroke();
 
   const status = purchaseStatus(upgrade, campaign);
   let statusLine = '';
   let statusColor = DIM_COLOR;
   if (status.owned) {
-    statusLine = 'INSTALLED — active in every campaign level for this character';
+    statusLine = 'INSTALLED — applies every campaign level for this hero.';
     statusColor = OWNED_COLOR;
   } else if (!status.prereqMet && upgrade.prereq) {
     const pre = lookupUpgrade(upgrade.prereq);
-    statusLine = `LOCKED — requires "${pre ? pre.label : upgrade.prereq}" first`;
+    statusLine = `LOCKED — requires "${pre ? pre.label : upgrade.prereq}" first.`;
     statusColor = LOCKED_COLOR;
   } else if (!status.affordable) {
-    const need = upgrade.cost - getCoins(campaign);
-    statusLine = `Need ¢${need} more to buy this upgrade`;
+    const need = upgrade.cost - getXp(campaign, upgrade.character);
+    statusLine = `Need ${need} more XP. Earn XP by scoring in any mode as ${upgrade.character}.`;
     statusColor = UNAFFORDABLE_COLOR;
   } else {
-    statusLine = `Available — press Enter to purchase for ¢${upgrade.cost}`;
+    statusLine = `Available — press Enter to spend ${upgrade.cost} XP.`;
     statusColor = HIGHLIGHT_COLOR;
   }
 
   ctx.textAlign = 'left';
   ctx.textBaseline = 'alphabetic';
-  // Header
   ctx.fillStyle = HIGHLIGHT_COLOR;
-  ctx.font = 'bold 13px monospace';
-  ctx.fillText(upgrade.label.toUpperCase(), x + 8, y + 16);
-  // "How it works"
+  ctx.font = 'bold 12px monospace';
+  ctx.fillText(upgrade.label.toUpperCase(), x + 10, y + 16);
   ctx.fillStyle = TEXT_COLOR;
   ctx.font = '11px monospace';
-  const howto = upgrade.howto || upgrade.description || '';
-  wrapText(ctx, howto, x + 8, y + 34, w - 16, 14);
-  // Status (bottom of panel)
+  wrapText(ctx, upgrade.howto || upgrade.description || '', x + 10, y + 30, w - 20, 13);
   ctx.fillStyle = statusColor;
   ctx.font = 'bold 11px monospace';
-  ctx.fillText(statusLine, x + 8, y + h - 8);
+  ctx.fillText(statusLine, x + 10, y + h - 8);
   ctx.restore();
 }
 
@@ -259,13 +326,39 @@ function wrapText(ctx, text, x, y, maxWidth, lineHeight) {
   if (line) ctx.fillText(line, x, yy);
 }
 
-export function cycleShopCharacter(shop, delta) {
-  if (!shop) return;
-  const order = ['bear', 'wolf', 'monkey', 'lion', 'pig', 'mole', 'rabbit', 'elephant', 'owl', 'fox'];
-  const idx = order.indexOf(shop.character);
-  const base = idx === -1 ? 0 : idx;
-  shop.character = order[(base + delta + order.length) % order.length];
-  shop.cursor = 0;
+function truncate(s, maxLen) {
+  if (!s) return '';
+  if (s.length <= maxLen) return s;
+  return s.slice(0, maxLen - 1) + '…';
+}
+
+function darken(hex, factor) {
+  if (!hex || hex.length < 7) return 'rgba(0,0,0,0.4)';
+  const r = parseInt(hex.substr(1, 2), 16);
+  const g = parseInt(hex.substr(3, 2), 16);
+  const b = parseInt(hex.substr(5, 2), 16);
+  const f = Math.max(0, Math.min(1, 1 - factor));
+  return `rgba(${Math.round(r * f)},${Math.round(g * f)},${Math.round(b * f)},1)`;
+}
+
+function drawActionButton(ctx, x, y, w, h, label, color, hovered) {
+  ctx.save();
+  const grad = ctx.createLinearGradient(x, y, x, y + h);
+  grad.addColorStop(0, hovered ? color : darken(color, 0.35));
+  grad.addColorStop(1, darken(color, 0.7));
+  ctx.fillStyle = grad;
+  roundRect(ctx, x, y, w, h, 9);
+  ctx.fill();
+  ctx.strokeStyle = hovered ? color : darken(color, 0.5);
+  ctx.lineWidth = 2;
+  roundRect(ctx, x, y, w, h, 9);
+  ctx.stroke();
+  ctx.fillStyle = hovered ? '#FFFFFF' : '#F5F5F5';
+  ctx.font = 'bold 13px monospace';
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+  ctx.fillText(label, x + w / 2, y + h / 2 + 1);
+  ctx.restore();
 }
 
 function roundRect(ctx, x, y, w, h, r) {
@@ -284,23 +377,6 @@ function roundRect(ctx, x, y, w, h, r) {
   ctx.closePath();
 }
 
-function drawArrowButton(ctx, x, y, w, h, glyph, emphasized) {
-  ctx.save();
-  ctx.fillStyle = emphasized ? 'rgba(102,255,170,0.22)' : 'rgba(255,255,255,0.10)';
-  roundRect(ctx, x, y, w, h, 5);
-  ctx.fill();
-  ctx.strokeStyle = emphasized ? '#66FFAA' : '#666677';
-  ctx.lineWidth = 1;
-  roundRect(ctx, x, y, w, h, 5);
-  ctx.stroke();
-  ctx.fillStyle = emphasized ? '#66FFAA' : '#CCCCCC';
-  ctx.font = 'bold 13px monospace';
-  ctx.textAlign = 'center';
-  ctx.textBaseline = 'middle';
-  ctx.fillText(glyph, x + w / 2, y + h / 2);
-  ctx.restore();
-}
-
 function hits(b, x, y) {
   return b && x >= b.x && x < b.x + b.w && y >= b.y && y < b.y + b.h;
 }
@@ -309,25 +385,21 @@ export function shopHover(shop, x, y) {
   if (!shop || !shop.open) return;
   shop._hoverRow = -1;
   shop._hoverChar = 0;
-  if (shop._charBounds) {
-    if (hits(shop._charBounds.left, x, y)) shop._hoverChar = -1;
-    else if (hits(shop._charBounds.right, x, y)) shop._hoverChar = 1;
-  }
+  shop._hoverBtn = '';
   if (Array.isArray(shop._rowBounds)) {
     for (const rb of shop._rowBounds) {
       if (hits(rb.bounds, x, y)) { shop._hoverRow = rb.i; break; }
     }
   }
+  for (const k of Object.keys(shop._btnBounds || {})) {
+    if (hits(shop._btnBounds[k], x, y)) { shop._hoverBtn = k; break; }
+  }
 }
 
-// Returns 'buy' if a row was clicked (sets cursor first), 'cycleChar:-1' / '+1'
-// for character arrows, or null otherwise.
+// Returns a structured intent: { type } where type is 'buy' | 'close' |
+// 'itemShop' | 'backToSelect' | 'cycleChar' (legacy noop). Caller routes it.
 export function shopClick(shop, x, y) {
   if (!shop || !shop.open) return null;
-  if (shop._charBounds) {
-    if (hits(shop._charBounds.left, x, y)) return { type: 'cycleChar', delta: -1 };
-    if (hits(shop._charBounds.right, x, y)) return { type: 'cycleChar', delta: 1 };
-  }
   if (Array.isArray(shop._rowBounds)) {
     for (const rb of shop._rowBounds) {
       if (hits(rb.bounds, x, y)) {
@@ -336,16 +408,15 @@ export function shopClick(shop, x, y) {
       }
     }
   }
+  for (const k of Object.keys(shop._btnBounds || {})) {
+    if (hits(shop._btnBounds[k], x, y)) {
+      if (k === 'buy') return { type: 'buy' };
+      if (k === 'itemShop') { shop.itemShopRequested = true; return { type: 'itemShop' }; }
+      if (k === 'backToSelect') { shop.backToSelectRequested = true; return { type: 'backToSelect' }; }
+      if (k === 'close') { shop.closeRequested = true; return { type: 'close' }; }
+    }
+  }
   return null;
-}
-
-function countCharacterOwned(charId, campaign) {
-  if (!campaign || !campaign.upgrades) return 0;
-  const tree = campaign.upgrades[charId];
-  if (!tree) return 0;
-  let n = 0;
-  for (const k of Object.keys(tree)) if (tree[k]) n += 1;
-  return n;
 }
 
 function formatNextLevelLabel(levelId) {

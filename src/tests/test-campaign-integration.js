@@ -73,18 +73,21 @@ test('integration: full campaign loop — kill, clear, buy, reload, apply', () =
   const totalCoins = 1000 + coinsFromClear;
   assert.equal(campaign.coins, totalCoins, 'lifetime coins match');
 
-  // Phase 4 — open the shop. Bear's foundational upgrade is persistentSpeed1
-  // (cost 300, no prereq). Buy it first.
+  // Phase 4 — open the Skill Tree. Skills now cost per-character XP, not
+  // coins (item shop uses coins). Grant the player some XP for Bear so the
+  // foundational upgrade is purchaseable.
+  campaign.xp = campaign.xp || {};
+  campaign.xp.bear = 2000;
   const persistentSpeed1 = lookupUpgrade('persistentSpeed1');
   let status = purchaseStatus(persistentSpeed1, campaign);
   assert.equal(status.owned, false);
   assert.equal(status.prereqMet, true);
-  assert.equal(status.affordable, true, 'enough coins for persistentSpeed1');
+  assert.equal(status.affordable, true, 'enough XP for persistentSpeed1');
   assert.equal(isPurchaseable(persistentSpeed1, campaign), true);
 
-  const beforeCoins = campaign.coins;
-  assert.equal(spendCoins(campaign, persistentSpeed1.cost), true);
-  assert.equal(campaign.coins, beforeCoins - persistentSpeed1.cost);
+  const beforeXp = campaign.xp.bear;
+  campaign.xp.bear -= persistentSpeed1.cost;
+  assert.equal(campaign.xp.bear, beforeXp - persistentSpeed1.cost);
   grantUpgrade(campaign, persistentSpeed1.character, persistentSpeed1.id);
   assert.equal(ownsUpgrade(campaign, 'bear', 'persistentSpeed1'), true);
 
@@ -92,7 +95,7 @@ test('integration: full campaign loop — kill, clear, buy, reload, apply', () =
   const fastStart = lookupUpgrade('fastStart1');
   status = purchaseStatus(fastStart, campaign);
   assert.equal(status.prereqMet, true, 'persistentSpeed1 unlocks fastStart1');
-  assert.equal(spendCoins(campaign, fastStart.cost), true);
+  campaign.xp.bear -= fastStart.cost;
   grantUpgrade(campaign, fastStart.character, fastStart.id);
   assert.equal(ownsUpgrade(campaign, 'bear', 'fastStart1'), true);
 
@@ -151,9 +154,9 @@ test('integration: Wolf invBerserk routes pickup to inventory, then Q activates'
   assert.equal(p.status.berserkUntilMs, 5000 + BALANCE.BERSERK_DURATION_MS + 2000);
 });
 
-test('integration: prereq gate blocks purchase even with enough coins', () => {
+test('integration: prereq gate blocks purchase even with enough XP', () => {
   const campaign = makeCampaign();
-  campaign.coins = 9999;
+  campaign.xp = { bear: 9999 };
   // fastStart1 requires persistentSpeed1 in the post-rethink tree.
   const fastStart1 = lookupUpgrade('fastStart1');
   assert.equal(isPurchaseable(fastStart1, campaign), false, 'blocked by prereq');

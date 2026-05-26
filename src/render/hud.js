@@ -23,13 +23,16 @@ export function drawHud(ctx, state) {
     ctx.textAlign = 'left';
     let leftLabel = formatPlayerSegment(p1);
     const mode = getMode();
+    // Coins / upgrade badges remain campaign-only (skills don't apply outside
+    // campaign). Item badges (shield, sword, potion) show in every mode that
+    // earned them, since items work universally.
     if (mode === 'campaign' || mode === 'campaign-coop') {
       leftLabel += `  ¢${getCoins(readCampaign())}`;
       const upgradeBadge = formatActiveUpgradeBadge(p1);
       if (upgradeBadge) leftLabel += `  ${upgradeBadge}`;
-      const inv = formatInventoryBadge(p1);
-      if (inv) leftLabel += `  ${inv}`;
     }
+    const inv = formatInventoryBadge(p1);
+    if (inv) leftLabel += `  ${inv}`;
     const statusBadge = formatStatusBadge(p1, state);
     if (statusBadge) leftLabel += `  ${statusBadge}`;
     ctx.fillText(leftLabel, HUD_PADDING_PX, centerY);
@@ -127,13 +130,17 @@ function formatStatusBadge(player, state) {
 // Returns "Q:Bx2" style hint when player has stored inventory items.
 // First letter = activation key (Q for P1). Empty when inventory empty.
 function formatInventoryBadge(player) {
-  if (!player || !player.inventory) return '';
-  const inv = player.inventory;
+  if (!player) return '';
+  const inv = player.inventory || {};
   const tokens = [];
   if (inv.berserk > 0) tokens.push(`B×${inv.berserk}`);
   if (inv.invisibility > 0) tokens.push(`I×${inv.invisibility}`);
   if (inv.timeFreeze > 0) tokens.push(`T×${inv.timeFreeze}`);
   if (inv.eggBomb > 0) tokens.push(`Egg×${inv.eggBomb}`);
+  // Item Shop budgets — what's left this level.
+  if ((player.shieldBudget || 0) > 0) tokens.push(`🛡×${player.shieldBudget}`);
+  if ((player.swordCharges || 0) > 0) tokens.push(`⚔×${player.swordCharges}`);
+  if ((player.reviveBudget || 0) > 0) tokens.push(`🍷×${player.reviveBudget}`);
   if (tokens.length === 0) return '';
   return tokens.join(' ');
 }

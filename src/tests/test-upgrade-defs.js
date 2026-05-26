@@ -66,7 +66,7 @@ test('purchaseStatus: prereq gate', () => {
 
 test('purchaseStatus: prereq met when owned', () => {
   const u = lookupUpgrade('fastStart1');
-  const c = { coins: 1000, upgrades: { bear: { persistentSpeed1: true } }, inventory: {} };
+  const c = { coins: 1000, xp: { bear: 1000 }, upgrades: { bear: { persistentSpeed1: true } }, inventory: {} };
   const s = purchaseStatus(u, c);
   assert.equal(s.prereqMet, true);
   assert.equal(s.affordable, true);
@@ -74,25 +74,25 @@ test('purchaseStatus: prereq met when owned', () => {
 
 test('purchaseStatus: owned upgrade reports owned', () => {
   const u = lookupUpgrade('persistentSpeed1');
-  const c = { coins: 1000, upgrades: { bear: { persistentSpeed1: true } }, inventory: {} };
+  const c = { coins: 1000, xp: { bear: 1000 }, upgrades: { bear: { persistentSpeed1: true } }, inventory: {} };
   const s = purchaseStatus(u, c);
   assert.equal(s.owned, true);
 });
 
 test('isPurchaseable: full happy path', () => {
   const u = lookupUpgrade('persistentSpeed1');
-  const c = { coins: 500, upgrades: {}, inventory: {} };
+  const c = { coins: 0, xp: { bear: 500 }, upgrades: {}, inventory: {} };
   assert.equal(isPurchaseable(u, c), true);
 });
 
-test('isPurchaseable: blocked by insufficient coins', () => {
+test('isPurchaseable: blocked by insufficient XP', () => {
   const u = lookupUpgrade('persistentSpeed1');
-  const c = { coins: 100, upgrades: {}, inventory: {} };
+  const c = { coins: 9999, xp: { bear: 100 }, upgrades: {}, inventory: {} };
   assert.equal(isPurchaseable(u, c), false);
 });
 
 test('isPurchaseable: blocked by already owned', () => {
   const u = lookupUpgrade('persistentSpeed1');
-  const c = { coins: 500, upgrades: { bear: { persistentSpeed1: true } }, inventory: {} };
+  const c = { coins: 0, xp: { bear: 9999 }, upgrades: { bear: { persistentSpeed1: true } }, inventory: {} };
   assert.equal(isPurchaseable(u, c), false);
 });
